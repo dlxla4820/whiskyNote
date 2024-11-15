@@ -1,13 +1,13 @@
-package develop.wiskyNote;
+package develop.whiskyNote;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WiskyNoteApplication {
+public class WhiskyNoteApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WiskyNoteApplication.class, args);
+		SpringApplication.run(WhiskyNoteApplication.class, args);
 	}
 
 }
