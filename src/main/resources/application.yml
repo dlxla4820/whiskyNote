@@ -1,3 +1,14 @@
 server:
   shutdown: graceful
   port: 8080
+
+spring:
+  jpa:
+    open-in-view: false
+    database: mysql
+    hibernate:
+      ddl-auto: none
+
+jasypt:
+  encryptor:
+    bean: jasyptEncryptor
