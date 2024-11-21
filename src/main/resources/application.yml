@@ -12,3 +12,6 @@ spring:
 jasypt:
   encryptor:
     bean: jasyptEncryptor
+    property:
+      prefix: ENC(
+      suffix: )
