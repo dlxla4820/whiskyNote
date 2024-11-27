@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum Description {
-    SUCCESS("SUCCESS"), FAIL("FAIL");
+public enum RoleType {
+    ADMIN("ADMIN"), USER("USER");
 
-    private final String description;
+    private final String role;
 
 }

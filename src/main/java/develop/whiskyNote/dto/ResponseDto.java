@@ -1,7 +1,8 @@
 package develop.whiskyNote.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import enums.Description;
+
+import develop.whiskyNote.enums.Description;
 import lombok.*;
 
 import java.util.StringJoiner;

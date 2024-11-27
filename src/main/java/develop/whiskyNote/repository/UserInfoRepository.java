@@ -23,12 +23,12 @@ public class UserInfoRepository {
     /**
      * DB INSERT : USER
      **/
-    public void saveUser(UserRequestDto userRequestDto){
+    public User saveUser(UserRequestDto userRequestDto){
         User user = User.builder()
                 .deviceId(userRequestDto.getDeviceId())
                 .regDate(LocalDateTime.now())
                 .build();
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     /**

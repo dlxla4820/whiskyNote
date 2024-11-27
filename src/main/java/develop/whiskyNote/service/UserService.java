@@ -1,20 +1,30 @@
 package develop.whiskyNote.service;
 
+import develop.whiskyNote.auth.TokenProvider;
 import develop.whiskyNote.dto.ResponseDto;
 import develop.whiskyNote.dto.UserRequestDto;
+import develop.whiskyNote.entity.User;
+import develop.whiskyNote.enums.Description;
+import develop.whiskyNote.enums.RoleType;
 import develop.whiskyNote.repository.UserInfoRepository;
-import enums.Description;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static enums.ErrorCode.PARAMETER_INVALID_SPECIFIC;
+import java.util.HashMap;
+import java.util.Map;
+
+import static develop.whiskyNote.enums.ErrorCode.PARAMETER_INVALID_SPECIFIC;
+
 
 @Service
 public class UserService {
     private final UserInfoRepository userInfoRepository;
+    private final TokenProvider tokenProvider;
 
-    public UserService(UserInfoRepository userInfoRepository) {
+    public UserService(UserInfoRepository userInfoRepository, TokenProvider tokenProvider) {
         this.userInfoRepository = userInfoRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     public ResponseDto<?> saveUser(UserRequestDto requestBody){
@@ -25,11 +35,16 @@ public class UserService {
                     .errorCode(PARAMETER_INVALID_SPECIFIC.getErrorCode())
                     .errorDescription(String.format(PARAMETER_INVALID_SPECIFIC.getErrorDescription(), "device_id"))
                     .build();
-        userInfoRepository.saveUser(requestBody);
-        //Todo : jwt 토큰 발급
+        User user = userInfoRepository.saveUser(requestBody);
+
+        String tokenSubject = String.format("%s:%s", user.getUuid(), RoleType.USER);
+        Map<String, String> token = new HashMap<>();
+        token.put("accessToken",tokenProvider.createAccessToken(tokenSubject));
+        token.put("refreshToken", tokenProvider.createRefreshToken(tokenSubject));
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
+                .data(token)
                 .build();
     }
 

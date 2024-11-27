@@ -15,3 +15,9 @@ jasypt:
     property:
       prefix: ENC(
       suffix: )
+
+jwt:
+  secret-key: ENC(W02eEMGiKoDnAHLEIKbZqzn6dX4g3dk/trTQcNWfsAl26eQkkOgVFextKCiPwAXOgWUM54LmdR5cDSRl91tl7VioilMYvkouRvpKP7tF1eQM2DqfhSPmwZ3ei3Tb99073mZdwKD000uKHLPZkwaL6HajVKDHEZdT6YB/w3Owhz2LJQOT911Q3napP+POdPwJKrVEhDI9ysSuih+3xV5FKEI1U4XIuFl+MCqQATC3L6g=)
+  expiration-hours: 3
+  refresh-expiration-weeks: 2
+  issuer: UST21

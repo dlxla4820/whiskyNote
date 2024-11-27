@@ -1,4 +1,4 @@
-package enums;
+package develop.whiskyNote.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
