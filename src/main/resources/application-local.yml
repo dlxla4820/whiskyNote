@@ -3,7 +3,7 @@ server:
   port: 8080
 spring:
   datasource:
-    url: ENC(HUS2F03L/vFr55CS+ASrbJD89mgk0DaTalJ75qgo7kQAvQu92Sby7EGwoXCQeW4iAFFp21zVDdNTjNENFt7Ns5i5wyYeEvmjT7ysByIU2iGC47orxcaUDjnE6Jf8AzKxhGLNes8YYtT896PmMmHLhQ==)
-    username: ENC(3oUVlP64Eo5M4LD+T4kdh4sqE/CUIgznakt/GG2gJfQJMhGqmar4vFPzXQH/gawP)
-    password: ENC(uICHBHSMg9UbklOyFLk0EOFD52bBjyxY/nnH6pHpQ41mX6472pUCoa7b2ZqwoXMD)
+    url: ENC(cxr5XW73EIYw9MBII5luBdJEdnZ4FbM2PVyde3t3I2/AQ4SgIA3ZZ6F29/768Vf2G+evqC5KI4vthzWb2DiNdtEFwv10MTtxSRQRBX9HJB2Q8aEDNHu1Im2/7+VzK/wlwIJXiHNSugI0UN1+6V0hug==)
+    username: ENC(LSNdBGht4peMFcdBcfJtvhaN9OIwkcKkz+Z5vXvkeASY5zRGCFmVE9MrkaPwPYFR)
+    password: ENC(HbBQ8/OBU84rXwP4aBRaUO2fZwhv7WC4nHvBbTXaL8t7keVScnGqwuQqoJNfa11N)
     driver-class-name: com.mysql.cj.jdbc.Driver
