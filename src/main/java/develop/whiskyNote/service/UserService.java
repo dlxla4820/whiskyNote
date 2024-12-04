@@ -37,7 +37,7 @@ public class UserService {
                     .build();
         User user = userInfoRepository.saveUser(requestBody);
 
-        String tokenSubject = String.format("%s:%s", user.getUuid(), RoleType.USER);
+        String tokenSubject = String.format("%s:%s", user.getUuid(), RoleType.USER.getRole());
         Map<String, String> token = new HashMap<>();
         token.put("accessToken",tokenProvider.createAccessToken(tokenSubject));
         token.put("refreshToken", tokenProvider.createRefreshToken(tokenSubject));
