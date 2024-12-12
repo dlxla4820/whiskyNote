@@ -30,6 +30,11 @@ public class UserInfoRepository {
                 .build();
         return userRepository.save(user);
     }
+    public User findUserByDeviceId(String deviceId){
+       return queryFactory.selectFrom(user)
+                .where(user.deviceId.eq(deviceId))
+                .fetchOne();
+    }
 
     /**
      * DB SELECT :

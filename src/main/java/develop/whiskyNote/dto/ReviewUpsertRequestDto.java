@@ -20,7 +20,6 @@ public class ReviewUpsertRequestDto {
     private String content;
     private Boolean isAnonymous;
     private LocalDate openDate;
-    private MultipartFile[] images;
     private List<String> tags;
     private Long score;
     @Override
@@ -28,10 +27,10 @@ public class ReviewUpsertRequestDto {
         return new StringJoiner(", ", ReviewUpsertRequestDto.class.getSimpleName() + "[", "]")
                 .add("content='" + content + "'")
                 .add("isAnonymous='" + isAnonymous + "'")
-                .add("images.count() =" + Arrays.stream(images).count())
                 .add("openDate='" + openDate + "'")
                 .add("tags='" + tags + "'")
                 .add("score='" + score + "'")
                 .toString();
     }
+
 }

@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,10 +16,10 @@ public class ImageHandler {
     @Value("${file.path}")
     private String preFixFilePath;
 
-    public Map<Long, String> save(MultipartFile[] images, UUID uuid) throws IOException {
+    public Map<Long, String> save(List<MultipartFile> images, UUID uuid) throws IOException {
         Map<Long, String> fullPathNames = new HashMap<>();
-        for (int i = 0; i < images.length; i++) {
-            MultipartFile image = images[i];
+        for (int i = 0; i < images.size(); i++) {
+            MultipartFile image = images.get(i);
             String fullPathName = preFixFilePath + uuid.toString() + File.separator + getOriginName(image);
             fullPathNames.put((long) i, fullPathName);
             File file = new File(fullPathName);

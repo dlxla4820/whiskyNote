@@ -18,8 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 import static develop.whiskyNote.enums.ErrorCode.MAX_PHOTO_OVER;
 
@@ -36,10 +35,9 @@ public class ReviewService {
         this.imageHandler = imageHandler;
     }
 
-    public ResponseDto<?> createReview(ReviewUpsertRequestDto requestBody) throws IOException {
+    public ResponseDto<?> createReview(ReviewUpsertRequestDto requestBody, List<MultipartFile> images) throws IOException {
         User user = sessionUtils.getUser(RoleType.USER);
-        MultipartFile[] images = requestBody.getImages();
-        if(Arrays.stream(images).count() > 3)
+        if(images != null && images.size() > 3)
             return ResponseDto.builder()
                     .code(MAX_PHOTO_OVER.getStatus())
                     .description(Description.FAIL)
@@ -47,7 +45,7 @@ public class ReviewService {
                     .errorDescription(MAX_PHOTO_OVER.getErrorDescription())
                     .build();
 
-        Map<Long, String> imageUrls =   imageHandler.save(images, user.getUuid());
+        Map<Long, String> imageUrls = images != null ? imageHandler.save(images, user.getUuid()) : new HashMap<>();
         reviewDetailRepository.saveReview(requestBody,  user, imageUrls);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
@@ -68,7 +66,6 @@ public class ReviewService {
                 .tags(review.getTags())
                 .score(review.getScore())
                 .build();
-
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -76,22 +73,22 @@ public class ReviewService {
                 .build();
     }
 
-    public ResponseDto<?> updateReview(String reviewUuid, ReviewUpsertRequestDto requestBody) throws IOException {
+    public ResponseDto<?> updateReview(String reviewUuid,  ReviewUpsertRequestDto requestBody, List<MultipartFile> images) throws IOException {
         User user = sessionUtils.getUser(RoleType.USER);
-        MultipartFile[] images = requestBody.getImages();
         Review review = reviewDetailRepository.findReviewByReviewUuid(reviewUuid);
+
         if(review != null && review.getUser().getUuid() != user.getUuid())
             throw new ForbiddenException("Access Denied");
 
-        if(Arrays.stream(images).count() > 3)
+        if(images != null && images.size() > 3)
             return ResponseDto.builder()
                     .code(MAX_PHOTO_OVER.getStatus())
                     .description(Description.FAIL)
                     .errorCode(MAX_PHOTO_OVER.getErrorCode())
                     .errorDescription(MAX_PHOTO_OVER.getErrorDescription())
                     .build();
-        Map<Long, String> imageUrls = imageHandler.save(images, user.getUuid());
 
+        Map<Long, String> imageUrls = images != null ? imageHandler.save(images, user.getUuid()) : new HashMap<>();
         reviewDetailRepository.updateReviewByReviewUuid(requestBody, reviewUuid, imageUrls);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
