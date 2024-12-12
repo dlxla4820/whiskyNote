@@ -2,6 +2,7 @@ package develop.whiskyNote.service;
 
 import develop.whiskyNote.dto.ResponseDto;
 import develop.whiskyNote.dto.ReviewCreateRequestDto;
+import develop.whiskyNote.dto.ReviewResponseDto;
 import develop.whiskyNote.dto.UserRequestDto;
 import develop.whiskyNote.entity.User;
 import develop.whiskyNote.enums.Description;
@@ -21,6 +22,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
+import static develop.whiskyNote.enums.ErrorCode.MAX_PHOTO_OVER;
+
 @Service
 @Transactional
 public class ReviewService {
@@ -39,6 +42,10 @@ public class ReviewService {
         MultipartFile[] images = requestBody.getImages();
         if(Arrays.stream(images).count() > 3)
             return ResponseDto.builder()
+                    .code(MAX_PHOTO_OVER.getStatus())
+                    .description(Description.FAIL)
+                    .errorCode(MAX_PHOTO_OVER.getErrorCode())
+                    .errorDescription(MAX_PHOTO_OVER.getErrorDescription())
                     .build();
 
         Map<Long, String> imageUrls =   imageHandler.save(images, user.getUuid());
@@ -46,6 +53,15 @@ public class ReviewService {
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
+                .build();
+    }
+    public ResponseDto<?> readReview() {
+        User user = sessionUtils.getUser(RoleType.USER);
+        ReviewResponseDto responseDto = reviewDetailRepository.findReviewByUserUuid(user.getUuid());
+        return ResponseDto.builder()
+                .description(Description.SUCCESS)
+                .code(HttpStatus.OK.value())
+                .data(responseDto)
                 .build();
     }
 }

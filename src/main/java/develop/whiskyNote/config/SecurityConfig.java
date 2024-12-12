@@ -11,11 +11,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
 
@@ -28,7 +30,7 @@ public class SecurityConfig {
         return http
                 .csrf(org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/register","/duplicated_check", "/findId", "/login","/findPw","/mail_send","/mail_check").permitAll()
+                        .requestMatchers("/register", "/duplicated_check", "/findId", "/login", "/findPw", "/mail_send", "/mail_check").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement ->
@@ -38,4 +40,14 @@ public class SecurityConfig {
                 .build();
     }
 
+
+    // CORS 설정
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+//                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+    }
 }

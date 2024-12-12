@@ -22,7 +22,9 @@ public enum ErrorCode {
 
     MEMBER_NOT_EXIST(400,"E00201","Request에 해당하는 회원이 존재하지 않습니다."),
     EXISTING_PASSWORD_NOT_MATCH(400,"E00202","현재 비밀번호가 일치하지 않습니다."),
-    EMAIL_NOT_CHECK(400,"E00203","이메일 인증이 필요합니다.");
+    EMAIL_NOT_CHECK(400,"E00203","이메일 인증이 필요합니다."),
+
+    MAX_PHOTO_OVER(400,"E00301", "사진의 개수가 너무 많습니다.");
 
     private final int status;
     private final String errorCode;
