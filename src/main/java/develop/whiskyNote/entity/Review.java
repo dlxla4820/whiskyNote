@@ -18,7 +18,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Getter
-@Table(name = "member")
+@Table(name = "review")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Review {

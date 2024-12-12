@@ -7,7 +7,7 @@ spring:
     open-in-view: false
     database: mysql
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 
 jasypt:
   encryptor:
@@ -17,7 +17,7 @@ jasypt:
       suffix: )
 
 jwt:
-  secret-key: ENC(W02eEMGiKoDnAHLEIKbZqzn6dX4g3dk/trTQcNWfsAl26eQkkOgVFextKCiPwAXOgWUM54LmdR5cDSRl91tl7VioilMYvkouRvpKP7tF1eQM2DqfhSPmwZ3ei3Tb99073mZdwKD000uKHLPZkwaL6HajVKDHEZdT6YB/w3Owhz2LJQOT911Q3napP+POdPwJKrVEhDI9ysSuih+3xV5FKEI1U4XIuFl+MCqQATC3L6g=)
+  secret-key: ENC(CTrM7ndYtRwgQptWmEZhZt/luxS+VwRGnsZpaXDDZc7ZlBpS7UDChWvS3zjpjHGsOXx5OfAS/4Jft9sYZdl+Fbb/VqMWEQ8cJM2h9jLR4G731ong9Cp+ND9lBpmKMdZ3DOXnamiqKNXiZbUK2MGJUHBqK7jNB8cLzYY++zBJN6eLWlSAL+bhzt18FJ1uoYrCDLB0wu36oZxTdwuL68/485EckuJfkDBv163WIIJwKH4=)
   expiration-hours: 3
   refresh-expiration-weeks: 2
   issuer: UST21
