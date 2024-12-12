@@ -1,10 +1,8 @@
 package develop.whiskyNote.controller;
 
 import develop.whiskyNote.dto.ResponseDto;
-import develop.whiskyNote.dto.ReviewCreateRequestDto;
-import develop.whiskyNote.dto.UserRequestDto;
+import develop.whiskyNote.dto.ReviewUpsertRequestDto;
 import develop.whiskyNote.service.ReviewService;
-import develop.whiskyNote.utils.SessionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +16,28 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping(value = "/review")
-    public ResponseEntity<ResponseDto<?>> saveReview(@RequestParam ReviewCreateRequestDto requestBody) throws IOException {
+    public ResponseEntity<ResponseDto<?>> upsertReview(@RequestParam ReviewUpsertRequestDto requestBody) throws IOException {
         ResponseDto<?> response = reviewService.createReview(requestBody);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
-    @GetMapping(value = "/review")
-    public ResponseEntity<ResponseDto<?>> readReview() {
-        ResponseDto<?> response = reviewService.readReview();
+    @GetMapping(value = "/review/{reviewUuid}")
+    public ResponseEntity<ResponseDto<?>> readReview(@PathVariable String reviewUuid){
+        ResponseDto<?> response = reviewService.readReview(reviewUuid);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
+
+    @PutMapping(value = "/review/{reviewUuid}")
+    public ResponseEntity<ResponseDto<?>> upsertReview(@PathVariable String reviewUuid, @RequestParam ReviewUpsertRequestDto requestBody) throws IOException {
+        ResponseDto<?> response = reviewService.updateReview(reviewUuid, requestBody);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+
+
+    @DeleteMapping(value = "/review{reviewUuid}")
+    public ResponseEntity<ResponseDto<?>> deleteReview(@PathVariable String reviewUuid) {
+        ResponseDto<?> response = reviewService.deleteReview(reviewUuid);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+
 }

@@ -1,9 +1,9 @@
 package develop.whiskyNote.repository;
 
-import com.querydsl.core.QueryFactory;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import develop.whiskyNote.dto.ReviewCreateRequestDto;
+import develop.whiskyNote.dto.ReviewUpsertRequestDto;
 import develop.whiskyNote.dto.ReviewResponseDto;
 import develop.whiskyNote.entity.Review;
 import develop.whiskyNote.entity.User;
@@ -24,7 +24,7 @@ public class ReviewDetailRepository {
     }
 
 
-    public void saveReview(ReviewCreateRequestDto requestDto, User user, Map<Long, String> imageUrls){
+    public void saveReview(ReviewUpsertRequestDto requestDto, User user, Map<Long, String> imageUrls){
         Review review = Review.builder()
                 .content(requestDto.getContent())
                 .user(user)
@@ -38,11 +38,32 @@ public class ReviewDetailRepository {
         reviewRepository.save(review);
     }
 
-    public ReviewResponseDto findReviewByUserUuid(UUID userUuid){
-        return queryFactory.select(Projections.fields(ReviewResponseDto.class, review.content, review.imageUrl.as("imageUrl")
-                                ,review.isAnonymous.as("is_anonymous"),review.tags, review.openDate.as("openDate"), review.score))
-                .from(review)
+    public Review findReviewByReviewUuid(String reviewUuid){
+        return queryFactory.selectFrom(review)
+                .where(Expressions.stringTemplate("HEX({0})", review.uuid).eq(reviewUuid.replace("-", "")))
+                .fetchOne();
+    }
+    public Review findReviewByUserUuid(UUID userUuid){
+        return queryFactory.selectFrom(review)
                 .where(review.user.uuid.eq(userUuid))
                 .fetchOne();
     }
+    public void updateReviewByReviewUuid(ReviewUpsertRequestDto requestDto, String reviewUuid, Map<Long, String> imageUrls){
+        queryFactory.update(review)
+                .set(review.content, requestDto.getContent())
+                .set(review.imageUrl, imageUrls)
+                .set(review.isAnonymous, requestDto.getIsAnonymous())
+                .set(review.openDate, requestDto.getOpenDate())
+                .set(review.score, requestDto.getScore())
+                .set(review.tags, requestDto.getTags())
+                .set(review.modDate, LocalDateTime.now())
+                .where(Expressions.stringTemplate("HEX({0})", review.uuid).eq(reviewUuid.replace("-", "")))
+                .execute();
+    }
+    public void deleteReviewByReviewUuid(String reviewUuid){
+        queryFactory.delete(review)
+                .where(Expressions.stringTemplate("HEX({0})", review.uuid).eq(reviewUuid.replace("-", "")))
+                .execute();
+    }
+
 }
