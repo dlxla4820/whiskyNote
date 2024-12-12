@@ -2,6 +2,8 @@ package develop.whiskyNote.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import develop.whiskyNote.enums.Description;
 import lombok.*;
 
@@ -10,6 +12,7 @@ import java.util.StringJoiner;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Builder
 public class ResponseDto<T> {
 

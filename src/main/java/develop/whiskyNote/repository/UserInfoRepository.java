@@ -35,6 +35,12 @@ public class UserInfoRepository {
      * DB SELECT :
      **/
 
+    public User getUserByUuid(UUID uuid){
+        return  queryFactory.selectFrom(user)
+                .where(user.uuid.eq(uuid))
+                .fetchOne();
+    }
+
     public UUID getUuidByDeviceId(String deviceId){
         return  queryFactory.select(user.uuid)
                 .from(user)
