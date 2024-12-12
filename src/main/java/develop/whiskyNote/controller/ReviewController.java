@@ -34,7 +34,7 @@ public class ReviewController {
     }
 
 
-    @DeleteMapping(value = "/review{reviewUuid}")
+    @DeleteMapping(value = "/review/{reviewUuid}")
     public ResponseEntity<ResponseDto<?>> deleteReview(@PathVariable String reviewUuid) {
         ResponseDto<?> response = reviewService.deleteReview(reviewUuid);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
