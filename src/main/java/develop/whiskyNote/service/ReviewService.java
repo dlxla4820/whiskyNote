@@ -73,6 +73,11 @@ public class ReviewService {
                 .build();
     }
 
+//    public ResponseDto<?> readReviewList(){
+//        User user = sessionUtils.getUser(RoleType.USER);
+//        Review review =
+//    }
+
     public ResponseDto<?> updateReview(String reviewUuid,  ReviewUpsertRequestDto requestBody, List<MultipartFile> images) throws IOException {
         User user = sessionUtils.getUser(RoleType.USER);
         Review review = reviewDetailRepository.findReviewByReviewUuid(reviewUuid);
@@ -109,5 +114,7 @@ public class ReviewService {
                 .code(HttpStatus.OK.value())
                 .build();
     }
+
+
 
 }
