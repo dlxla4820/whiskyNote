@@ -3,6 +3,7 @@ package develop.whiskyNote.service;
 import develop.whiskyNote.dto.ResponseDto;
 import develop.whiskyNote.dto.ReviewUpsertRequestDto;
 import develop.whiskyNote.dto.ReviewResponseDto;
+import develop.whiskyNote.dto.WhiskyListResponseDto;
 import develop.whiskyNote.entity.Review;
 import develop.whiskyNote.entity.User;
 import develop.whiskyNote.enums.Description;
@@ -66,6 +67,16 @@ public class ReviewService {
                 .tags(review.getTags())
                 .score(review.getScore())
                 .build();
+        return ResponseDto.builder()
+                .description(Description.SUCCESS)
+                .code(HttpStatus.OK.value())
+                .data(responseDto)
+                .build();
+    }
+
+    public ResponseDto<?> searchWhiskyList(String name, String category, String scoreOrder, String dateOrder, String nameOrder){
+        sessionUtils.getUser(RoleType.USER);
+        List<WhiskyListResponseDto> responseDto = reviewDetailRepository.findAllWhiskyListResponseDto(name, category, nameOrder, scoreOrder, dateOrder);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())

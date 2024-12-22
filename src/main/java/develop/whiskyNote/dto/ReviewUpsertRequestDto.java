@@ -17,6 +17,8 @@ import java.util.StringJoiner;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ReviewUpsertRequestDto {
+    private String whiskyUuid;
+    private Integer number;
     private String content;
     private Boolean isAnonymous;
     private LocalDate openDate;
@@ -25,6 +27,7 @@ public class ReviewUpsertRequestDto {
     @Override
     public String toString() {
         return new StringJoiner(", ", ReviewUpsertRequestDto.class.getSimpleName() + "[", "]")
+                .add("whiskyUuid='" + whiskyUuid + "'")
                 .add("content='" + content + "'")
                 .add("isAnonymous='" + isAnonymous + "'")
                 .add("openDate='" + openDate + "'")
