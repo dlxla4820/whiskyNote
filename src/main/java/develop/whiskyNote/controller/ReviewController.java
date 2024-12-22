@@ -30,6 +30,19 @@ public class ReviewController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
+    @GetMapping(value = "/whisky")
+    public ResponseEntity<ResponseDto<?>> searchWhisky(@RequestParam(required = false) String name
+            , @RequestParam(required = false) String category, @RequestParam(name = "score_order") String scoreOrder
+            , @RequestParam(name = "date_order") String dateOrder, @RequestParam(name = "name_order") String nameOrder ){
+        ResponseDto<?> response = reviewService.searchWhiskyList(name, category, nameOrder, scoreOrder, dateOrder);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+
+//    @GetMapping(value = "/whisky/{whiskyUuid}/reviews")
+//    public ResponseEntity<ResponseDto<?>> searchReviewList(){
+//
+//    }
+
     @PutMapping(value = "/review/{reviewUuid}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResponseDto<?>> updateReview(@PathVariable String reviewUuid, @RequestPart(name = "data") ReviewUpsertRequestDto requestBody, @RequestPart(name = "images", required = false) List<MultipartFile> images) throws IOException{
         ResponseDto<?> response = reviewService.updateReview(reviewUuid,requestBody,images);

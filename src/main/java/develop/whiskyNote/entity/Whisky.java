@@ -18,7 +18,6 @@ public class Whisky {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Builder.Default
     private UUID uuid = UUID.randomUUID();
-
     @Column(name = "name", nullable = false)
     private String name;
 
