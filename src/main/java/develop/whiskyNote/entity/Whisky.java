@@ -31,4 +31,6 @@ public class Whisky {
     private String caskNumber;
     @Column(name = "botteled_year")
     private Integer botteledYear;
+    @Column(name="user_uuid")
+    private String userUuid;
 }
