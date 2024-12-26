@@ -32,5 +32,5 @@ public class Whisky {
     @Column(name = "botteled_year")
     private Integer botteledYear;
     @Column(name="user_uuid")
-    private String userUuid;
+    private UUID userUuid;
 }
