@@ -18,21 +18,17 @@ public class Whisky {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Builder.Default
     private UUID uuid = UUID.randomUUID();
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "whisky_name", nullable = false)
+    private String whiskyName;
 
-    @Column(name = "category")
-    private String category;
+    @Column(name = "whisky_category")
+    private String whiskyCategory;
     @Column(name = "strength")
     private String strength;
-    @Column(name = "image")
-    private String image;
-    @Column(name = "cask_type")
-    private String caskType;
-    @Column(name = "stated_age")
-    private String statedAge;
+    @Column(name = "image_url")
+    private String imageUrl;
     @Column(name = "cask_number")
     private String caskNumber;
-    @Column(name = "year")
-    private Integer year;
+    @Column(name = "botteled_year")
+    private Integer botteledYear;
 }

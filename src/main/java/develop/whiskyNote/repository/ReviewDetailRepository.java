@@ -77,10 +77,10 @@ public class ReviewDetailRepository {
     }
 
     public List<String> findAllNameLikeWhiskyName(String name){
-        return queryFactory.select(whisky.name)
+        return queryFactory.select(whisky.whiskyName)
                 .from(whisky)
-                .where(whisky.name.like("%" + name + "%"))
-                .orderBy(whisky.name.asc())
+                .where(whisky.whiskyName.like("%" + name + "%"))
+                .orderBy(whisky.whiskyName.asc())
                 .limit(5)
                 .fetch();
     }
@@ -88,13 +88,13 @@ public class ReviewDetailRepository {
     public List<WhiskyListResponseDto> findAllWhiskyListResponseDto(String name, String category, String nameOrder, String scoreOrder, String dateOrder){
         return queryFactory.select(Projections.fields(WhiskyListResponseDto.class,
                         whisky.uuid.as("whiskyUuid"),
-                        whisky.name.as("name"),
+                        whisky.whiskyName.as("name"),
                         review.score.avg().as("score"), // AVG(score) 사용
                         whisky.caskType.as("caskType"),
-                        whisky.year.as("releaseYear"),
-                        whisky.image.as("photoUrl"),
+                        whisky.botteledYear.as("releaseYear"),
+                        whisky.imageUrl.as("photoUrl"),
                         whisky.strength.as("strength"),
-                        whisky.category.as("category"),
+                        whisky.whiskyCategory.as("category"),
                         review.regDate.max().as("regDate"), // MAX(regDate)
                         review.modDate.max().as("modDate") // MAX(modDate)
                 ))
@@ -104,12 +104,12 @@ public class ReviewDetailRepository {
                 .where(eqWhiskyCategory(category))
                 .groupBy(
                         whisky.uuid,
-                        whisky.name,
+                        whisky.whiskyName,
                         whisky.caskType,
-                        whisky.year,
-                        whisky.image,
+                        whisky.botteledYear,
+                        whisky.imageUrl,
                         whisky.strength,
-                        whisky.category,
+                        whisky.whiskyCategory,
                         review.regDate,   // regDate 추가
                         review.modDate    // modDate 추가
                 )
@@ -127,18 +127,18 @@ public class ReviewDetailRepository {
     private BooleanExpression likeWhiskyName(String name){
         if(name == null || name.isEmpty())
             return null;
-        return whisky.name.like("%" + name + "%");
+        return whisky.whiskyName.like("%" + name + "%");
     }
     private BooleanExpression eqWhiskyCategory(String category){
         if(category == null || category.isEmpty())
             return null;
-        return whisky.category.eq(category);
+        return whisky.whiskyCategory.eq(category);
     }
     private OrderSpecifier<?> orderByWhiskyName(String order) {
         if (Order.ASC.getOrder().equals(order) || order.isEmpty())
-            return whisky.name.asc(); // ASC 정렬
+            return whisky.whiskyName.asc(); // ASC 정렬
         if (Order.DESC.getOrder().equals(order))
-            return whisky.name.desc(); // DESC 정렬
+            return whisky.whiskyName.desc(); // DESC 정렬
         throw new RuntimeException();
     }
     private OrderSpecifier<?> orderByScore(String order) {
