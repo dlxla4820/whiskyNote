@@ -8,6 +8,8 @@ spring:
     database: mysql
     hibernate:
       ddl-auto: update
+  profiles:
+    include: dev
 
 jasypt:
   encryptor:
