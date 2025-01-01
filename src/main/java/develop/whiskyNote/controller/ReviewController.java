@@ -2,6 +2,7 @@ package develop.whiskyNote.controller;
 
 import develop.whiskyNote.dto.ResponseDto;
 import develop.whiskyNote.dto.ReviewUpsertRequestDto;
+import develop.whiskyNote.dto.WhiskyCreateRequestDto;
 import develop.whiskyNote.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,15 +30,34 @@ public class ReviewController {
         ResponseDto<?> response = reviewService.readReview(reviewUuid);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
-
-    @GetMapping(value = "/whisky")
-    public ResponseEntity<ResponseDto<?>> searchWhisky(@RequestParam(required = false) String name
-            , @RequestParam(required = false) String category, @RequestParam(name = "score_order") String scoreOrder
-            , @RequestParam(name = "date_order") String dateOrder, @RequestParam(name = "name_order") String nameOrder ){
-        ResponseDto<?> response = reviewService.searchWhiskyList(name, category, nameOrder, scoreOrder, dateOrder);
+    @GetMapping(value = "/whiskys")
+    public ResponseEntity<ResponseDto<?>> createFirstReview(@RequestParam(required = false) String name){
+        ResponseDto<?> response = reviewService.searchWhiskyList(name);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
+/*    @GetMapping(value = "/whiskys")
+    public ResponseEntity<ResponseDto<?>> searchWhiskys(@RequestParam(required = false) String name);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }*/
+    @GetMapping(value = "/my-whiskys")
+    public ResponseEntity<ResponseDto<?>> searchMyWhiskys(@RequestParam(required = false) String name
+            , @RequestParam(required = false) String category, @RequestParam(name = "score_order") String scoreOrder
+            , @RequestParam(name = "date_order") String dateOrder, @RequestParam(name = "name_order") String nameOrder ){
+        ResponseDto<?> response = reviewService.searchMyWhiskyList(name, category, nameOrder, scoreOrder, dateOrder);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+
+    @PostMapping(value = "/whisky", consumes ={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ResponseDto<?>> createWhisky(@RequestPart(name = "data") WhiskyCreateRequestDto requestBody, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+        ResponseDto<?> response = reviewService.createWhisky(requestBody, image);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+/*    @GetMapping(value = "/reviews/bottle/{bottleNum}")
+    public ResponseEntity<ResponseDto<?>> createWhisky(@PathVariable Integer bottleNum ) {
+        ResponseDto<?> response = reviewService.readReviews(sreviewUuid);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }*/
 //    @GetMapping(value = "/whisky/{whiskyUuid}/reviews")
 //    public ResponseEntity<ResponseDto<?>> searchReviewList(){
 //

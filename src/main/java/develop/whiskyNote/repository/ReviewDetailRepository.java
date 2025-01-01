@@ -1,14 +1,15 @@
 package develop.whiskyNote.repository;
 
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import develop.whiskyNote.dto.ReviewUpsertRequestDto;
-import develop.whiskyNote.dto.ReviewResponseDto;
+import develop.whiskyNote.dto.WhiskyCreateRequestDto;
 import develop.whiskyNote.dto.WhiskyListResponseDto;
+import develop.whiskyNote.dto.MyWhiskyListResponseDto;
 import develop.whiskyNote.entity.Review;
 import develop.whiskyNote.entity.User;
 import develop.whiskyNote.entity.Whisky;
@@ -24,10 +25,12 @@ import static develop.whiskyNote.entity.QWhisky.whisky;
 @Repository
 public class ReviewDetailRepository {
     private final ReviewRepository reviewRepository;
+    private final WhiskyRepository whiskyRepository;
     private final JPAQueryFactory queryFactory;
 
-    public ReviewDetailRepository(ReviewRepository reviewRepository, JPAQueryFactory queryFactory) {
+    public ReviewDetailRepository(ReviewRepository reviewRepository, WhiskyRepository whiskyRepository, JPAQueryFactory queryFactory) {
         this.reviewRepository = reviewRepository;
+        this.whiskyRepository = whiskyRepository;
         this.queryFactory = queryFactory;
     }
 
@@ -35,7 +38,7 @@ public class ReviewDetailRepository {
     public void saveReview(ReviewUpsertRequestDto requestDto, User user, Map<Long, String> imageUrls){
         Review review = Review.builder()
                 .content(requestDto.getContent())
-                .number(requestDto.getNumber() == null ? 1 : requestDto.getNumber())
+                .number(requestDto.getBottleNumber() == null ? 1 : requestDto.getBottleNumber())
                 .user(user)
                 .imageUrl(imageUrls)
                 .isAnonymous(requestDto.getIsAnonymous())
@@ -46,7 +49,17 @@ public class ReviewDetailRepository {
                 .build();
         reviewRepository.save(review);
     }
-
+    public void saveWhisky(WhiskyCreateRequestDto requestDto, UUID userUuid, String imageUrl){
+        Whisky whisky = Whisky.builder()
+                .whiskyName(requestDto.getWhiskyName())
+                .whiskyCategory(requestDto.getCategory())
+                .imageUrl(imageUrl == null ? "test" : imageUrl)
+                .strength(requestDto.getStrength())
+                .userUuid(userUuid)
+                .botteledYear(requestDto.getBottledYear())
+                .build();
+        whiskyRepository.save(whisky);
+    }
 
     public Review findReviewByReviewUuid(String reviewUuid){
         return queryFactory.selectFrom(review)
@@ -56,6 +69,11 @@ public class ReviewDetailRepository {
     public Review findReviewByUserUuid(UUID userUuid){
         return queryFactory.selectFrom(review)
                 .where(review.user.uuid.eq(userUuid))
+                .fetchOne();
+    }
+    public Review findReviewByWhiskyUuid(String whiskyUuid){
+        return queryFactory.selectFrom(review)
+                .where(Expressions.stringTemplate("HEX({0})", review.whisky.uuid).eq(whiskyUuid.replace("-", "")))
                 .fetchOne();
     }
     public void updateReviewByReviewUuid(ReviewUpsertRequestDto requestDto, String reviewUuid, Map<Long, String> imageUrls){
@@ -76,21 +94,30 @@ public class ReviewDetailRepository {
                 .execute();
     }
 
-    public List<String> findAllNameLikeWhiskyName(String name){
-        return queryFactory.select(whisky.whiskyName)
+    public List<WhiskyListResponseDto> findAllNameLikeWhiskyName(String name){
+        return queryFactory.select(Projections.fields(WhiskyListResponseDto.class, whisky.whiskyName.as("whiskyName"), whisky.uuid.as("whiskyUuid")
+                        ,new CaseBuilder()
+                        .when(review.uuid.isNull())  // review가 없으면
+                        .then(false)  // false 반환
+                        .otherwise(true)  // 있으면 true 반환
+                        .as("isFirst")  // 컬럼 이름 설정))
+                ))
                 .from(whisky)
+                .leftJoin(review)
+                .on(whisky.uuid.eq(review.whisky.uuid))
                 .where(whisky.whiskyName.like("%" + name + "%"))
                 .orderBy(whisky.whiskyName.asc())
                 .limit(5)
                 .fetch();
     }
 
-    public List<WhiskyListResponseDto> findAllWhiskyListResponseDto(String name, String category, String nameOrder, String scoreOrder, String dateOrder){
-        return queryFactory.select(Projections.fields(WhiskyListResponseDto.class,
+
+    public List<MyWhiskyListResponseDto> findAllMyWhiskyListResponseDto(String name, String category, String nameOrder, String scoreOrder, String dateOrder, UUID userUuid){
+        return queryFactory.select(Projections.fields(MyWhiskyListResponseDto.class,
                         whisky.uuid.as("whiskyUuid"),
                         whisky.whiskyName.as("name"),
                         review.score.avg().as("score"), // AVG(score) 사용
-                        whisky.caskType.as("caskType"),
+//                        whisky.caskType.as("caskType"),
                         whisky.botteledYear.as("releaseYear"),
                         whisky.imageUrl.as("photoUrl"),
                         whisky.strength.as("strength"),
@@ -102,10 +129,11 @@ public class ReviewDetailRepository {
                 .leftJoin(review).on(review.whisky.eq(whisky))
                 .where(likeWhiskyName(name))
                 .where(eqWhiskyCategory(category))
+                .where(whisky.userUuid.eq(userUuid).or(whisky.userUuid.isNull()))
                 .groupBy(
                         whisky.uuid,
                         whisky.whiskyName,
-                        whisky.caskType,
+//                        whisky.caskType,
                         whisky.botteledYear,
                         whisky.imageUrl,
                         whisky.strength,

@@ -33,6 +33,17 @@ public class ImageHandler {
         return fullPathNames;
     }
 
+    public String save(MultipartFile image, UUID uuid) throws IOException {
+        String fullPathName = preFixFilePath + uuid.toString() + File.separator + getOriginName(image);
+        File file = new File(fullPathName);
+        File parentDir = file.getParentFile();
+        if (!parentDir.exists() && !parentDir.mkdirs()) {
+            throw new IOException("Failed to create directories: " + parentDir.getAbsolutePath());
+        }
+        image.transferTo(file);
+        return fullPathName;
+    }
+
     private String getOriginName(MultipartFile image){
         return image.getOriginalFilename();
     }
