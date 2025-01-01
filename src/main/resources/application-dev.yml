@@ -2,6 +2,10 @@ server:
   shutdown: graceful
   port: 8080
 
+aws:
+  mysql:
+    url : ENC(XnWI+/jdUZnoL9xFPwlKZMIhm7KsAaiwC+kp5eHQZBAdmchrIXdyjxmdMS+NHqk+m5Cm1VpgH5sfxxqTgofdTA==)
+
 firebase:
   lambda:
     url : ENC(VXabOoLU6H+PI/MYOg2KzpS++Ceh9qqa4amIL95kr5QMhLLTenRu91gX5gl+DulQDtHXNCEVMUIDfzoQWMNqWEhhErmDPmLjLNJ+tElFHZk3fxFi17RKvEIWhXM/W2dZYyyX9rgrB9kCI+4hB4DGbg==)
