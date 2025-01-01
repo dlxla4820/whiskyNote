@@ -1,15 +1,13 @@
 package develop.whiskyNote.service;
 
-import develop.whiskyNote.dto.ResponseDto;
-import develop.whiskyNote.dto.ReviewUpsertRequestDto;
-import develop.whiskyNote.dto.ReviewResponseDto;
-import develop.whiskyNote.dto.WhiskyListResponseDto;
+import develop.whiskyNote.dto.*;
 import develop.whiskyNote.entity.Review;
 import develop.whiskyNote.entity.User;
 import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.enums.RoleType;
 import develop.whiskyNote.exception.ForbiddenException;
 import develop.whiskyNote.repository.ReviewDetailRepository;
+import develop.whiskyNote.utils.CommonUtils;
 import develop.whiskyNote.utils.ImageHandler;
 import develop.whiskyNote.utils.SessionUtils;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static develop.whiskyNote.enums.ErrorCode.MAX_PHOTO_OVER;
@@ -73,10 +70,41 @@ public class ReviewService {
                 .data(responseDto)
                 .build();
     }
+    public ResponseDto<?> searchWhiskyList(String name) {
+        User user = sessionUtils.getUser(RoleType.USER);
 
-    public ResponseDto<?> searchWhiskyList(String name, String category, String scoreOrder, String dateOrder, String nameOrder){
-        sessionUtils.getUser(RoleType.USER);
-        List<WhiskyListResponseDto> responseDto = reviewDetailRepository.findAllWhiskyListResponseDto(name, category, nameOrder, scoreOrder, dateOrder);
+        List<WhiskyListResponseDto> responseDtoList = reviewDetailRepository.findAllNameLikeWhiskyName(name);
+        return ResponseDto.builder()
+                .description(Description.SUCCESS)
+                .code(HttpStatus.OK.value())
+                .data(responseDtoList)
+                .build();
+    }
+/*    public ResponseDto<?> readReviews(String reviewUuid, Integer bottleNum) {
+        User user = sessionUtils.getUser(RoleType.USER);
+        if(bottleNum == null)
+        Review review = reviewDetailRepository.findReviewByReviewUuid(reviewUuid);
+        if(review != null && review.getUser().getUuid() != user.getUuid())
+            throw new ForbiddenException("Access Denied");
+
+        ReviewResponseDto responseDto = review == null ? null : ReviewResponseDto.builder()
+                .content(review.getContent())
+                .imageUrl(review.getImageUrl())
+                .isAnonymous(review.getIsAnonymous())
+                .openDate(review.getOpenDate())
+                .tags(review.getTags())
+                .score(review.getScore())
+                .build();
+        return ResponseDto.builder()
+                .description(Description.SUCCESS)
+                .code(HttpStatus.OK.value())
+                .data(responseDto)
+                .build();
+    }*/
+
+    public ResponseDto<?> searchMyWhiskyList(String name, String category, String scoreOrder, String dateOrder, String nameOrder){
+        UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
+        List<MyWhiskyListResponseDto> responseDto = reviewDetailRepository.findAllMyWhiskyListResponseDto(name, category, nameOrder, scoreOrder, dateOrder, userUuid);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -126,6 +154,15 @@ public class ReviewService {
                 .build();
     }
 
+    public ResponseDto<?> createWhisky(WhiskyCreateRequestDto requestBody, MultipartFile image) throws IOException {
+        UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
+        String imageUrl = image == null ? null : imageHandler.save(image, userUuid);
+        reviewDetailRepository.saveWhisky(requestBody, userUuid, imageUrl);
 
+        return ResponseDto.builder()
+                .description(Description.SUCCESS)
+                .code(HttpStatus.OK.value())
+                .build();
+    }
 
 }
