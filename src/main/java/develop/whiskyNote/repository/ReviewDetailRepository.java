@@ -56,7 +56,7 @@ public class ReviewDetailRepository {
                 .imageUrl(imageUrl == null ? "test" : imageUrl)
                 .strength(requestDto.getStrength())
                 .userUuid(userUuid)
-                .botteledYear(requestDto.getBottledYear())
+                .bottledYear(requestDto.getBottledYear())
                 .build();
         whiskyRepository.save(whisky);
     }
@@ -117,8 +117,7 @@ public class ReviewDetailRepository {
                         whisky.uuid.as("whiskyUuid"),
                         whisky.whiskyName.as("name"),
                         review.score.avg().as("score"), // AVG(score) 사용
-//                        whisky.caskType.as("caskType"),
-                        whisky.botteledYear.as("releaseYear"),
+                        whisky.bottledYear.as("releaseYear"),
                         whisky.imageUrl.as("photoUrl"),
                         whisky.strength.as("strength"),
                         whisky.whiskyCategory.as("category"),
@@ -133,8 +132,7 @@ public class ReviewDetailRepository {
                 .groupBy(
                         whisky.uuid,
                         whisky.whiskyName,
-//                        whisky.caskType,
-                        whisky.botteledYear,
+                        whisky.bottledYear,
                         whisky.imageUrl,
                         whisky.strength,
                         whisky.whiskyCategory,

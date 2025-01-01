@@ -24,13 +24,11 @@ public class Whisky {
     @Column(name = "whisky_category")
     private String whiskyCategory;
     @Column(name = "strength")
-    private String strength;
+    private Double strength;
     @Column(name = "image_url")
     private String imageUrl;
-    @Column(name = "cask_number")
-    private String caskNumber;
-    @Column(name = "botteled_year")
-    private Integer botteledYear;
+    @Column(name = "bottled_year")
+    private Integer bottledYear;
     @Column(name="user_uuid")
     private UUID userUuid;
 }

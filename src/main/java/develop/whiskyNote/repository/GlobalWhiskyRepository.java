@@ -3,12 +3,14 @@ package develop.whiskyNote.repository;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import develop.whiskyNote.dto.WhiskyItemDto;
+import develop.whiskyNote.dto.GlobalWhiskyCrawlingDataDto;
+import develop.whiskyNote.entity.User;
 import develop.whiskyNote.entity.Whisky;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static develop.whiskyNote.entity.QWhisky.whisky;
 
@@ -47,16 +49,18 @@ public class GlobalWhiskyRepository {
     /**
      * DB INSERT : WHISKY
      * **/
-    public List<Whisky> saveWhiskies(List<WhiskyItemDto> whiskyItems) {
+    public List<Whisky> saveWhiskies(List<GlobalWhiskyCrawlingDataDto> crawlingData) {
         List<Whisky> whiskyList = new ArrayList<>();
-        whiskyItems.forEach(whiskyItem -> {whiskyList.add(Whisky.builder()
-                        .botteledYear(whiskyItem.getYear())
-                        .whiskyName(whiskyItem.getName())
-                        .imageUrl(whiskyItem.getImage())
-                        .caskNumber(whiskyItem.getCaskType())
-                        .whiskyCategory(whiskyItem.getCategory())
-                        .strength(whiskyItem.getStrength())
-                .build());});
+        crawlingData.forEach(whiskyDetailInCrawlingData -> {
+            whiskyList.add(Whisky.builder()
+                    .whiskyName(whiskyDetailInCrawlingData.getWhiskyName())
+                    .imageUrl(Objects.equals(whiskyDetailInCrawlingData.getImageUrl(), "0") ? null : whiskyDetailInCrawlingData.getImageUrl())
+                    .whiskyCategory(whiskyDetailInCrawlingData.getWhiskyCategory())
+                    .strength(whiskyDetailInCrawlingData.getStrength())
+                    .bottledYear(whiskyDetailInCrawlingData.getBottledYear())
+                    .userUuid(null)
+                    .build());
+        });
         return whiskyRepository.saveAll(whiskyList);
     }
 }

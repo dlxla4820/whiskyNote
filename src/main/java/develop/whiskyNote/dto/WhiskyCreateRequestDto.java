@@ -15,7 +15,7 @@ import java.util.StringJoiner;
 public class WhiskyCreateRequestDto {
     private String whiskyName;
     private String category;
-    private String strength;
+    private Double strength;
     private Integer bottledYear;
     @Override
     public String toString() {
