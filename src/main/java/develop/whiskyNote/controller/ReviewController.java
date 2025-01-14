@@ -31,8 +31,8 @@ public class ReviewController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
     @GetMapping(value = "/whiskys")
-    public ResponseEntity<ResponseDto<?>> createFirstReview(@RequestParam(required = false) String name){
-        ResponseDto<?> response = reviewService.searchWhiskyList(name);
+    public ResponseEntity<ResponseDto<?>> createFirstReview(@RequestParam(required = false) String name, @RequestParam(required = false) String category){
+        ResponseDto<?> response = reviewService.searchWhiskyList(name, category);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 

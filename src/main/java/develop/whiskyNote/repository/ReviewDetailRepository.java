@@ -94,7 +94,7 @@ public class ReviewDetailRepository {
                 .execute();
     }
 
-    public List<WhiskyListResponseDto> findAllNameLikeWhiskyName(String name){
+    public List<WhiskyListResponseDto> findAllNameLikeWhiskyName(String name, String category){
         return queryFactory.select(Projections.fields(WhiskyListResponseDto.class, whisky.whiskyName.as("whiskyName"), whisky.uuid.as("whiskyUuid")
                         ,new CaseBuilder()
                         .when(review.uuid.isNull())  // review가 없으면
@@ -105,7 +105,8 @@ public class ReviewDetailRepository {
                 .from(whisky)
                 .leftJoin(review)
                 .on(whisky.uuid.eq(review.whisky.uuid))
-                .where(whisky.whiskyName.like("%" + name + "%"))
+                .where(likeWhiskyName(name))
+                .where(eqWhiskyCategory(category))
                 .orderBy(whisky.whiskyName.asc())
                 .limit(5)
                 .fetch();
