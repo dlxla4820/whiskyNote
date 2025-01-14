@@ -70,10 +70,10 @@ public class ReviewService {
                 .data(responseDto)
                 .build();
     }
-    public ResponseDto<?> searchWhiskyList(String name) {
+    public ResponseDto<?> searchWhiskyList(String name, String category) {
         User user = sessionUtils.getUser(RoleType.USER);
 
-        List<WhiskyListResponseDto> responseDtoList = reviewDetailRepository.findAllNameLikeWhiskyName(name);
+        List<WhiskyListResponseDto> responseDtoList = reviewDetailRepository.findAllNameLikeWhiskyName(name, category);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
