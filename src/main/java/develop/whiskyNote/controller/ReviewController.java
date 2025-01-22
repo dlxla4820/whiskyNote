@@ -48,6 +48,12 @@ public class ReviewController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
+    @GetMapping(value = "/my-reviews/whisky/{whiskyUuid}/bottle/{bottleNumber}")
+    public ResponseEntity<ResponseDto<?>> readMyReviews(@PathVariable String whiskyUuid, @PathVariable int bottleNumber){
+        ResponseDto<?> response = reviewService.readMyReviews(whiskyUuid, bottleNumber);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+
     @PostMapping(value = "/whisky", consumes ={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResponseDto<?>> createWhisky(@RequestPart(name = "data") WhiskyCreateRequestDto requestBody, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
         ResponseDto<?> response = reviewService.createWhisky(requestBody, image);
