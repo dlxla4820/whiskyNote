@@ -6,10 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import develop.whiskyNote.dto.ReviewUpsertRequestDto;
-import develop.whiskyNote.dto.WhiskyCreateRequestDto;
-import develop.whiskyNote.dto.WhiskyListResponseDto;
-import develop.whiskyNote.dto.MyWhiskyListResponseDto;
+import develop.whiskyNote.dto.*;
 import develop.whiskyNote.entity.Review;
 import develop.whiskyNote.entity.User;
 import develop.whiskyNote.entity.Whisky;
@@ -35,8 +32,9 @@ public class ReviewDetailRepository {
     }
 
 
-    public void saveReview(ReviewUpsertRequestDto requestDto, User user, Map<Long, String> imageUrls){
+    public void saveReview(ReviewUpsertRequestDto requestDto, User user, Whisky whisky,Map<Long, String> imageUrls ){
         Review review = Review.builder()
+                .whisky(whisky)
                 .content(requestDto.getContent())
                 .number(requestDto.getBottleNumber() == null ? 1 : requestDto.getBottleNumber())
                 .user(user)
@@ -76,6 +74,16 @@ public class ReviewDetailRepository {
                 .where(Expressions.stringTemplate("HEX({0})", review.whisky.uuid).eq(whiskyUuid.replace("-", "")))
                 .fetchOne();
     }
+
+    public List<MyReviewListResponseDto> findMyReviewListByWhiskyUuidAndBottleNumber(String whiskyUuid, int bottleNumber, UUID userUuid){
+        return queryFactory.select(Projections.fields(MyReviewListResponseDto.class, review.uuid.as("reviewUuid"), review.content, review.score, review.tags, review.openDate))
+                .from(review)
+                .where(Expressions.stringTemplate("HEX({0})", review.whisky.uuid).eq(whiskyUuid.replace("-", "")))
+                .where(review.number.eq(bottleNumber))
+                .where(review.user.uuid.eq(userUuid))
+                .fetch();
+    }
+
     public void updateReviewByReviewUuid(ReviewUpsertRequestDto requestDto, String reviewUuid, Map<Long, String> imageUrls){
         queryFactory.update(review)
                 .set(review.content, requestDto.getContent())
@@ -118,7 +126,7 @@ public class ReviewDetailRepository {
                         whisky.uuid.as("whiskyUuid"),
                         whisky.whiskyName.as("name"),
                         review.score.avg().as("score"), // AVG(score) 사용
-                        whisky.bottledYear.as("releaseYear"),
+                        whisky.botteledYear.as("releaseYear"),
                         whisky.imageUrl.as("photoUrl"),
                         whisky.strength.as("strength"),
                         whisky.whiskyCategory.as("category"),
@@ -133,7 +141,7 @@ public class ReviewDetailRepository {
                 .groupBy(
                         whisky.uuid,
                         whisky.whiskyName,
-                        whisky.bottledYear,
+                        whisky.botteledYear,
                         whisky.imageUrl,
                         whisky.strength,
                         whisky.whiskyCategory,
