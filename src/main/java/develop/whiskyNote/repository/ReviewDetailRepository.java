@@ -75,12 +75,13 @@ public class ReviewDetailRepository {
                 .fetchOne();
     }
 
-    public List<MyReviewListResponseDto> findMyReviewListByWhiskyUuidAndBottleNumber(String whiskyUuid, int bottleNumber, UUID userUuid){
-        return queryFactory.select(Projections.fields(MyReviewListResponseDto.class, review.uuid.as("reviewUuid"), review.content, review.score, review.tags, review.openDate))
+    public List<MyReviewListResponseDto> findMyReviewListByWhiskyUuidAndBottleNumber(String whiskyUuid, int bottleNumber, UUID userUuid, String order){
+        return queryFactory.select(Projections.fields(MyReviewListResponseDto.class, review.uuid.as("reviewUuid"),review.imageUrl.as("imageUrl"), review.content, review.score, review.tags, review.openDate))
                 .from(review)
                 .where(Expressions.stringTemplate("HEX({0})", review.whisky.uuid).eq(whiskyUuid.replace("-", "")))
                 .where(review.number.eq(bottleNumber))
                 .where(review.user.uuid.eq(userUuid))
+                .orderBy(orderByRegDate(order))
                 .fetch();
     }
 

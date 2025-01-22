@@ -49,8 +49,8 @@ public class ReviewController {
     }
 
     @GetMapping(value = "/my-reviews/whisky/{whiskyUuid}/bottle/{bottleNumber}")
-    public ResponseEntity<ResponseDto<?>> readMyReviews(@PathVariable String whiskyUuid, @PathVariable int bottleNumber){
-        ResponseDto<?> response = reviewService.readMyReviews(whiskyUuid, bottleNumber);
+    public ResponseEntity<ResponseDto<?>> readMyReviews(@PathVariable String whiskyUuid, @PathVariable int bottleNumber, @RequestParam(name = "order") String order){
+        ResponseDto<?> response = reviewService.readMyReviews(whiskyUuid, bottleNumber, order);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 

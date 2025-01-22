@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 @Getter
@@ -17,6 +18,7 @@ import java.util.StringJoiner;
 public class MyReviewListResponseDto {
     private String reviewUuid;
     private String content;
+    private Map<Long, String> imageUrl;
     private Long score;
     private LocalDateTime openDate;
     private List<String> tags;

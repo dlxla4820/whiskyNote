@@ -81,9 +81,9 @@ public class ReviewService {
 //
 //    }
 
-    public ResponseDto<?> readMyReviews(String whiskyUuid, int bottleNumber){
+    public ResponseDto<?> readMyReviews(String whiskyUuid, int bottleNumber, String order){
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
-        List<MyReviewListResponseDto> responseDtoList = reviewDetailRepository.findMyReviewListByWhiskyUuidAndBottleNumber(whiskyUuid, bottleNumber, userUuid);
+        List<MyReviewListResponseDto> responseDtoList = reviewDetailRepository.findMyReviewListByWhiskyUuidAndBottleNumber(whiskyUuid, bottleNumber, userUuid, order);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
