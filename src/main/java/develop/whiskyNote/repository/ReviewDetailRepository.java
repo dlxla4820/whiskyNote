@@ -126,7 +126,7 @@ public class ReviewDetailRepository {
                         whisky.uuid.as("whiskyUuid"),
                         whisky.whiskyName.as("name"),
                         review.score.avg().as("score"), // AVG(score) 사용
-                        whisky.botteledYear.as("releaseYear"),
+                        whisky.bottledYear.as("releaseYear"),
                         whisky.imageUrl.as("photoUrl"),
                         whisky.strength.as("strength"),
                         whisky.whiskyCategory.as("category"),
@@ -141,7 +141,7 @@ public class ReviewDetailRepository {
                 .groupBy(
                         whisky.uuid,
                         whisky.whiskyName,
-                        whisky.botteledYear,
+                        whisky.bottledYear,
                         whisky.imageUrl,
                         whisky.strength,
                         whisky.whiskyCategory,
