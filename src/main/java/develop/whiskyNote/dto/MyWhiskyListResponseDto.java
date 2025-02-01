@@ -30,14 +30,14 @@ public class MyWhiskyListResponseDto {
         return new StringJoiner(", ", MyWhiskyListResponseDto.class.getSimpleName() + "[", "]")
                 .add("whiskyUuid='" + whiskyUuid + "'")
                 .add("name='" + name + "'")
-                .add("score='" + score + "'")
+                .add("score='" + (score != null ? score.toString() : "null") + "'")  // Null 체크 추가
                 .add("caskType='" + caskType + "'")
                 .add("releaseYear='" + releaseYear + "'")
                 .add("photoUrl='" + photoUrl + "'")
                 .add("strength='" + strength + "'")
                 .add("category='" + category + "'")
-                .add("strength='" + regDate + "'")
-                .add("category='" + modDate + "'")
+                .add("regDate='" + regDate + "'")  // regDate 수정
+                .add("modDate='" + modDate + "'")  // modDate 수정
                 .toString();
     }
 }
