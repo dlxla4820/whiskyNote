@@ -123,7 +123,7 @@ public class ReviewDetailRepository {
 
 
     public List<MyWhiskyListResponseDto> findAllMyWhiskyListResponseDto(String name, String category, String nameOrder, String scoreOrder, String dateOrder, UUID userUuid){
-        return queryFactory.select(Projections.fields(MyWhiskyListResponseDto.class,
+        return queryFactory.select(Projections.constructor(MyWhiskyListResponseDto.class,
                         whisky.uuid.as("whiskyUuid"),
                         whisky.whiskyName.as("name"),
                         review.score.avg().as("score"), // AVG(score) 사용
