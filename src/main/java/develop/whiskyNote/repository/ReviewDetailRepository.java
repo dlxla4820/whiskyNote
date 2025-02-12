@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import develop.whiskyNote.dto.*;
 import develop.whiskyNote.entity.Review;
 import develop.whiskyNote.entity.User;
+import develop.whiskyNote.entity.UserWhisky;
 import develop.whiskyNote.entity.Whisky;
 import develop.whiskyNote.enums.Order;
 import org.springframework.stereotype.Repository;
@@ -22,19 +23,19 @@ import static develop.whiskyNote.entity.QWhisky.whisky;
 @Repository
 public class ReviewDetailRepository {
     private final ReviewRepository reviewRepository;
-    private final WhiskyRepository whiskyRepository;
+    private final UserWhiskyRepository userWhiskyRepository;
     private final JPAQueryFactory queryFactory;
 
-    public ReviewDetailRepository(ReviewRepository reviewRepository, WhiskyRepository whiskyRepository, JPAQueryFactory queryFactory) {
+    public ReviewDetailRepository(ReviewRepository reviewRepository, UserWhiskyRepository userWhiskyRepository, JPAQueryFactory queryFactory) {
         this.reviewRepository = reviewRepository;
-        this.whiskyRepository = whiskyRepository;
+        this.userWhiskyRepository = userWhiskyRepository;
         this.queryFactory = queryFactory;
     }
 
 
-    public void saveReview(ReviewUpsertRequestDto requestDto, User user, Whisky whisky,Map<Long, String> imageUrls ){
+    public void saveReview(ReviewUpsertRequestDto requestDto, User user, UserWhisky userWhisky, Map<Long, String> imageUrls ){
         Review review = Review.builder()
-                .whisky(whisky)
+                .userWhisky(userWhisky)
                 .content(requestDto.getContent())
                 .number(requestDto.getBottleNumber() == null ? 1 : requestDto.getBottleNumber())
                 .user(user)
@@ -47,9 +48,9 @@ public class ReviewDetailRepository {
                 .build();
         reviewRepository.save(review);
     }
-    public void saveWhisky(WhiskyCreateRequestDto requestDto, UUID userUuid, String imageUrl){
-        Whisky whisky = Whisky.builder()
-                .whiskyName(requestDto.getWhiskyName())
+    public void saveUserWhisky(WhiskyCreateRequestDto requestDto, UUID userUuid, String imageUrl){
+        UserWhisky userWhisky = UserWhisky.builder()
+                .koreaName(requestDto.getWhiskyName())
                 .whiskyCategory(requestDto.getCategory())
                 .imageUrl(imageUrl == null ? "test" : imageUrl)
                 .strength(requestDto.getStrength())

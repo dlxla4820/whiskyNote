@@ -29,12 +29,12 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "whisky_uuid", nullable = false)
-    private Whisky whisky;
+    @JoinColumn(name = "user_whisky_uuid", nullable = false)
+    private UserWhisky userWhisky;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_uuid", nullable = false)
     private User user;
 
     @Column(name = "content")
@@ -51,7 +51,6 @@ public class Review {
 
     @Column(name="open_date")
     private LocalDate openDate;
-
 
     @Column(name = "tags")
     @JdbcTypeCode(SqlTypes.JSON)
