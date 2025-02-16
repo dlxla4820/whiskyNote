@@ -54,6 +54,9 @@ public class UserWhisky {
     @Column(name = "open_date")
     private LocalDate openDate;
 
+    @Column(name = "alias")
+    private String alias;
+
     @Column(name="user_uuid")
     private UUID userUuid;
 

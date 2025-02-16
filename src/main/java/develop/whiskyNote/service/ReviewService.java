@@ -9,6 +9,7 @@ import develop.whiskyNote.enums.RoleType;
 import develop.whiskyNote.exception.ForbiddenException;
 import develop.whiskyNote.exception.ModelNotFoundException;
 import develop.whiskyNote.repository.ReviewDetailRepository;
+import develop.whiskyNote.repository.UserWhiskyRepository;
 import develop.whiskyNote.repository.WhiskyRepository;
 import develop.whiskyNote.utils.CommonUtils;
 import develop.whiskyNote.utils.ImageHandler;
@@ -29,12 +30,15 @@ import static develop.whiskyNote.utils.Constant.WHISKY_NOT_FOUND;
 public class ReviewService {
     private final ReviewDetailRepository reviewDetailRepository;
     private final WhiskyRepository whiskyRepository;
+
+    private final UserWhiskyRepository userWhiskyRepository;
     private final SessionUtils sessionUtils;
     private final ImageHandler imageHandler;
 
-    public ReviewService(ReviewDetailRepository reviewDetailRepository, WhiskyRepository whiskyRepository, SessionUtils sessionUtils, ImageHandler imageHandler) {
+    public ReviewService(ReviewDetailRepository reviewDetailRepository, WhiskyRepository whiskyRepository, UserWhiskyRepository userWhiskyRepository, SessionUtils sessionUtils, ImageHandler imageHandler) {
         this.reviewDetailRepository = reviewDetailRepository;
         this.whiskyRepository = whiskyRepository;
+        this.userWhiskyRepository = userWhiskyRepository;
         this.sessionUtils = sessionUtils;
         this.imageHandler = imageHandler;
     }
@@ -51,7 +55,7 @@ public class ReviewService {
                     .build();
 
         Map<Long, String> imageUrls = images != null ? imageHandler.save(images, user.getUuid()) : new HashMap<>();
-        reviewDetailRepository.saveReview(requestBody,  user, whisky, imageUrls);
+//        reviewDetailRepository.saveReview(requestBody,  user, whisky, imageUrls);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -81,9 +85,9 @@ public class ReviewService {
 //
 //    }
 
-    public ResponseDto<?> readMyReviews(String whiskyUuid, int bottleNumber, String order){
+    public ResponseDto<?> readMyReviews(String userWhiskyUuid, String alias, String order){
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
-        List<MyReviewListResponseDto> responseDtoList = reviewDetailRepository.findMyReviewListByWhiskyUuidAndBottleNumber(whiskyUuid, bottleNumber, userUuid, order);
+        List<MyReviewListResponseDto> responseDtoList = reviewDetailRepository.findMyReviewListByUserWhiskyUuidAndUserWhiskyAlias(userWhiskyUuid, alias, userUuid, order);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -93,7 +97,7 @@ public class ReviewService {
     public ResponseDto<?> searchWhiskyList(String name, String category) {
         User user = sessionUtils.getUser(RoleType.USER);
 
-        List<WhiskyListResponseDto> responseDtoList = reviewDetailRepository.findAllNameLikeWhiskyName(name, category);
+        List<WhiskyListResponseDto> responseDtoList = reviewDetailRepository.findAllNameListWhiskyName(name, category);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -177,8 +181,8 @@ public class ReviewService {
     public ResponseDto<?> createWhisky(WhiskyCreateRequestDto requestBody, MultipartFile image) throws IOException {
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
         String imageUrl = image == null ? null : imageHandler.save(image, userUuid);
-        reviewDetailRepository.saveWhisky(requestBody, userUuid, imageUrl);
-
+        Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow();
+        userWhiskyRepository.save(requestBody.toUserWhisky(whisky, userUuid, imageUrl));
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())

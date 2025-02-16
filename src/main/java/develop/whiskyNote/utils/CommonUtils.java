@@ -45,4 +45,9 @@ public class CommonUtils {
         else
             throw new UnauthenticatedException("unauthenticated");
     }
+
+
+    public static boolean containsKorean(String str) {
+        return str.matches(".*[가-힣].*");
+    }
 }

@@ -5,6 +5,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import develop.whiskyNote.dto.*;
 import develop.whiskyNote.entity.Review;
@@ -12,6 +13,7 @@ import develop.whiskyNote.entity.User;
 import develop.whiskyNote.entity.UserWhisky;
 import develop.whiskyNote.entity.Whisky;
 import develop.whiskyNote.enums.Order;
+import develop.whiskyNote.utils.CommonUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 import static develop.whiskyNote.entity.QReview.review;
 import static develop.whiskyNote.entity.QWhisky.whisky;
+import static develop.whiskyNote.entity.QUserWhisky.userWhisky;
 @Repository
 public class ReviewDetailRepository {
     private final ReviewRepository reviewRepository;
@@ -76,11 +79,11 @@ public class ReviewDetailRepository {
                 .fetchOne();
     }
 
-    public List<MyReviewListResponseDto> findMyReviewListByWhiskyUuidAndBottleNumber(String whiskyUuid, int bottleNumber, UUID userUuid, String order){
+    public List<MyReviewListResponseDto> findMyReviewListByUserWhiskyUuidAndUserWhiskyAlias(String userWhiskyUuid, String alias, UUID userUuid, String order){
         return queryFactory.select(Projections.fields(MyReviewListResponseDto.class, review.uuid.as("reviewUuid"),review.imageUrl.as("imageUrl"), review.content, review.score, review.tags, review.openDate))
                 .from(review)
-                .where(Expressions.stringTemplate("HEX({0})", review.whisky.uuid).eq(whiskyUuid.replace("-", "")))
-                .where(review.number.eq(bottleNumber))
+                .where(Expressions.stringTemplate("HEX({0})", review.userWhisky.uuid).eq(userWhiskyUuid.replace("-", "")))
+                .where(review.userWhisky.alias.eq(alias))
                 .where(review.user.uuid.eq(userUuid))
                 .orderBy(orderByRegDate(order))
                 .fetch();
@@ -104,8 +107,8 @@ public class ReviewDetailRepository {
                 .execute();
     }
 
-    public List<WhiskyListResponseDto> findAllNameLikeWhiskyName(String name, String category){
-        return queryFactory.select(Projections.fields(WhiskyListResponseDto.class, whisky.whiskyName.as("whiskyName"), whisky.uuid.as("whiskyUuid")
+/*    public List<WhiskyListResponseDto> findAllNameLikeWhiskyName(String name, String category){
+        return queryFactory.select(Projections.fields(WhiskyListResponseDto.class, (CommonUtils.containsKorean(name) ? whisky.koreaName.as("whiskyName") : whisky.englishName("whiskName")), whisky.uuid.as("whiskyUuid")
                         ,new CaseBuilder()
                         .when(review.uuid.isNull())  // review가 없으면
                         .then(false)  // false 반환
@@ -120,33 +123,47 @@ public class ReviewDetailRepository {
                 .orderBy(whisky.whiskyName.asc())
                 .limit(5)
                 .fetch();
+    }*/
+    public List<WhiskyListResponseDto> findAllNameListWhiskyName(String name, String category){
+        return queryFactory.select(Projections.fields(WhiskyListResponseDto.class, (CommonUtils.containsKorean(name) ? whisky.koreaName.as("whiskyName") : whisky.englishName("whiskName")),
+                        whisky.uuid.as("whiskyUuid")))
+                .from(whisky)
+                .where(likeWhiskyName(name))
+                .where(eqWhiskyCategory(category))
+                .orderBy(whisky.koreaName.asc())
+                .orderBy(whisky.englishName.asc())
+                .limit(5)
+                .fetch();
     }
+
 
 
     public List<MyWhiskyListResponseDto> findAllMyWhiskyListResponseDto(String name, String category, String nameOrder, String scoreOrder, String dateOrder, UUID userUuid){
         return queryFactory.select(Projections.constructor(MyWhiskyListResponseDto.class,
-                        whisky.uuid.as("whiskyUuid"),
-                        whisky.whiskyName.as("name"),
+                        userWhisky.uuid.as("whiskyUuid"),
+                        userWhisky.koreaName.as("koreaName"),
+                        userWhisky.englishName.as("englishName"),
                         review.score.avg().as("score"), // AVG(score) 사용
-                        whisky.bottledYear.as("releaseYear"),
-                        whisky.imageUrl.as("photoUrl"),
-                        whisky.strength.as("strength"),
-                        whisky.whiskyCategory.as("category"),
+                        userWhisky.bottledYear.as("bottledYear"),
+                        userWhisky.imageUrl.as("imageUrl"),
+                        userWhisky.strength.as("strength"),
+                        userWhisky.category.as("category"),
                         review.regDate.max().as("regDate"), // MAX(regDate)
                         review.modDate.max().as("modDate") // MAX(modDate)
                 ))
-                .from(whisky)
-                .leftJoin(review).on(review.whisky.eq(whisky))
+                .from(userWhisky)
+                .leftJoin(review).on(review.userWhisky.eq(userWhisky))
                 .where(likeWhiskyName(name))
                 .where(eqWhiskyCategory(category))
-                .where(whisky.userUuid.eq(userUuid).or(whisky.userUuid.isNull()))
+                .where(userWhisky.userUuid.eq(userUuid).or(userWhisky.userUuid.isNull()))
                 .groupBy(
-                        whisky.uuid,
-                        whisky.whiskyName,
-                        whisky.bottledYear,
-                        whisky.imageUrl,
-                        whisky.strength,
-                        whisky.whiskyCategory,
+                        userWhisky.uuid,
+                        userWhisky.koreaName,
+                        userWhisky.englishName,
+                        userWhisky.bottledYear,
+                        userWhisky.imageUrl,
+                        userWhisky.strength,
+                        userWhisky.category,
                         review.regDate,   // regDate 추가
                         review.modDate    // modDate 추가
                 )
@@ -164,7 +181,10 @@ public class ReviewDetailRepository {
     private BooleanExpression likeWhiskyName(String name){
         if(name == null || name.isEmpty())
             return null;
-        return whisky.whiskyName.like("%" + name + "%");
+        if(CommonUtils.containsKorean(name))
+            return whisky.koreaName.like("%" + name + "%");
+        return whisky.english.like("%" + name + "%");
+
     }
     private BooleanExpression eqWhiskyCategory(String category){
         if(category == null || category.isEmpty())
