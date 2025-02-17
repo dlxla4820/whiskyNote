@@ -40,7 +40,6 @@ public class ReviewDetailRepository {
         Review review = Review.builder()
                 .userWhisky(userWhisky)
                 .content(requestDto.getContent())
-                .number(requestDto.getBottleNumber() == null ? 1 : requestDto.getBottleNumber())
                 .user(user)
                 .imageUrl(imageUrls)
                 .isAnonymous(requestDto.getIsAnonymous())
@@ -50,17 +49,6 @@ public class ReviewDetailRepository {
                 .regDate(LocalDateTime.now())
                 .build();
         reviewRepository.save(review);
-    }
-    public void saveUserWhisky(WhiskyCreateRequestDto requestDto, UUID userUuid, String imageUrl){
-        UserWhisky userWhisky = UserWhisky.builder()
-                .koreaName(requestDto.getWhiskyName())
-                .whiskyCategory(requestDto.getCategory())
-                .imageUrl(imageUrl == null ? "test" : imageUrl)
-                .strength(requestDto.getStrength())
-                .userUuid(userUuid)
-                .bottledYear(requestDto.getBottledYear())
-                .build();
-        whiskyRepository.save(whisky);
     }
 
     public Review findReviewByReviewUuid(String reviewUuid){
@@ -73,9 +61,9 @@ public class ReviewDetailRepository {
                 .where(review.user.uuid.eq(userUuid))
                 .fetchOne();
     }
-    public Review findReviewByWhiskyUuid(String whiskyUuid){
+    public Review findReviewByWhiskyUuid(String userWhiskyUuid){
         return queryFactory.selectFrom(review)
-                .where(Expressions.stringTemplate("HEX({0})", review.whisky.uuid).eq(whiskyUuid.replace("-", "")))
+                .where(Expressions.stringTemplate("HEX({0})", review.userWhisky.uuid).eq(userWhiskyUuid.replace("-", "")))
                 .fetchOne();
     }
 
@@ -125,7 +113,7 @@ public class ReviewDetailRepository {
                 .fetch();
     }*/
     public List<WhiskyListResponseDto> findAllNameListWhiskyName(String name, String category){
-        return queryFactory.select(Projections.fields(WhiskyListResponseDto.class, (CommonUtils.containsKorean(name) ? whisky.koreaName.as("whiskyName") : whisky.englishName("whiskName")),
+        return queryFactory.select(Projections.fields(WhiskyListResponseDto.class, (CommonUtils.containsKorean(name) ? whisky.koreaName.as("whiskyName") : whisky.englishName.as("whiskName")),
                         whisky.uuid.as("whiskyUuid")))
                 .from(whisky)
                 .where(likeWhiskyName(name))
@@ -153,8 +141,8 @@ public class ReviewDetailRepository {
                 ))
                 .from(userWhisky)
                 .leftJoin(review).on(review.userWhisky.eq(userWhisky))
-                .where(likeWhiskyName(name))
-                .where(eqWhiskyCategory(category))
+                .where(likeUserWhiskyName(name))
+                .where(eqUserWhiskyCategory(category))
                 .where(userWhisky.userUuid.eq(userUuid).or(userWhisky.userUuid.isNull()))
                 .groupBy(
                         userWhisky.uuid,
@@ -169,7 +157,8 @@ public class ReviewDetailRepository {
                 )
                 .having(review.score.avg().isNotNull())
                 .orderBy(
-                        orderByWhiskyName(nameOrder),    // 이름 정렬
+                        orderByUserWhiskyKoreaName(nameOrder),    // 이름 정렬
+                        orderByUserWhiskyEnglishName(nameOrder),
                         orderByScore(scoreOrder),         // 점수 정렬
                         orderByRegDate(dateOrder),        // 출시일 정렬
                         review.modDate.max().desc()             // MAX(modDate) 내림차순 정렬
@@ -183,19 +172,39 @@ public class ReviewDetailRepository {
             return null;
         if(CommonUtils.containsKorean(name))
             return whisky.koreaName.like("%" + name + "%");
-        return whisky.english.like("%" + name + "%");
+        return whisky.englishName.like("%" + name + "%");
+
+    }
+    private BooleanExpression likeUserWhiskyName(String name){
+        if(name == null || name.isEmpty())
+            return null;
+        if(CommonUtils.containsKorean(name))
+            return userWhisky.koreaName.like("%" + name + "%");
+        return userWhisky.englishName.like("%" + name + "%");
 
     }
     private BooleanExpression eqWhiskyCategory(String category){
         if(category == null || category.isEmpty())
             return null;
-        return whisky.whiskyCategory.eq(category);
+        return whisky.category.eq(category);
     }
-    private OrderSpecifier<?> orderByWhiskyName(String order) {
+    private BooleanExpression eqUserWhiskyCategory(String category){
+        if(category == null || category.isEmpty())
+            return null;
+        return userWhisky.category.eq(category);
+    }
+    private OrderSpecifier<?> orderByUserWhiskyKoreaName(String order) {
         if (Order.ASC.getOrder().equals(order) || order.isEmpty())
-            return whisky.whiskyName.asc(); // ASC 정렬
+            return userWhisky.koreaName.asc(); // ASC 정렬
         if (Order.DESC.getOrder().equals(order))
-            return whisky.whiskyName.desc(); // DESC 정렬
+            return userWhisky.koreaName.desc(); // DESC 정렬
+        throw new RuntimeException();
+    }
+    private OrderSpecifier<?> orderByUserWhiskyEnglishName(String order) {
+        if (Order.ASC.getOrder().equals(order) || order.isEmpty())
+            return userWhisky.koreaName.asc(); // ASC 정렬
+        if (Order.DESC.getOrder().equals(order))
+            return userWhisky.koreaName.desc(); // DESC 정렬
         throw new RuntimeException();
     }
     private OrderSpecifier<?> orderByScore(String order) {

@@ -3,12 +3,14 @@ package develop.whiskyNote.service;
 import develop.whiskyNote.dto.*;
 import develop.whiskyNote.entity.Review;
 import develop.whiskyNote.entity.User;
+import develop.whiskyNote.entity.UserWhisky;
 import develop.whiskyNote.entity.Whisky;
 import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.enums.RoleType;
 import develop.whiskyNote.exception.ForbiddenException;
 import develop.whiskyNote.exception.ModelNotFoundException;
 import develop.whiskyNote.repository.ReviewDetailRepository;
+import develop.whiskyNote.repository.ReviewRepository;
 import develop.whiskyNote.repository.UserWhiskyRepository;
 import develop.whiskyNote.repository.WhiskyRepository;
 import develop.whiskyNote.utils.CommonUtils;
@@ -30,14 +32,15 @@ import static develop.whiskyNote.utils.Constant.WHISKY_NOT_FOUND;
 public class ReviewService {
     private final ReviewDetailRepository reviewDetailRepository;
     private final WhiskyRepository whiskyRepository;
-
+    private final ReviewRepository reviewRepository;
     private final UserWhiskyRepository userWhiskyRepository;
     private final SessionUtils sessionUtils;
     private final ImageHandler imageHandler;
 
-    public ReviewService(ReviewDetailRepository reviewDetailRepository, WhiskyRepository whiskyRepository, UserWhiskyRepository userWhiskyRepository, SessionUtils sessionUtils, ImageHandler imageHandler) {
+    public ReviewService(ReviewDetailRepository reviewDetailRepository, WhiskyRepository whiskyRepository, ReviewRepository reviewRepository, UserWhiskyRepository userWhiskyRepository, SessionUtils sessionUtils, ImageHandler imageHandler) {
         this.reviewDetailRepository = reviewDetailRepository;
         this.whiskyRepository = whiskyRepository;
+        this.reviewRepository = reviewRepository;
         this.userWhiskyRepository = userWhiskyRepository;
         this.sessionUtils = sessionUtils;
         this.imageHandler = imageHandler;
@@ -45,7 +48,7 @@ public class ReviewService {
 
     public ResponseDto<?> createReview(ReviewUpsertRequestDto requestBody, List<MultipartFile> images) throws IOException {
         User user = sessionUtils.getUser(RoleType.USER);
-        Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow(() -> new ModelNotFoundException(WHISKY_NOT_FOUND));
+        UserWhisky userWhisky = userWhiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow(() -> new ModelNotFoundException(WHISKY_NOT_FOUND));
         if(images != null && images.size() > 3)
             return ResponseDto.builder()
                     .code(MAX_PHOTO_OVER.getStatus())
@@ -55,7 +58,8 @@ public class ReviewService {
                     .build();
 
         Map<Long, String> imageUrls = images != null ? imageHandler.save(images, user.getUuid()) : new HashMap<>();
-//        reviewDetailRepository.saveReview(requestBody,  user, whisky, imageUrls);
+        Review review = requestBody.toReview(userWhisky, user, imageUrls);
+        reviewRepository.save(review);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())

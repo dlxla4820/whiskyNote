@@ -40,8 +40,6 @@ public class Review {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "number")
-    private Integer number;
     @Column(name = "image_url")
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<Long, String> imageUrl;
