@@ -30,16 +30,14 @@ public class ReviewController {
         ResponseDto<?> response = reviewService.readReview(reviewUuid);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
+    // 위스키 불러오기
     @GetMapping(value = "/whiskys")
-    public ResponseEntity<ResponseDto<?>> createFirstReview(@RequestParam(required = false) String name, @RequestParam(required = false) String category){
+    public ResponseEntity<ResponseDto<?>> searchWhiskys(@RequestParam(required = false) String name, @RequestParam(required = false) String category){
         ResponseDto<?> response = reviewService.searchWhiskyList(name, category);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
-/*    @GetMapping(value = "/whiskys")
-    public ResponseEntity<ResponseDto<?>> searchWhiskys(@RequestParam(required = false) String name);
-        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
-    }*/
+    //내 위스키 불러오기
     @GetMapping(value = "/my-whiskys")
     public ResponseEntity<ResponseDto<?>> searchMyWhiskys(@RequestParam(required = false) String name
             , @RequestParam(required = false) String category, @RequestParam(name = "score_order") String scoreOrder
@@ -48,13 +46,13 @@ public class ReviewController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
-    @GetMapping(value = "/my-reviews/whisky/{whiskyUuid}/bottle/{bottleNumber}")
-    public ResponseEntity<ResponseDto<?>> readMyReviews(@PathVariable String whiskyUuid, @PathVariable int bottleNumber, @RequestParam(name = "order") String order){
-        ResponseDto<?> response = reviewService.readMyReviews(whiskyUuid, bottleNumber, order);
+    @GetMapping(value = "/my-reviews/whisky/{userWhiskyUuid}/alias/{alias}")
+    public ResponseEntity<ResponseDto<?>> readMyReviews(@PathVariable String userWhiskyUuid, @PathVariable String alias, @RequestParam(name = "order") String order){
+        ResponseDto<?> response = reviewService.readMyReviews(userWhiskyUuid, alias, order);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
-
-    @PostMapping(value = "/whisky", consumes ={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    //위스키 저장
+    @PostMapping(value = "/my-whisky", consumes ={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResponseDto<?>> createWhisky(@RequestPart(name = "data") WhiskyCreateRequestDto requestBody, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
         ResponseDto<?> response = reviewService.createWhisky(requestBody, image);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));

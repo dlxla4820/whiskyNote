@@ -18,12 +18,14 @@ import java.util.UUID;
 @ToString
 public class MyWhiskyListResponseDto {
     private UUID whiskyUuid;
-    private String name;
+    private String koreaName;
+    private String englishName;
     private Double score;
-    private Integer releaseYear;
-    private String photoUrl;
+    private Integer bottledYear;
+    private String imageUrl;
     private Double strength;
     private String category;
+    private String caskType;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 }

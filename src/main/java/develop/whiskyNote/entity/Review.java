@@ -29,19 +29,17 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "whisky_uuid", nullable = false)
-    private Whisky whisky;
+    @JoinColumn(name = "user_whisky_uuid", nullable = false)
+    private UserWhisky userWhisky;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_uuid", nullable = false)
     private User user;
 
     @Column(name = "content")
     private String content;
 
-    @Column(name = "number")
-    private Integer number;
     @Column(name = "image_url")
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<Long, String> imageUrl;
@@ -51,7 +49,6 @@ public class Review {
 
     @Column(name="open_date")
     private LocalDate openDate;
-
 
     @Column(name = "tags")
     @JdbcTypeCode(SqlTypes.JSON)

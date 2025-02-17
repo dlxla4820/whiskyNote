@@ -12,23 +12,26 @@ import java.util.UUID;
 @Table(name = "whisky")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString
 public class Whisky {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Builder.Default
     private UUID uuid = UUID.randomUUID();
-    @Column(name = "whisky_name", nullable = false)
-    private String whiskyName;
 
-    @Column(name = "whisky_category")
-    private String whiskyCategory;
+    @Column(name = "korea_name")
+    private String koreaName;
+
+    @Column(name = "english_name")
+    private String englishName;
+
+    @Column(name = "category")
+    private String category;
+
     @Column(name = "strength")
     private Double strength;
-    @Column(name = "image_url")
-    private String imageUrl;
-    @Column(name = "bottled_year")
-    private Integer bottledYear;
-    @Column(name="user_uuid")
-    private UUID userUuid;
+
+    @Column(name = "country")
+    private String country;
 }

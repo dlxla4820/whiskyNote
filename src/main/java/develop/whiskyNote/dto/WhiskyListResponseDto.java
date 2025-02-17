@@ -15,5 +15,4 @@ import java.util.UUID;
 public class WhiskyListResponseDto {
     private String whiskyName;
     private UUID whiskyUuid;
-    private Boolean isFirst;
 }
