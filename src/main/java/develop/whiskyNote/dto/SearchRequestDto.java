@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class SearchRequestDto {
-    @JsonProperty("whisky_name")
-    private String whiskyName;
-    @JsonProperty("page_num")
-    private Integer pageNum;
+    private String searchWord;
+    private String lastWhiskyName;
 }
