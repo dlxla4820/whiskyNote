@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import develop.whiskyNote.config.LambdaConfig;
 import develop.whiskyNote.dto.BaseWhiskyRequestDto;
 import develop.whiskyNote.dto.ResponseDto;
-import develop.whiskyNote.dto.SearchRequestDto;
-import develop.whiskyNote.entity.BasicWhiskyInfo;
+import develop.whiskyNote.dto.BaseWhiskySearchRequestDto;
 import develop.whiskyNote.entity.Whisky;
 import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.repository.BaseWhiskyRepository;
@@ -39,10 +38,8 @@ public class BaseWhiskyService {
         this.objectMapper = objectMapper;
     }
 
-    public ResponseDto<?> getBaseWhiskyWithPage(SearchRequestDto requestBody) {
-        String searchName = requestBody.getSearchWord() == null || requestBody.getSearchWord().isEmpty() ? "": requestBody.getSearchWord();
-        Integer pageNum = requestBody.getLastWhiskyName() == null || requestBody.getLastWhiskyName()>=0 ? 1 : requestBody.getPageNum();
-        List<BasicWhiskyInfo> result = baseWhiskyRepository.getAllBasicWhiskyInfos();
+    public ResponseDto<?> getBaseWhiskyWithPage(BaseWhiskySearchRequestDto requestBody) {
+        List<Whisky> result = baseWhiskyRepository.getAllBasicWhiskyInfos();
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -58,16 +55,13 @@ public class BaseWhiskyService {
                     .errorCode(CRAWLING_DATA_NOT_EXIST.getErrorCode())
                     .errorDescription(CRAWLING_DATA_NOT_EXIST.getErrorDescription())
                     .build();
-        Set<String> existingWhiskyNames = baseWhiskyRepository.findExistingWhiskyNames(baseWhiskyRequestDtoList);
-        List<BasicWhiskyInfo> newWhiskies = baseWhiskyRequestDtoList.getWhiskyList().stream()
-                .filter(inputWhiskyDto -> !existingWhiskyNames.contains(inputWhiskyDto.getKoreaName()) && !existingWhiskyNames.contains(inputWhiskyDto.getEnglishName()))
-                .map(inputWhiskyDto -> BasicWhiskyInfo.builder()
-                        .koreaName(inputWhiskyDto.getKoreaName())
-                        .englishName(inputWhiskyDto.getEnglishName())
-                        .country(inputWhiskyDto.getCountry())
-                        .build())
-                .toList();
-        if(newWhiskies.isEmpty())
+        Set<String> currentExistedWhisky = baseWhiskyRepository.findSameKoreaNameOrEnglishName(baseWhiskyRequestDtoList);
+
+        baseWhiskyRequestDtoList.getWhiskyList().removeIf(inputWhiskyDTO ->
+                currentExistedWhisky.contains(inputWhiskyDTO.getKoreaName()) &&
+                currentExistedWhisky.contains(inputWhiskyDTO.getEnglishName())
+        );
+        if(baseWhiskyRequestDtoList.getWhiskyList().isEmpty())
             return ResponseDto.builder()
                     .code(ALL_WHISKY_INFO_DUPLICATE.getStatus())
                     .description(Description.FAIL)

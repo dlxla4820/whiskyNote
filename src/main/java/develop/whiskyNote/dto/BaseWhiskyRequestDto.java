@@ -12,15 +12,18 @@ import java.util.List;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class BaseWhiskyRequestDto {
-    private List<inputWhiskyDto> whiskyList;
+    private List<InputWhiskyDTO> whiskyList;
 
     @Getter
     @Setter
     @NoArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    public static class inputWhiskyDto{
+    public static class InputWhiskyDTO {
         private String country;
         private String koreaName;
         private String englishName;
+        private String category;
+        private Double strength;
     }
+
 }

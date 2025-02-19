@@ -22,7 +22,6 @@ class WiskyNoteApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-	@Autowired
 	private PooledPBEStringEncryptor encryptor;
 	@Value("${jasypt.encryptor.password}")
 	public String password;
