@@ -25,5 +25,4 @@ public class BaseWhiskyRequestDto {
         private String category;
         private Double strength;
     }
-
 }
