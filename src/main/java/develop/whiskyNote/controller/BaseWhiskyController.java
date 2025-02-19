@@ -1,6 +1,7 @@
 package develop.whiskyNote.controller;
 
 import develop.whiskyNote.dto.BaseWhiskyRequestDto;
+import develop.whiskyNote.dto.BaseWhiskySearchRequestDto;
 import develop.whiskyNote.dto.ResponseDto;
 import develop.whiskyNote.service.BaseWhiskyService;
 import lombok.RequiredArgsConstructor;
