@@ -67,11 +67,10 @@ public class ReviewDetailRepository {
                 .fetchOne();
     }
 
-    public List<MyReviewListResponseDto> findMyReviewListByUserWhiskyUuidAndUserWhiskyAlias(String userWhiskyUuid, String alias, UUID userUuid, String order){
+    public List<MyReviewListResponseDto> findMyReviewListByUserWhiskyUuid(String userWhiskyUuid,UUID userUuid, String order){
         return queryFactory.select(Projections.fields(MyReviewListResponseDto.class, review.uuid.as("reviewUuid"),review.imageUrl.as("imageUrl"), review.content, review.score, review.tags, review.openDate))
                 .from(review)
                 .where(Expressions.stringTemplate("HEX({0})", review.userWhisky.uuid).eq(userWhiskyUuid.replace("-", "")))
-                .where(review.userWhisky.alias.eq(alias))
                 .where(review.user.uuid.eq(userUuid))
                 .orderBy(orderByRegDate(order))
                 .fetch();
@@ -112,9 +111,9 @@ public class ReviewDetailRepository {
                 .limit(5)
                 .fetch();
     }*/
-    public List<WhiskyListResponseDto> findAllNameListWhiskyName(String name, String category){
-        return queryFactory.select(Projections.fields(WhiskyListResponseDto.class, (CommonUtils.containsKorean(name) ? whisky.koreaName.as("whiskyName") : whisky.englishName.as("whiskName")),
-                        whisky.uuid.as("whiskyUuid")))
+    public List<WhiskyDto> findAllNameListWhiskyName(String name, String category){
+        return queryFactory.select(Projections.fields(WhiskyDto.class, whisky.uuid.as("whiskyUuid"), whisky.koreaName.as("koreaName"),
+                whisky.englishName.as("englishName"), whisky.category.as("category"), whisky.strength.as("strength"), whisky.country.as("country")))
                 .from(whisky)
                 .where(likeWhiskyName(name))
                 .where(eqWhiskyCategory(category))
@@ -131,11 +130,17 @@ public class ReviewDetailRepository {
                         userWhisky.uuid.as("whiskyUuid"),
                         userWhisky.koreaName.as("koreaName"),
                         userWhisky.englishName.as("englishName"),
-                        review.score.avg().as("score"), // AVG(score) 사용
+                        new CaseBuilder()
+                                .when(review.score.avg().isNull())
+                                .then(0.0)
+                                .otherwise(review.score.avg()).as("score"),
                         userWhisky.bottledYear.as("bottledYear"),
                         userWhisky.imageUrl.as("imageUrl"),
                         userWhisky.strength.as("strength"),
                         userWhisky.category.as("category"),
+                        userWhisky.caskType.as("caskType"),
+                        userWhisky.openDate.as("openDate"),
+                        userWhisky.tags.as("tags"),
                         review.regDate.max().as("regDate"), // MAX(regDate)
                         review.modDate.max().as("modDate") // MAX(modDate)
                 ))
@@ -143,7 +148,6 @@ public class ReviewDetailRepository {
                 .leftJoin(review).on(review.userWhisky.eq(userWhisky))
                 .where(likeUserWhiskyName(name))
                 .where(eqUserWhiskyCategory(category))
-                .where(userWhisky.userUuid.eq(userUuid).or(userWhisky.userUuid.isNull()))
                 .groupBy(
                         userWhisky.uuid,
                         userWhisky.koreaName,
@@ -152,10 +156,13 @@ public class ReviewDetailRepository {
                         userWhisky.imageUrl,
                         userWhisky.strength,
                         userWhisky.category,
+                        userWhisky.caskType,
+                        userWhisky.openDate,
+                        userWhisky.tags,
                         review.regDate,   // regDate 추가
                         review.modDate    // modDate 추가
                 )
-                .having(review.score.avg().isNotNull())
+                //.having(review.score.avg().isNotNull())
                 .orderBy(
                         orderByUserWhiskyKoreaName(nameOrder),    // 이름 정렬
                         orderByUserWhiskyEnglishName(nameOrder),

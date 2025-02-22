@@ -11,7 +11,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.StringJoiner;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ToString
-public class WhiskyCreateRequestDto {
+public class MYWhiskyCreateRequestDto {
     private String whiskyUuid;
     private String koreaName;
     private String englishName;
@@ -29,7 +29,7 @@ public class WhiskyCreateRequestDto {
     private Integer bottledYear;
     private String caskType;
     private LocalDate openDate;
-    private String alias;
+    private List<String> tags;
 
 
     public UserWhisky toUserWhisky(Whisky whisky, UUID userUuid, String imageUrl){
@@ -43,11 +43,13 @@ public class WhiskyCreateRequestDto {
                 .bottledYear(this.bottledYear)
                 .caskType(this.caskType)
                 .openDate(this.openDate)
-                .alias(this.alias)
+                .tags(this.tags)
                 .imageUrl(imageUrl)
                 .userUuid(userUuid)
                 .regDate(LocalDateTime.now())
                 .modDate(LocalDateTime.now())
                 .build();
     }
+
+
 }

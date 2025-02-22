@@ -2,11 +2,15 @@ package develop.whiskyNote.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -54,8 +58,9 @@ public class UserWhisky {
     @Column(name = "open_date")
     private LocalDate openDate;
 
-    @Column(name = "alias")
-    private String alias;
+    @Column(name = "tags")
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<String> tags;
 
     @Column(name="user_uuid")
     private UUID userUuid;

@@ -12,7 +12,11 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class WhiskyListResponseDto {
+public class WhiskyDto {
     private String whiskyName;
+    private String koreaName;
+    private String englishName;
+    private Double strength;
+    private String country;
     private UUID whiskyUuid;
 }
