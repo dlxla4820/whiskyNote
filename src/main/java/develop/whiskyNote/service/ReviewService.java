@@ -48,7 +48,7 @@ public class ReviewService {
 
     public ResponseDto<?> createReview(ReviewUpsertRequestDto requestBody, List<MultipartFile> images) throws IOException {
         User user = sessionUtils.getUser(RoleType.USER);
-        UserWhisky userWhisky = userWhiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow(() -> new ModelNotFoundException(WHISKY_NOT_FOUND));
+        UserWhisky userWhisky = userWhiskyRepository.findById(UUID.fromString(requestBody.getMyWhiskyUuid())).orElseThrow(() -> new ModelNotFoundException(WHISKY_NOT_FOUND));
         if(images != null && images.size() > 3)
             return ResponseDto.builder()
                     .code(MAX_PHOTO_OVER.getStatus())
@@ -89,9 +89,9 @@ public class ReviewService {
 //
 //    }
 
-    public ResponseDto<?> readMyReviews(String userWhiskyUuid, String alias, String order){
+    public ResponseDto<?> readMyReviews(String userWhiskyUuid, String order){
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
-        List<MyReviewListResponseDto> responseDtoList = reviewDetailRepository.findMyReviewListByUserWhiskyUuidAndUserWhiskyAlias(userWhiskyUuid, alias, userUuid, order);
+        List<MyReviewListResponseDto> responseDtoList = reviewDetailRepository.findMyReviewListByUserWhiskyUuid(userWhiskyUuid, userUuid, order);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -101,7 +101,7 @@ public class ReviewService {
     public ResponseDto<?> searchWhiskyList(String name, String category) {
         User user = sessionUtils.getUser(RoleType.USER);
 
-        List<WhiskyListResponseDto> responseDtoList = reviewDetailRepository.findAllNameListWhiskyName(name, category);
+        List<WhiskyDto> responseDtoList = reviewDetailRepository.findAllNameListWhiskyName(name, category);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -182,7 +182,7 @@ public class ReviewService {
                 .build();
     }
 
-    public ResponseDto<?> createWhisky(WhiskyCreateRequestDto requestBody, MultipartFile image) throws IOException {
+    public ResponseDto<?> createWhisky(MYWhiskyCreateRequestDto requestBody, MultipartFile image) throws IOException {
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
         String imageUrl = image == null ? null : imageHandler.save(image, userUuid);
         Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow();
@@ -193,4 +193,20 @@ public class ReviewService {
                 .build();
     }
 
+//    public ResponseDto<?> insertWhisky()  {
+//        Whisky whisky = Whisky.builder()
+//                .koreaName("글렌리벳 12")
+//                .englishName("glenrivet 12")
+//                .category("slinglemolt")
+//                .strength(40.0)
+//                .country("scotland")
+//                .build();
+//        whiskyRepository.save(whisky);
+//        return ResponseDto.builder()
+//                .description(Description.SUCCESS)
+//                .code(HttpStatus.OK.value())
+//                .build();
+//    }
 }
+
+

@@ -6,21 +6,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class MyReviewListResponseDto {
-    private String reviewUuid;
+    private UUID reviewUuid;
     private String content;
     private Map<Long, String> imageUrl;
     private Long score;
-    private LocalDateTime openDate;
+    private LocalDate openDate;
     private List<String> tags;
     @Override
     public String toString() {

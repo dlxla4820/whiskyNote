@@ -1,8 +1,8 @@
 package develop.whiskyNote.controller;
 
+import develop.whiskyNote.dto.MYWhiskyCreateRequestDto;
 import develop.whiskyNote.dto.ResponseDto;
 import develop.whiskyNote.dto.ReviewUpsertRequestDto;
-import develop.whiskyNote.dto.WhiskyCreateRequestDto;
 import develop.whiskyNote.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,14 +46,14 @@ public class ReviewController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
-    @GetMapping(value = "/my-reviews/whisky/{userWhiskyUuid}/alias/{alias}")
-    public ResponseEntity<ResponseDto<?>> readMyReviews(@PathVariable String userWhiskyUuid, @PathVariable String alias, @RequestParam(name = "order") String order){
-        ResponseDto<?> response = reviewService.readMyReviews(userWhiskyUuid, alias, order);
+    @GetMapping(value = "/my-reviews/my-whisky/{userWhiskyUuid}")
+    public ResponseEntity<ResponseDto<?>> readMyReviews(@PathVariable String userWhiskyUuid, @RequestParam(name = "order") String order){
+        ResponseDto<?> response = reviewService.readMyReviews(userWhiskyUuid, order);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
     //위스키 저장
     @PostMapping(value = "/my-whisky", consumes ={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ResponseDto<?>> createWhisky(@RequestPart(name = "data") WhiskyCreateRequestDto requestBody, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+    public ResponseEntity<ResponseDto<?>> createWhisky(@RequestPart(name = "data") MYWhiskyCreateRequestDto requestBody, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
         ResponseDto<?> response = reviewService.createWhisky(requestBody, image);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
@@ -79,5 +79,12 @@ public class ReviewController {
         ResponseDto<?> response = reviewService.deleteReview(reviewUuid);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
+
+
+//    @PostMapping("/whisky")
+//    public ResponseEntity<ResponseDto<?>> insertWhisky() {
+//        ResponseDto<?> response = reviewService.insertWhisky();
+//        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+//    }
 
 }

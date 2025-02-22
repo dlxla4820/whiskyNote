@@ -47,7 +47,7 @@ public class CommonUtils {
     }
 
 
-    public static boolean containsKorean(String str) {
+    public static boolean containsKorean(String str) throws NullPointerException {
         return str.matches(".*[가-힣].*");
     }
 }

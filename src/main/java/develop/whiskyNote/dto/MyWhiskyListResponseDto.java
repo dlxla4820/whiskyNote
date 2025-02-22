@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -26,6 +28,11 @@ public class MyWhiskyListResponseDto {
     private Double strength;
     private String category;
     private String caskType;
+    private LocalDate openDate;
+    private List<String> tags;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
+
+
+
 }

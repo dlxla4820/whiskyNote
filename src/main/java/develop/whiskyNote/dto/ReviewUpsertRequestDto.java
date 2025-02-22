@@ -24,7 +24,7 @@ import java.util.StringJoiner;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ToString
 public class ReviewUpsertRequestDto {
-    private String whiskyUuid;
+    private String myWhiskyUuid;
     private String content;
     private Boolean isAnonymous;
     private LocalDate openDate;
