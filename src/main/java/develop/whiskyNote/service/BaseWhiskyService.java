@@ -9,6 +9,7 @@ import develop.whiskyNote.entity.Whisky;
 import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.repository.BaseWhiskyRepository;
 import develop.whiskyNote.utils.SessionUtils;
+import develop.whiskyNote.utils.TranslatorUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,14 +30,20 @@ public class BaseWhiskyService {
     private final LambdaConfig lambdaConfig;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    private final TranslatorUtils translatorUtils;
 
-    public BaseWhiskyService(BaseWhiskyRepository baseWhiskyRepository, SessionUtils sessionUtils, LambdaConfig lambdaConfig, RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public BaseWhiskyService(BaseWhiskyRepository baseWhiskyRepository, SessionUtils sessionUtils, LambdaConfig lambdaConfig, RestTemplate restTemplate, ObjectMapper objectMapper, TranslatorUtils translatorUtils) {
         this.baseWhiskyRepository = baseWhiskyRepository;
         this.sessionUtils = sessionUtils;
         this.lambdaConfig = lambdaConfig;
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+        this.translatorUtils = translatorUtils;
     }
+
+//    public ResponseDto<?> searchBaseWhiskyWithKeyWord(){
+//
+//    }
 
     public ResponseDto<?> getBaseWhiskyWithPage(BaseWhiskySearchRequestDto requestBody) {
         List<Whisky> result = baseWhiskyRepository.getAllBasicWhiskyInfos();
