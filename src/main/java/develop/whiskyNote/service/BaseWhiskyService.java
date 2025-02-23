@@ -40,6 +40,14 @@ public class BaseWhiskyService {
         this.objectMapper = objectMapper;
         this.translatorUtils = translatorUtils;
     }
+    public ResponseDto<?> getBaseWhiskyJustFive(){
+        List<Whisky> result = baseWhiskyRepository.getAllBasicWhiskyInfos();
+        return ResponseDto.builder()
+                .description(Description.SUCCESS)
+                .code(HttpStatus.OK.value())
+                .data(result)
+                .build();
+    }
 
 //    public ResponseDto<?> searchBaseWhiskyWithKeyWord(){
 //

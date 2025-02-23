@@ -36,4 +36,9 @@ public class BaseWhiskyController {
         ResponseDto<?> response = baseWhiskyService.updateBaseWhisky(baseWhiskyRequestDtoList);
         return new ResponseEntity<>(response,HttpStatus.valueOf(response.getCode()));
     }
+    @GetMapping(value="/base/test")
+    public ResponseEntity<ResponseDto<?>> getBaseWhiskyTest() throws IOException {
+        ResponseDto<?> ResponseEntity = baseWhiskyService.getBaseWhiskyJustFive();
+        return new ResponseEntity<>(ResponseEntity,HttpStatus.valueOf(ResponseEntity.getCode()));
+    }
 }
