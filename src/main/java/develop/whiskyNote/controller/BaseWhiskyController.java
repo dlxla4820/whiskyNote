@@ -17,11 +17,20 @@ import java.util.List;
 public class BaseWhiskyController {
     private final BaseWhiskyService baseWhiskyService;
 
-    @GetMapping(value = "/base")
-    public ResponseEntity<ResponseDto<?>> searchBaseWhisky( BaseWhiskySearchRequestDto searchRequestDto) {
-        ResponseDto<?> response = baseWhiskyService.getBaseWhiskyWithPage(searchRequestDto);
-        return new ResponseEntity<>(response,HttpStatus.valueOf(response.getCode()));
-    }
+
+    //위스키 기본 정보 5개 제공
+//    @GetMapping(value = "/base/")
+//    public ResponseEntity<ResponseDto<?>> searchBaseWhiskyOnlyKeyWord() {
+//        ResponseDto<?> response = baseWhiskyService.getBaseWhiskyWithPage(searchRequestDto);
+//        return new ResponseEntity<>(response,HttpStatus.valueOf(response.getCode()));
+//    }
+
+    //이것들은 나중에 public-review로 묶을 것
+    //위스키 관련 리뷰 (global) 검색
+
+    //위스키 관련 리뷰 (global) 검색 with detail
+
+
     @PostMapping(value = "/base")
     public ResponseEntity<ResponseDto<?>> updateBaseWhiskyInfo(@RequestBody BaseWhiskyRequestDto baseWhiskyRequestDtoList) throws IOException {
         ResponseDto<?> response = baseWhiskyService.updateBaseWhisky(baseWhiskyRequestDtoList);

@@ -34,16 +34,23 @@ public class BaseWhiskyRepository {
 
 
     public List<Whisky> getWhiskyByKoreaName(BaseWhiskySearchRequestDto requestDto) {
-
         String searchKeyword = requestDto.getSearchKeyword()+"%";
         List<Whisky> whiskyList = queryFactory.selectFrom(whisky)
                 .where(whisky.koreaName.contains("%"+searchKeyword))
                 .where(whisky.uuid.gt(UUID.fromString(requestDto.getLastWhiskyId())))
                 .orderBy(
                         Expressions.stringTemplate("CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",whisky, searchKeyword).asc(), whisky.koreaName.asc()
-                ).fetch();
-
-
+                ).limit(5).fetch();
+        return whiskyList;
+    }
+    public List<Whisky> getWhiskyByEnglishName(BaseWhiskySearchRequestDto requestDto) {
+        String searchKeyword = requestDto.getSearchKeyword()+"%";
+        List<Whisky> whiskyList = queryFactory.selectFrom(whisky)
+                .where(whisky.englishName.contains("%"+searchKeyword))
+                .where(whisky.uuid.gt(UUID.fromString(requestDto.getLastWhiskyId())))
+                .orderBy(
+                        Expressions.stringTemplate("CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",whisky, searchKeyword).asc(), whisky.koreaName.asc()
+                ).limit(5).fetch();
         return whiskyList;
     }
 
