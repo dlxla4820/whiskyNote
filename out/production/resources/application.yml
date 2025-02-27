@@ -1,0 +1,23 @@
+server:
+  shutdown: graceful
+  port: 8080
+
+spring:
+  jpa:
+    open-in-view: false
+    database: mysql
+    hibernate:
+      ddl-auto: update
+
+jasypt:
+  encryptor:
+    bean: jasyptEncryptor
+    property:
+      prefix: ENC(
+      suffix: )
+
+jwt:
+  secret-key: ENC(CTrM7ndYtRwgQptWmEZhZt/luxS+VwRGnsZpaXDDZc7ZlBpS7UDChWvS3zjpjHGsOXx5OfAS/4Jft9sYZdl+Fbb/VqMWEQ8cJM2h9jLR4G731ong9Cp+ND9lBpmKMdZ3DOXnamiqKNXiZbUK2MGJUHBqK7jNB8cLzYY++zBJN6eLWlSAL+bhzt18FJ1uoYrCDLB0wu36oZxTdwuL68/485EckuJfkDBv163WIIJwKH4=)
+  expiration-hours: 3
+  refresh-expiration-weeks: 2
+  issuer: UST21

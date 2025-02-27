@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2701fa11-c067-440c-92b6-e248ce53d09f" name="Changes" comment="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
+      <change afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/exception/UnprocessableEntityException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/controller/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/controller/ReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/MYWhiskyCreateRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/UserWhiskyDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/ResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/ResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/WhiskyDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/WhiskyDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/entity/UserWhisky.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/entity/UserWhisky.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/ReviewDetailRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/ReviewDetailRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/ReviewService.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="wiskyNote" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="wiskyNote" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="wiskyNote" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2pFQSQ3rDZF9E7yROATIYBByuB0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/education/build.gradle&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;9bf67c4504597bf2a1d7381fa7fe3247&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\whiskyNote\src\main\java\develop\whiskyNote" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.WhiskyNoteApplication">
+    <configuration name="JasyptTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;develop.whiskyNote.JasyptTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="whiskyNote [bootJar]" type="GradleRunConfiguration" factoryName="Gradle">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="whiskyNote [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" value="-Djasypt.encryptor.password=pistachio" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="whiskyNote [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="WhiskyNoteApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="ACTIVE_PROFILES" value="local" />
+      <option name="ALTERNATIVE_JRE_PATH" value="azul-21" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <module name="wiskyNote.main" />
+      <selectedOptions>
+        <option name="environmentVariables" />
+      </selectedOptions>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="develop.whiskyNote.WhiskyNoteApplication" />
+      <option name="VM_PARAMETERS" value="-Djasypt.encryptor.password=pistachio" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.whiskyNote [bootJar]" />
+      <item itemvalue="Gradle.whiskyNote [clean]" />
+      <item itemvalue="Gradle.whiskyNote [build]" />
+      <item itemvalue="Gradle.JasyptTest" />
+      <item itemvalue="Spring Boot.WhiskyNoteApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.whiskyNote [clean]" />
+        <item itemvalue="Gradle.whiskyNote [build]" />
+        <item itemvalue="Gradle.JasyptTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2701fa11-c067-440c-92b6-e248ce53d09f" name="Changes" comment="" />
+      <created>1732359342811</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1732359342811</updated>
+      <workItem from="1732359344603" duration="1170000" />
+      <workItem from="1732703836066" duration="672000" />
+      <workItem from="1733310353569" duration="2765000" />
+      <workItem from="1733580563923" duration="1512000" />
+      <workItem from="1733911896245" duration="1195000" />
+      <workItem from="1733997705656" duration="13164000" />
+      <workItem from="1734088123425" duration="1005000" />
+      <workItem from="1734274327072" duration="1509000" />
+      <workItem from="1734359215605" duration="1031000" />
+      <workItem from="1734606682718" duration="1632000" />
+      <workItem from="1734785025385" duration="5037000" />
+      <workItem from="1734834275407" duration="5581000" />
+      <workItem from="1734868803742" duration="5476000" />
+      <workItem from="1735131853144" duration="44000" />
+      <workItem from="1735214571581" duration="825000" />
+      <workItem from="1735224669801" duration="44000" />
+      <workItem from="1735294864596" duration="2889000" />
+      <workItem from="1735400704918" duration="1380000" />
+      <workItem from="1735651484534" duration="7864000" />
+      <workItem from="1735705445573" duration="3141000" />
+      <workItem from="1735724283641" duration="3349000" />
+      <workItem from="1735741739347" duration="804000" />
+      <workItem from="1735959252112" duration="600000" />
+      <workItem from="1735967827353" duration="1600000" />
+      <workItem from="1735979858249" duration="41000" />
+      <workItem from="1736331130866" duration="3721000" />
+      <workItem from="1736766798422" duration="629000" />
+      <workItem from="1736770372256" duration="684000" />
+      <workItem from="1736848341525" duration="3702000" />
+      <workItem from="1736940760637" duration="2757000" />
+      <workItem from="1737023371550" duration="1482000" />
+      <workItem from="1737190696866" duration="1854000" />
+      <workItem from="1737209114001" duration="2982000" />
+      <workItem from="1737270476988" duration="600000" />
+      <workItem from="1737453663342" duration="46000" />
+      <workItem from="1737542293205" duration="3761000" />
+      <workItem from="1737732281022" duration="28000" />
+      <workItem from="1738397687679" duration="5587000" />
+      <workItem from="1738680115529" duration="1977000" />
+      <workItem from="1738841588125" duration="717000" />
+      <workItem from="1739096897404" duration="5096000" />
+      <workItem from="1739269026619" duration="69000" />
+      <workItem from="1739279907292" duration="1488000" />
+      <workItem from="1739446121759" duration="1589000" />
+      <workItem from="1739542797024" duration="600000" />
+      <workItem from="1739693081510" duration="6649000" />
+      <workItem from="1739783281349" duration="2955000" />
+      <workItem from="1739966550512" duration="704000" />
+      <workItem from="1739967311066" duration="774000" />
+      <workItem from="1740131529215" duration="217000" />
+      <workItem from="1740221815663" duration="9255000" />
+      <workItem from="1740298705264" duration="3949000" />
+      <workItem from="1740479905753" duration="883000" />
+      <workItem from="1740569468122" duration="2593000" />
+      <workItem from="1740582208607" duration="282000" />
+      <workItem from="1740664202194" duration="1438000" />
+    </task>
+    <task id="LOCAL-00001" summary="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
+      <option name="closed" value="true" />
+      <created>1732359883676</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732359883676</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

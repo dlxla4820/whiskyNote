@@ -13,7 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class WhiskyDto {
-    private String whiskyName;
     private String koreaName;
     private String englishName;
     private Double strength;

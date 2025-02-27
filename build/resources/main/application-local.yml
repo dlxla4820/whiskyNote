@@ -1,0 +1,12 @@
+server:
+  shutdown: graceful
+  port: 8080
+spring:
+  datasource:
+    url: ENC(vqJ1dv4vi/eprVTV32oi0kY0CHb1TH50vQ5pATNHb/YgdZXZ8vAlAeJJ5q/JIc5SsaLNhasCAX3UUPtnY2V8Hqc/VWgJ/kkskkhxe3BzrjHtrLx5Yya4+IrowostsWFiS9L6PvnDw8tdFDop9fLFEw==)
+    username: ENC(rb+1eENOywxIneqUsq6I5mxgJsyCYypB0WbnjUuvoAHhe0tLBNJ3nkH/YmogtadO)
+    password: ENC(JIXYu07a93thG9eHqq5uZPCwTofxSqj257MI6Hv4JQnGLjQ0EE0s0XMsCl2d1T3v)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+file:
+  path: C:\\file_image\\

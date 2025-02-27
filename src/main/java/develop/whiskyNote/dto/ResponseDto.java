@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import develop.whiskyNote.enums.Description;
+import develop.whiskyNote.enums.ErrorCode;
 import lombok.*;
 
 import java.util.StringJoiner;
@@ -26,6 +27,22 @@ public class ResponseDto<T> {
     private T data;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String accessToken;
+
+    public ResponseDto(Integer code, Description description, ErrorCode errorCode){
+        this.code = code;
+        this.description = description;
+        this.errorCode = errorCode.getErrorCode();
+        this.errorDescription = errorCode.getErrorDescription();
+    }
+
+    public ResponseDto(Integer code, Description description, ErrorCode errorCode, T data){
+        this.code = code;
+        this.description = description;
+        this.errorCode = errorCode.getErrorCode();
+        this.errorDescription = errorCode.getErrorDescription();
+        this.data = data;
+    }
+
 
     @Override
     public String toString(){

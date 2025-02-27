@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ToString
-public class MYWhiskyCreateRequestDto {
+public class UserWhiskyDto {
     private String whiskyUuid;
     private String koreaName;
     private String englishName;
@@ -29,7 +29,7 @@ public class MYWhiskyCreateRequestDto {
     private Integer bottledYear;
     private String caskType;
     private LocalDate openDate;
-    private List<String> tags;
+    private String memo;
 
 
     public UserWhisky toUserWhisky(Whisky whisky, UUID userUuid, String imageUrl){
@@ -43,7 +43,7 @@ public class MYWhiskyCreateRequestDto {
                 .bottledYear(this.bottledYear)
                 .caskType(this.caskType)
                 .openDate(this.openDate)
-                .tags(this.tags)
+                .memo(this.memo)
                 .imageUrl(imageUrl)
                 .userUuid(userUuid)
                 .regDate(LocalDateTime.now())

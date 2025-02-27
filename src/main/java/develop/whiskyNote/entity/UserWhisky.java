@@ -58,9 +58,8 @@ public class UserWhisky {
     @Column(name = "open_date")
     private LocalDate openDate;
 
-    @Column(name = "tags")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<String> tags;
+    @Column(name = "memo")
+    private String memo;
 
     @Column(name="user_uuid")
     private UUID userUuid;

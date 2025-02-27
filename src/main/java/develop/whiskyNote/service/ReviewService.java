@@ -6,6 +6,7 @@ import develop.whiskyNote.entity.User;
 import develop.whiskyNote.entity.UserWhisky;
 import develop.whiskyNote.entity.Whisky;
 import develop.whiskyNote.enums.Description;
+import develop.whiskyNote.enums.ErrorCode;
 import develop.whiskyNote.enums.RoleType;
 import develop.whiskyNote.exception.ForbiddenException;
 import develop.whiskyNote.exception.ModelNotFoundException;
@@ -182,9 +183,22 @@ public class ReviewService {
                 .build();
     }
 
-    public ResponseDto<?> createWhisky(MYWhiskyCreateRequestDto requestBody, MultipartFile image) throws IOException {
+    public ResponseDto<?> createWhisky(UserWhiskyDto requestBody, MultipartFile image) throws IOException {
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
         String imageUrl = image == null ? null : imageHandler.save(image, userUuid);
+        Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow();
+        userWhiskyRepository.save(requestBody.toUserWhisky(whisky, userUuid, imageUrl));
+        return ResponseDto.builder()
+                .description(Description.SUCCESS)
+                .code(HttpStatus.OK.value())
+                .build();
+    }
+
+    public ResponseDto<?> updateWhisky(String userWhiskyUuid, UserWhiskyDto requestBody, MultipartFile image) throws IOException {
+        UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
+        UserWhisky userWhisky = userWhiskyRepository.findById(UUID.fromString(userWhiskyUuid)).orElseThrow(() -> new ForbiddenException("access deny"));
+        String imageUrl = image == null ? null : imageHandler.save(image, userUuid);
+
         Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow();
         userWhiskyRepository.save(requestBody.toUserWhisky(whisky, userUuid, imageUrl));
         return ResponseDto.builder()

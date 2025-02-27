@@ -88,6 +88,25 @@ public class ReviewDetailRepository {
                 .where(Expressions.stringTemplate("HEX({0})", review.uuid).eq(reviewUuid.replace("-", "")))
                 .execute();
     }
+
+    public void updateUserWhisky(UserWhiskyDto requestDto, UUID userWhiskyUuid, String imageUrl){
+        queryFactory.update(userWhisky)
+                .set(userWhisky.koreaName, requestDto.getKoreaName())
+                .set(userWhisky.englishName, requestDto.getEnglishName())
+                .set(userWhisky.category, requestDto.getCategory())
+                .set(userWhisky.strength, requestDto.getStrength())
+                .set(userWhisky.country, requestDto.getCountry())
+                .set(userWhisky.imageUrl, imageUrl)
+                .set(userWhisky.bottledYear, requestDto.getBottledYear())
+                .set(userWhisky.caskType, requestDto.getCaskType())
+                .set(userWhisky.openDate, requestDto.getOpenDate())
+                .set(userWhisky.memo, requestDto.getMemo())
+                .set(userWhisky.modDate, LocalDateTime.now())
+                .where(userWhisky.uuid.eq(userWhiskyUuid))
+                .execute();
+    }
+
+
     public void deleteReviewByReviewUuid(String reviewUuid){
         queryFactory.delete(review)
                 .where(Expressions.stringTemplate("HEX({0})", review.uuid).eq(reviewUuid.replace("-", "")))
@@ -140,7 +159,7 @@ public class ReviewDetailRepository {
                         userWhisky.category.as("category"),
                         userWhisky.caskType.as("caskType"),
                         userWhisky.openDate.as("openDate"),
-                        userWhisky.tags.as("tags"),
+                        userWhisky.memo.as("memo"),
                         review.regDate.max().as("regDate"), // MAX(regDate)
                         review.modDate.max().as("modDate") // MAX(modDate)
                 ))
@@ -158,7 +177,7 @@ public class ReviewDetailRepository {
                         userWhisky.category,
                         userWhisky.caskType,
                         userWhisky.openDate,
-                        userWhisky.tags,
+                        userWhisky.memo,
                         review.regDate,   // regDate 추가
                         review.modDate    // modDate 추가
                 )
