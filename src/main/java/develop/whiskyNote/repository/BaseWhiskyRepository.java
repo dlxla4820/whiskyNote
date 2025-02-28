@@ -31,29 +31,35 @@ public class BaseWhiskyRepository {
         this.queryFactory = queryFactory;
     }
     private Integer pageSize = 10;
-
-
-    public List<Whisky> getWhiskyByKoreaName(BaseWhiskySearchRequestDto requestDto) {
-        String searchKeyword = requestDto.getSearchKeyword()+"%";
-        List<Whisky> whiskyList = queryFactory.selectFrom(whisky)
-                .where(whisky.koreaName.contains("%"+searchKeyword))
-                .where(whisky.uuid.gt(UUID.fromString(requestDto.getLastWhiskyId())))
+    public List<String> getWhiskyByKoreaName(String keyword) {
+        List<String> whiskyList = queryFactory.select(whisky.koreaName)
+                .from(whisky)
+                .where(whisky.koreaName.contains(keyword))
                 .orderBy(
-                        Expressions.stringTemplate("CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",whisky, searchKeyword).asc(), whisky.koreaName.asc()
-                ).limit(5).fetch();
+                        Expressions.stringTemplate(
+                                "CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",
+                                whisky.koreaName, keyword + "%"
+                                ).asc(),
+                        whisky.koreaName.asc()
+                )
+                .limit(5).fetch();
         return whiskyList;
     }
-    public List<Whisky> getWhiskyByEnglishName(BaseWhiskySearchRequestDto requestDto) {
-        String searchKeyword = requestDto.getSearchKeyword()+"%";
-        List<Whisky> whiskyList = queryFactory.selectFrom(whisky)
-                .where(whisky.englishName.contains("%"+searchKeyword))
-                .where(whisky.uuid.gt(UUID.fromString(requestDto.getLastWhiskyId())))
+    //나중에 시간이 된다면 유사검색 시도
+    public List<String> getWhiskyByEnglishName(String keyword) {
+        List<String> whiskyList = queryFactory.select(whisky.englishName)
+                .from(whisky)
+                .where(whisky.englishName.containsIgnoreCase(keyword))
                 .orderBy(
-                        Expressions.stringTemplate("CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",whisky, searchKeyword).asc(), whisky.koreaName.asc()
-                ).limit(5).fetch();
+                        Expressions.stringTemplate(
+                                "CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",
+                                whisky.englishName, keyword+"%"
+                        ).asc(),
+                        whisky.englishName.asc()
+                )
+                .limit(5).fetch();
         return whiskyList;
     }
-
     //Whisky Database에 데이터 추가
     public List<Whisky> saveWhiskies(BaseWhiskyRequestDto baseWhiskyRequestDtos) {
         List<Whisky> whiskyList = new ArrayList<>();

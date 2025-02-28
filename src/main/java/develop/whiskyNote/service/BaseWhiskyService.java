@@ -40,8 +40,9 @@ public class BaseWhiskyService {
         this.objectMapper = objectMapper;
         this.translatorUtils = translatorUtils;
     }
-    public ResponseDto<?> getBaseWhiskyJustFive(){
-        List<Whisky> result = baseWhiskyRepository.getAllBasicWhiskyInfos();
+    public ResponseDto<?> searchFiveBaseWhiskyUsingKeyword(String keyword){
+
+        List<String> result = translatorUtils.isKorean(keyword)? baseWhiskyRepository.getWhiskyByKoreaName(keyword) : baseWhiskyRepository.getWhiskyByEnglishName(keyword);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -53,7 +54,7 @@ public class BaseWhiskyService {
 //
 //    }
 
-    public ResponseDto<?> getBaseWhiskyWithPage(BaseWhiskySearchRequestDto requestBody) {
+    public ResponseDto<?> getAllBaseWhiskyInfos() {
         List<Whisky> result = baseWhiskyRepository.getAllBasicWhiskyInfos();
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
