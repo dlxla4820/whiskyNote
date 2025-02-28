@@ -19,14 +19,19 @@ public class BaseWhiskyController {
 
 
     //위스키 기본 정보 5개 제공
-//    @GetMapping(value = "/base/")
-//    public ResponseEntity<ResponseDto<?>> searchBaseWhiskyOnlyKeyWord() {
-//        ResponseDto<?> response = baseWhiskyService.getBaseWhiskyWithPage(searchRequestDto);
-//        return new ResponseEntity<>(response,HttpStatus.valueOf(response.getCode()));
-//    }
+    @GetMapping(value = "/base")
+    public ResponseEntity<ResponseDto<?>> searchBaseWhiskyOnlyKeyWord(@RequestParam String keyword) {
+        ResponseDto<?> response = baseWhiskyService.searchFiveBaseWhiskyUsingKeyword(keyword);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+
 
     //이것들은 나중에 public-review로 묶을 것
     //위스키 관련 리뷰 (global) 검색
+//    @GetMapping(value="/base/review/{uuid}")
+//    public ResponseEntity<ResponseDto<?>> searchOtherUserReviewAboutWhisky(@PathVariable String uuid, @RequestParam String searchword) {
+//        ResponseDto<?> response
+//    }
 
     //위스키 관련 리뷰 (global) 검색 with detail
 
@@ -36,9 +41,9 @@ public class BaseWhiskyController {
         ResponseDto<?> response = baseWhiskyService.updateBaseWhisky(baseWhiskyRequestDtoList);
         return new ResponseEntity<>(response,HttpStatus.valueOf(response.getCode()));
     }
-    @GetMapping(value="/base/test")
-    public ResponseEntity<ResponseDto<?>> getBaseWhiskyTest() throws IOException {
-        ResponseDto<?> ResponseEntity = baseWhiskyService.getBaseWhiskyJustFive();
-        return new ResponseEntity<>(ResponseEntity,HttpStatus.valueOf(ResponseEntity.getCode()));
-    }
+//    @GetMapping(value="/base/test")
+//    public ResponseEntity<ResponseDto<?>> getBaseWhiskyTest() throws IOException {
+//        ResponseDto<?> ResponseEntity = baseWhiskyService.getAllBaseWhiskyInfos();
+//        return new ResponseEntity<>(ResponseEntity,HttpStatus.valueOf(ResponseEntity.getCode()));
+//    }
 }
