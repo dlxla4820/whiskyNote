@@ -32,7 +32,7 @@ public class QUserWhisky extends EntityPathBase<UserWhisky> {
 
     public final StringPath englishName = createString("englishName");
 
-    public final StringPath imageUrl = createString("imageUrl");
+    public final StringPath imageName = createString("imageName");
 
     public final StringPath koreaName = createString("koreaName");
 

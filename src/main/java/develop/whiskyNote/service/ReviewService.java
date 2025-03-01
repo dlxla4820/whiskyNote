@@ -1,19 +1,12 @@
 package develop.whiskyNote.service;
 
 import develop.whiskyNote.dto.*;
-import develop.whiskyNote.entity.Review;
-import develop.whiskyNote.entity.User;
-import develop.whiskyNote.entity.UserWhisky;
-import develop.whiskyNote.entity.Whisky;
+import develop.whiskyNote.entity.*;
 import develop.whiskyNote.enums.Description;
-import develop.whiskyNote.enums.ErrorCode;
 import develop.whiskyNote.enums.RoleType;
 import develop.whiskyNote.exception.ForbiddenException;
 import develop.whiskyNote.exception.ModelNotFoundException;
-import develop.whiskyNote.repository.ReviewDetailRepository;
-import develop.whiskyNote.repository.ReviewRepository;
-import develop.whiskyNote.repository.UserWhiskyRepository;
-import develop.whiskyNote.repository.WhiskyRepository;
+import develop.whiskyNote.repository.*;
 import develop.whiskyNote.utils.CommonUtils;
 import develop.whiskyNote.utils.ImageHandler;
 import develop.whiskyNote.utils.SessionUtils;
@@ -35,14 +28,18 @@ public class ReviewService {
     private final WhiskyRepository whiskyRepository;
     private final ReviewRepository reviewRepository;
     private final UserWhiskyRepository userWhiskyRepository;
+    private final ImageFileRepository imageFileRepository;
+    private final ImageFileDetailRepository imageFileDetailRepository;
     private final SessionUtils sessionUtils;
     private final ImageHandler imageHandler;
 
-    public ReviewService(ReviewDetailRepository reviewDetailRepository, WhiskyRepository whiskyRepository, ReviewRepository reviewRepository, UserWhiskyRepository userWhiskyRepository, SessionUtils sessionUtils, ImageHandler imageHandler) {
+    public ReviewService(ReviewDetailRepository reviewDetailRepository, WhiskyRepository whiskyRepository, ReviewRepository reviewRepository, UserWhiskyRepository userWhiskyRepository, ImageFileRepository imageFileRepository, ImageFileDetailRepository imageFileDetailRepository, SessionUtils sessionUtils, ImageHandler imageHandler) {
         this.reviewDetailRepository = reviewDetailRepository;
         this.whiskyRepository = whiskyRepository;
         this.reviewRepository = reviewRepository;
         this.userWhiskyRepository = userWhiskyRepository;
+        this.imageFileRepository = imageFileRepository;
+        this.imageFileDetailRepository = imageFileDetailRepository;
         this.sessionUtils = sessionUtils;
         this.imageHandler = imageHandler;
     }
@@ -183,24 +180,30 @@ public class ReviewService {
                 .build();
     }
 
-    public ResponseDto<?> createWhisky(UserWhiskyDto requestBody, MultipartFile image) throws IOException {
+    public ResponseDto<?> createWhisky(UserWhiskyDto requestBody){
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
-        String imageUrl = image == null ? null : imageHandler.save(image, userUuid);
-        Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow();
-        userWhiskyRepository.save(requestBody.toUserWhisky(whisky, userUuid, imageUrl));
+        Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow(() -> new ModelNotFoundException("Whisky Not Found"));
+        ImageFile imageFile = imageFileRepository.findByName(requestBody.getImageName()).orElse(null);
+        String imageName = (imageFile == null) ? null : requestBody.getImageName();
+        userWhiskyRepository.save(requestBody.toUserWhisky(whisky, userUuid, imageName));
+        if(imageName != null)
+            imageFileDetailRepository.updateImageFileIsSavedByNameAndUserUuid(imageName, userUuid);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
                 .build();
     }
 
-    public ResponseDto<?> updateWhisky(String userWhiskyUuid, UserWhiskyDto requestBody, MultipartFile image) throws IOException {
+    public ResponseDto<?> updateWhisky(String userWhiskyUuid, UserWhiskyDto requestBody) {
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
         UserWhisky userWhisky = userWhiskyRepository.findById(UUID.fromString(userWhiskyUuid)).orElseThrow(() -> new ForbiddenException("access deny"));
-        String imageUrl = image == null ? null : imageHandler.save(image, userUuid);
 
-        Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow();
-        userWhiskyRepository.save(requestBody.toUserWhisky(whisky, userUuid, imageUrl));
+        ImageFile imageFile = imageFileRepository.findByName(requestBody.getImageName()).orElse(null);
+        String imageName = (imageFile == null) ? null : requestBody.getImageName();
+        if(imageName != null)
+            imageFileDetailRepository.updateImageFileIsSavedByNameAndUserUuid(imageName, userUuid);
+
+        reviewDetailRepository.updateUserWhisky(requestBody,userWhisky.getUserUuid(), imageName);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())

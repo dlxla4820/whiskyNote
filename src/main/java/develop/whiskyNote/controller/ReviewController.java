@@ -1,8 +1,10 @@
 package develop.whiskyNote.controller;
 
 import develop.whiskyNote.dto.ResponseDto;
+import develop.whiskyNote.dto.ResponseHeaderDto;
 import develop.whiskyNote.dto.ReviewUpsertRequestDto;
 import develop.whiskyNote.dto.UserWhiskyDto;
+import develop.whiskyNote.service.FileService;
 import develop.whiskyNote.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-
+    private final FileService fileService;
     @PostMapping(value = "/review", consumes ={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResponseDto<?>> createReview(@RequestPart(name = "data") ReviewUpsertRequestDto requestBody, @RequestPart(name = "images", required = false) List<MultipartFile> images ) throws IOException {
         ResponseDto<?> response = reviewService.createReview(requestBody,images);
@@ -48,16 +50,16 @@ public class ReviewController {
     }
 
     //위스키 저장
-    @PostMapping(value = "/my-whisky", consumes ={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ResponseDto<?>> createWhisky(@RequestPart(name = "data") UserWhiskyDto requestBody, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
-        ResponseDto<?> response = reviewService.createWhisky(requestBody, image);
+    @PostMapping(value = "/my-whisky")
+    public ResponseEntity<ResponseDto<?>> createWhisky(@RequestBody UserWhiskyDto requestBody) {
+        ResponseDto<?> response = reviewService.createWhisky(requestBody);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
     //위스키 변경
-    @PostMapping(value = "/my-whisky/{userWhiskyUuid}", consumes ={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/my-whisky/{userWhiskyUuid}")
     public ResponseEntity<ResponseDto<?>> updateWhisky(@PathVariable String userWhiskyUuid, @RequestPart(name = "data") UserWhiskyDto requestBody, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
-        ResponseDto<?> response = reviewService.updateWhisky(userWhiskyUuid, requestBody, image);
+        ResponseDto<?> response = reviewService.updateWhisky(userWhiskyUuid, requestBody);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
@@ -81,10 +83,23 @@ public class ReviewController {
     }
 
 
+    @PostMapping(value = "/image-upload",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ResponseDto<?>> uploadFile(@RequestPart(name = "image", required = false) MultipartFile image){
+        ResponseDto<?> response = fileService.uploadFile(image);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+
+    @GetMapping("/image/{imageName}")
+    public ResponseEntity<?> showAsset(@PathVariable String imageName) {
+        ResponseDto<?> responseDto = fileService.showImage(imageName);
+        ResponseHeaderDto responseHeaderDto = (ResponseHeaderDto) responseDto.getData();
+        return new ResponseEntity<>(responseHeaderDto.getData(),responseHeaderDto.getHeaders(), HttpStatus.valueOf(responseDto.getCode()));
+    }
+}
+
 //    @PostMapping("/whisky")
 //    public ResponseEntity<ResponseDto<?>> insertWhisky() {
 //        ResponseDto<?> response = reviewService.insertWhisky();
 //        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
 //    }
 
-}

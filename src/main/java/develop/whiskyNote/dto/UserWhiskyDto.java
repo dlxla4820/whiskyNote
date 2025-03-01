@@ -30,9 +30,9 @@ public class UserWhiskyDto {
     private String caskType;
     private LocalDate openDate;
     private String memo;
+    private String imageName;
 
-
-    public UserWhisky toUserWhisky(Whisky whisky, UUID userUuid, String imageUrl){
+    public UserWhisky toUserWhisky(Whisky whisky, UUID userUuid, String imageName){
         return UserWhisky.builder()
                 .whisky(whisky)
                 .koreaName(this.koreaName)
@@ -44,7 +44,7 @@ public class UserWhiskyDto {
                 .caskType(this.caskType)
                 .openDate(this.openDate)
                 .memo(this.memo)
-                .imageUrl(imageUrl)
+                .imageName(imageName)
                 .userUuid(userUuid)
                 .regDate(LocalDateTime.now())
                 .modDate(LocalDateTime.now())
