@@ -24,12 +24,12 @@ public class MyWhiskyListResponseDto {
     private String englishName;
     private Double score;
     private Integer bottledYear;
-    private String imageUrl;
+    private String imageName;
     private Double strength;
     private String category;
     private String caskType;
     private LocalDate openDate;
-    private List<String> tags;
+    private String memo;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 

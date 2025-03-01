@@ -46,8 +46,8 @@ public class UserWhisky {
     @Column(name="country")
     private String country;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "image_name")
+    private String imageName;
 
     @Column(name = "bottled_year")
     private Integer bottledYear;
@@ -63,6 +63,7 @@ public class UserWhisky {
 
     @Column(name="user_uuid")
     private UUID userUuid;
+
 
     @Column(name = "reg_date")
     private LocalDateTime regDate;

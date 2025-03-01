@@ -89,14 +89,14 @@ public class ReviewDetailRepository {
                 .execute();
     }
 
-    public void updateUserWhisky(UserWhiskyDto requestDto, UUID userWhiskyUuid, String imageUrl){
+    public void updateUserWhisky(UserWhiskyDto requestDto, UUID userWhiskyUuid, String imageName){
         queryFactory.update(userWhisky)
                 .set(userWhisky.koreaName, requestDto.getKoreaName())
                 .set(userWhisky.englishName, requestDto.getEnglishName())
                 .set(userWhisky.category, requestDto.getCategory())
                 .set(userWhisky.strength, requestDto.getStrength())
                 .set(userWhisky.country, requestDto.getCountry())
-                .set(userWhisky.imageUrl, imageUrl)
+                .set(userWhisky.imageName, imageName)
                 .set(userWhisky.bottledYear, requestDto.getBottledYear())
                 .set(userWhisky.caskType, requestDto.getCaskType())
                 .set(userWhisky.openDate, requestDto.getOpenDate())
@@ -154,7 +154,7 @@ public class ReviewDetailRepository {
                                 .then(0.0)
                                 .otherwise(review.score.avg()).as("score"),
                         userWhisky.bottledYear.as("bottledYear"),
-                        userWhisky.imageUrl.as("imageUrl"),
+                        userWhisky.imageName.as("imageName"),
                         userWhisky.strength.as("strength"),
                         userWhisky.category.as("category"),
                         userWhisky.caskType.as("caskType"),
@@ -172,7 +172,7 @@ public class ReviewDetailRepository {
                         userWhisky.koreaName,
                         userWhisky.englishName,
                         userWhisky.bottledYear,
-                        userWhisky.imageUrl,
+                        userWhisky.imageName,
                         userWhisky.strength,
                         userWhisky.category,
                         userWhisky.caskType,
