@@ -30,13 +30,14 @@ public class ReviewUpsertRequestDto {
     private LocalDate openDate;
     private List<String> tags;
     private Long score;
+    private List<String> imageNames;
 
-    public Review toReview(UserWhisky userWhisky, User user, Map<Long, String> imageUrls){
+    public Review toReview(UserWhisky userWhisky, User user){
         return Review.builder()
                 .userWhisky(userWhisky)
                 .content(this.content)
                 .user(user)
-                .imageUrl(imageUrls)
+                .imageNames(this.imageNames)
                 .isAnonymous(this.isAnonymous)
                 .tags(this.tags)
                 .openDate(this.openDate)

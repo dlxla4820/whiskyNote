@@ -36,12 +36,12 @@ public class ReviewDetailRepository {
     }
 
 
-    public void saveReview(ReviewUpsertRequestDto requestDto, User user, UserWhisky userWhisky, Map<Long, String> imageUrls ){
+    public void saveReview(ReviewUpsertRequestDto requestDto, User user, UserWhisky userWhisky){
         Review review = Review.builder()
                 .userWhisky(userWhisky)
                 .content(requestDto.getContent())
                 .user(user)
-                .imageUrl(imageUrls)
+                .imageNames(requestDto.getImageNames())
                 .isAnonymous(requestDto.getIsAnonymous())
                 .tags(requestDto.getTags())
                 .openDate(requestDto.getOpenDate())
@@ -68,7 +68,7 @@ public class ReviewDetailRepository {
     }
 
     public List<MyReviewListResponseDto> findMyReviewListByUserWhiskyUuid(String userWhiskyUuid,UUID userUuid, String order){
-        return queryFactory.select(Projections.fields(MyReviewListResponseDto.class, review.uuid.as("reviewUuid"),review.imageUrl.as("imageUrl"), review.content, review.score, review.tags, review.openDate))
+        return queryFactory.select(Projections.fields(MyReviewListResponseDto.class, review.uuid.as("reviewUuid"),review.imageNames.as("imageNames"), review.content, review.score, review.tags, review.openDate))
                 .from(review)
                 .where(Expressions.stringTemplate("HEX({0})", review.userWhisky.uuid).eq(userWhiskyUuid.replace("-", "")))
                 .where(review.user.uuid.eq(userUuid))
@@ -76,10 +76,10 @@ public class ReviewDetailRepository {
                 .fetch();
     }
 
-    public void updateReviewByReviewUuid(ReviewUpsertRequestDto requestDto, String reviewUuid, Map<Long, String> imageUrls){
+    public void updateReviewByReviewUuid(ReviewUpsertRequestDto requestDto, String reviewUuid){
         queryFactory.update(review)
                 .set(review.content, requestDto.getContent())
-                .set(review.imageUrl, imageUrls)
+                .set(review.imageNames, requestDto.getImageNames())
                 .set(review.isAnonymous, requestDto.getIsAnonymous())
                 .set(review.openDate, requestDto.getOpenDate())
                 .set(review.score, requestDto.getScore())
@@ -153,6 +153,7 @@ public class ReviewDetailRepository {
                                 .when(review.score.avg().isNull())
                                 .then(0.0)
                                 .otherwise(review.score.avg()).as("score"),
+                        userWhisky.country.as("country"),
                         userWhisky.bottledYear.as("bottledYear"),
                         userWhisky.imageName.as("imageName"),
                         userWhisky.strength.as("strength"),

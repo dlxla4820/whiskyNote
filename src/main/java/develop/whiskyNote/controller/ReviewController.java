@@ -22,9 +22,9 @@ import java.util.UUID;
 public class ReviewController {
     private final ReviewService reviewService;
     private final FileService fileService;
-    @PostMapping(value = "/review", consumes ={MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ResponseDto<?>> createReview(@RequestPart(name = "data") ReviewUpsertRequestDto requestBody, @RequestPart(name = "images", required = false) List<MultipartFile> images ) throws IOException {
-        ResponseDto<?> response = reviewService.createReview(requestBody,images);
+    @PostMapping(value = "/review")
+    public ResponseEntity<ResponseDto<?>> createReview(@RequestBody ReviewUpsertRequestDto requestBody)  {
+        ResponseDto<?> response = reviewService.createReview(requestBody);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
@@ -63,15 +63,15 @@ public class ReviewController {
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
-    @GetMapping(value = "/my-reviews/my-whisky/{userWhiskyUuid}")
+    @GetMapping(value = "/my-whisky/{userWhiskyUuid}/my-reviews")
     public ResponseEntity<ResponseDto<?>> readMyReviews(@PathVariable String userWhiskyUuid, @RequestParam(name = "order") String order){
         ResponseDto<?> response = reviewService.readMyReviews(userWhiskyUuid, order);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 
-    @PutMapping(value = "/review/{reviewUuid}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ResponseDto<?>> updateReview(@PathVariable String reviewUuid, @RequestPart(name = "data") ReviewUpsertRequestDto requestBody, @RequestPart(name = "images", required = false) List<MultipartFile> images) throws IOException{
-        ResponseDto<?> response = reviewService.updateReview(reviewUuid,requestBody,images);
+    @PutMapping(value = "/review/{reviewUuid}")
+    public ResponseEntity<ResponseDto<?>> updateReview(@PathVariable String reviewUuid, @RequestBody ReviewUpsertRequestDto requestBody) {
+        ResponseDto<?> response = reviewService.updateReview(reviewUuid,requestBody);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
 

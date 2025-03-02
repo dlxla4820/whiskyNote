@@ -40,9 +40,9 @@ public class Review {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "image_url")
+    @Column(name = "image_names")
     @JdbcTypeCode(SqlTypes.JSON)
-    private Map<Long, String> imageUrl;
+    private List<String> imageNames;
 
     @Column(name="is_anonymous")
     private Boolean isAnonymous;
@@ -70,10 +70,10 @@ public class Review {
                 .add("user_device='" + user.getDeviceId() + "'")
                 .add("content='" + content + "'")
                 .add("isAnonymous='" + isAnonymous + "'")
-                .add("imageUrl='" + imageUrl + "'")
-                .add("imageUrl='" + openDate + "'")
-                .add("imageUrl='" + tags + "'")
-                .add("imageUrl='" + score + "'")
+                .add("imageNames='" + imageNames + "'")
+                .add("openDate='" + openDate + "'")
+                .add("tags='" + tags + "'")
+                .add("score='" + score + "'")
                 .add("regDate='" + regDate + "'")
                 .add("modDate='" + modDate + "'")
                 .toString();

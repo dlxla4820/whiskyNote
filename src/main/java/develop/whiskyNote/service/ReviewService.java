@@ -44,19 +44,17 @@ public class ReviewService {
         this.imageHandler = imageHandler;
     }
 
-    public ResponseDto<?> createReview(ReviewUpsertRequestDto requestBody, List<MultipartFile> images) throws IOException {
+    public ResponseDto<?> createReview(ReviewUpsertRequestDto requestBody) {
         User user = sessionUtils.getUser(RoleType.USER);
         UserWhisky userWhisky = userWhiskyRepository.findById(UUID.fromString(requestBody.getMyWhiskyUuid())).orElseThrow(() -> new ModelNotFoundException(WHISKY_NOT_FOUND));
-        if(images != null && images.size() > 3)
+        if(requestBody.getImageNames() != null && requestBody.getImageNames().size() > 3)
             return ResponseDto.builder()
                     .code(MAX_PHOTO_OVER.getStatus())
                     .description(Description.FAIL)
                     .errorCode(MAX_PHOTO_OVER.getErrorCode())
                     .errorDescription(MAX_PHOTO_OVER.getErrorDescription())
                     .build();
-
-        Map<Long, String> imageUrls = images != null ? imageHandler.save(images, user.getUuid()) : new HashMap<>();
-        Review review = requestBody.toReview(userWhisky, user, imageUrls);
+        Review review = requestBody.toReview(userWhisky, user);
         reviewRepository.save(review);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
@@ -71,7 +69,7 @@ public class ReviewService {
 
         ReviewResponseDto responseDto = review == null ? null : ReviewResponseDto.builder()
                 .content(review.getContent())
-                .imageUrl(review.getImageUrl())
+                .imageNames(review.getImageNames())
                 .isAnonymous(review.getIsAnonymous())
                 .openDate(review.getOpenDate())
                 .tags(review.getTags())
@@ -143,14 +141,14 @@ public class ReviewService {
 //        Review review =
 //    }
 
-    public ResponseDto<?> updateReview(String reviewUuid,  ReviewUpsertRequestDto requestBody, List<MultipartFile> images) throws IOException {
+    public ResponseDto<?> updateReview(String reviewUuid, ReviewUpsertRequestDto requestBody) {
         User user = sessionUtils.getUser(RoleType.USER);
         Review review = reviewDetailRepository.findReviewByReviewUuid(reviewUuid);
 
         if(review != null && review.getUser().getUuid() != user.getUuid())
             throw new ForbiddenException("Access Denied");
 
-        if(images != null && images.size() > 3)
+        if(requestBody.getImageNames() != null && requestBody.getImageNames().size() > 3)
             return ResponseDto.builder()
                     .code(MAX_PHOTO_OVER.getStatus())
                     .description(Description.FAIL)
@@ -158,8 +156,7 @@ public class ReviewService {
                     .errorDescription(MAX_PHOTO_OVER.getErrorDescription())
                     .build();
 
-        Map<Long, String> imageUrls = images != null ? imageHandler.save(images, user.getUuid()) : new HashMap<>();
-        reviewDetailRepository.updateReviewByReviewUuid(requestBody, reviewUuid, imageUrls);
+        reviewDetailRepository.updateReviewByReviewUuid(requestBody, reviewUuid);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
