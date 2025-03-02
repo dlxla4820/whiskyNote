@@ -20,7 +20,7 @@ import java.util.StringJoiner;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ReviewResponseDto {
     private String content;
-    private Map<Long, String> imageUrl;
+    private List<String> imageNames;
     private Boolean isAnonymous;
     private List<String> tags;
     private LocalDate openDate;
@@ -29,7 +29,7 @@ public class ReviewResponseDto {
     public String toString() {
         return new StringJoiner(", ", ReviewResponseDto.class.getSimpleName() + "[", "]")
                 .add("content='" + content + "'")
-                .add("imageUrl='" + imageUrl + "'")
+                .add("imageNames='" + imageNames + "'")
                 .add("isAnonymous='" + isAnonymous + "'")
                 .add("tags='" + tags + "'")
                 .add("openDate='" + openDate + "'")

@@ -24,7 +24,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public final StringPath content = createString("content");
 
-    public final MapPath<Long, String, StringPath> imageUrl = this.<Long, String, StringPath>createMap("imageUrl", Long.class, String.class, StringPath.class);
+    public final ListPath<String, StringPath> imageNames = this.<String, StringPath>createList("imageNames", String.class, StringPath.class, PathInits.DIRECT2);
 
     public final BooleanPath isAnonymous = createBoolean("isAnonymous");
 

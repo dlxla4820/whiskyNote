@@ -23,6 +23,7 @@ public class MyWhiskyListResponseDto {
     private String koreaName;
     private String englishName;
     private Double score;
+    private String country;
     private Integer bottledYear;
     private String imageName;
     private Double strength;

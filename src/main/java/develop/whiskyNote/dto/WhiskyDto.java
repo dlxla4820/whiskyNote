@@ -16,6 +16,7 @@ public class WhiskyDto {
     private String koreaName;
     private String englishName;
     private Double strength;
+    private String category;
     private String country;
     private UUID whiskyUuid;
 }
