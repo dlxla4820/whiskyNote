@@ -2,14 +2,14 @@ package develop.whiskyNote.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import develop.whiskyNote.config.LambdaConfig;
+import develop.whiskyNote.dto.BaseWhiskyFiveResponseDto;
 import develop.whiskyNote.dto.BaseWhiskyRequestDto;
 import develop.whiskyNote.dto.ResponseDto;
-import develop.whiskyNote.dto.BaseWhiskySearchRequestDto;
 import develop.whiskyNote.entity.Whisky;
 import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.repository.BaseWhiskyRepository;
+import develop.whiskyNote.utils.CommonUtils;
 import develop.whiskyNote.utils.SessionUtils;
-import develop.whiskyNote.utils.TranslatorUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static develop.whiskyNote.enums.ErrorCode.ALL_WHISKY_INFO_DUPLICATE;
 import static develop.whiskyNote.enums.ErrorCode.CRAWLING_DATA_NOT_EXIST;
@@ -30,19 +31,17 @@ public class BaseWhiskyService {
     private final LambdaConfig lambdaConfig;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
-    private final TranslatorUtils translatorUtils;
 
-    public BaseWhiskyService(BaseWhiskyRepository baseWhiskyRepository, SessionUtils sessionUtils, LambdaConfig lambdaConfig, RestTemplate restTemplate, ObjectMapper objectMapper, TranslatorUtils translatorUtils) {
+    public BaseWhiskyService(BaseWhiskyRepository baseWhiskyRepository, SessionUtils sessionUtils, LambdaConfig lambdaConfig, RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.baseWhiskyRepository = baseWhiskyRepository;
         this.sessionUtils = sessionUtils;
         this.lambdaConfig = lambdaConfig;
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
-        this.translatorUtils = translatorUtils;
     }
-    public ResponseDto<?> searchFiveBaseWhiskyUsingKeyword(String keyword){
+    public ResponseDto<?> searchFiveBaseWhiskyUsingKeyword(String keyword) {
 
-        List<String> result = translatorUtils.isKorean(keyword)? baseWhiskyRepository.getWhiskyByKoreaName(keyword) : baseWhiskyRepository.getWhiskyByEnglishName(keyword);
+        List<BaseWhiskyFiveResponseDto> result = CommonUtils.containsKorean(keyword)? baseWhiskyRepository.getWhiskyByKoreaName(keyword) : baseWhiskyRepository.getWhiskyByEnglishName(keyword);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -50,9 +49,11 @@ public class BaseWhiskyService {
                 .build();
     }
 
-//    public ResponseDto<?> searchBaseWhiskyWithKeyWord(){
-//
-//    }
+    public ResponseDto<?> searchOtherUserReviewUsingKeyword(String uuid, String keyword, int page) {
+        UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
+
+        return ResponseDto.builder().build();
+    }
 
     public ResponseDto<?> getAllBaseWhiskyInfos() {
         List<Whisky> result = baseWhiskyRepository.getAllBasicWhiskyInfos();
