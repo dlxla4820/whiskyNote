@@ -1,18 +1,16 @@
 package develop.whiskyNote.repository;
 
-import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import develop.whiskyNote.dto.BaseWhiskyFiveResponseDto;
 import develop.whiskyNote.dto.BaseWhiskyRequestDto;
-import develop.whiskyNote.dto.BaseWhiskySearchRequestDto;
 import develop.whiskyNote.entity.Whisky;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static develop.whiskyNote.entity.QWhisky.whisky;
@@ -31,8 +29,16 @@ public class BaseWhiskyRepository {
         this.queryFactory = queryFactory;
     }
     private Integer pageSize = 10;
-    public List<String> getWhiskyByKoreaName(String keyword) {
-        List<String> whiskyList = queryFactory.select(whisky.koreaName)
+
+//    public List<>
+
+    public List<BaseWhiskyFiveResponseDto> getWhiskyByKoreaName(String keyword) {
+        List<BaseWhiskyFiveResponseDto> whiskyList = queryFactory.select(Projections.fields(BaseWhiskyFiveResponseDto.class,
+                        whisky.koreaName.as("whiskyKoreaName"),
+                        whisky.englishName.as("whiskyEnglishName"),
+                        whisky.category.as("whiskyCategory"),
+                        whisky.uuid.as("whiskyUuid")
+                        ))
                 .from(whisky)
                 .where(whisky.koreaName.contains(keyword))
                 .orderBy(
@@ -46,8 +52,13 @@ public class BaseWhiskyRepository {
         return whiskyList;
     }
     //나중에 시간이 된다면 유사검색 시도
-    public List<String> getWhiskyByEnglishName(String keyword) {
-        List<String> whiskyList = queryFactory.select(whisky.englishName)
+    public List<BaseWhiskyFiveResponseDto> getWhiskyByEnglishName(String keyword) {
+        List<BaseWhiskyFiveResponseDto> whiskyList = queryFactory.select(Projections.fields(BaseWhiskyFiveResponseDto.class,
+                        whisky.englishName.as("whiskyEnglishName"),
+                        whisky.koreaName.as("whiskyKoreaName"),
+                        whisky.category.as("whiskyCategory"),
+                        whisky.uuid.as("whiskyUuid")
+                ))
                 .from(whisky)
                 .where(whisky.englishName.containsIgnoreCase(keyword))
                 .orderBy(
