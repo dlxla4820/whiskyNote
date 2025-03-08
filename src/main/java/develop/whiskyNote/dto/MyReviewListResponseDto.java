@@ -20,7 +20,7 @@ import java.util.UUID;
 public class MyReviewListResponseDto {
     private UUID reviewUuid;
     private String content;
-    private Map<Long, String> imageUrl;
+    private List<String> imageNames;
     private Long score;
     private LocalDate openDate;
     private List<String> tags;
@@ -29,6 +29,7 @@ public class MyReviewListResponseDto {
         return new StringJoiner(", ", MyReviewListResponseDto.class.getSimpleName() + "[", "]")
                 .add("reviewUuid='" + reviewUuid + "'")
                 .add("content='" + content + "'")
+                .add("imageNames" + imageNames + "'")
                 .add("score='" + score + "'")
                 .add("openDate='" + openDate + "'")
                 .add("tags='" + tags + "'")

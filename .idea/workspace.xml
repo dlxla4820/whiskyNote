@@ -5,30 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2701fa11-c067-440c-92b6-e248ce53d09f" name="Changes" comment="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/controller/ReviewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/controller/ReviewController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/dto/WhiskyDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/dto/WhiskyDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/repository/ReviewDetailRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/repository/ReviewDetailRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/develop/whiskyNote/entity/QReview.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/develop/whiskyNote/entity/QReview.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/MyWhiskyListResponseDto.class.uniqueId2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ReviewController.class.uniqueId1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ReviewService.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/controller/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/controller/ReviewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/MyWhiskyListResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/MyWhiskyListResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/ReviewResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/ReviewResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/ReviewUpsertRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/ReviewUpsertRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/WhiskyDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/WhiskyDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/entity/Review.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/entity/Review.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/ReviewDetailRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/ReviewDetailRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/ReviewService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/MyReviewListResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/dto/MyReviewListResponseDto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -307,7 +285,11 @@
       <workItem from="1740582208607" duration="282000" />
       <workItem from="1740664202194" duration="1438000" />
       <workItem from="1740835658323" duration="9986000" />
-      <workItem from="1740931424725" duration="1846000" />
+      <workItem from="1740931424725" duration="2036000" />
+      <workItem from="1740997774408" duration="53000" />
+      <workItem from="1741174515775" duration="1055000" />
+      <workItem from="1741261463391" duration="1285000" />
+      <workItem from="1741270744784" duration="10000" />
     </task>
     <task id="LOCAL-00001" summary="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
       <option name="closed" value="true" />
