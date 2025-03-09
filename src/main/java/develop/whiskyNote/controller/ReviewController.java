@@ -58,7 +58,7 @@ public class ReviewController {
 
     //위스키 변경
     @PostMapping(value = "/my-whisky/{userWhiskyUuid}")
-    public ResponseEntity<ResponseDto<?>> updateWhisky(@PathVariable String userWhiskyUuid, @RequestPart(name = "data") UserWhiskyDto requestBody, @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+    public ResponseEntity<ResponseDto<?>> updateWhisky(@PathVariable String userWhiskyUuid, @RequestBody UserWhiskyDto requestBody) {
         ResponseDto<?> response = reviewService.updateWhisky(userWhiskyUuid, requestBody);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
