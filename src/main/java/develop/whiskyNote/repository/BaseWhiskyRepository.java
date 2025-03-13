@@ -30,8 +30,6 @@ public class BaseWhiskyRepository {
     }
     private Integer pageSize = 10;
 
-//    public List<>
-
     public List<BaseWhiskyFiveResponseDto> getWhiskyByKoreaName(String keyword) {
         List<BaseWhiskyFiveResponseDto> whiskyList = queryFactory.select(Projections.fields(BaseWhiskyFiveResponseDto.class,
                         whisky.koreaName.as("whiskyKoreaName"),

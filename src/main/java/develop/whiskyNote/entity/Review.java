@@ -63,6 +63,11 @@ public class Review {
     @Column(name = "mod_date")
     private LocalDateTime modDate;
 
+    //좋아요 수
+    @Column(name="like_count")
+    @Builder.Default
+    private int likeCount = 0;
+
     @Override
     public String toString() {
         return new StringJoiner(", ", Review.class.getSimpleName() + "[", "]")

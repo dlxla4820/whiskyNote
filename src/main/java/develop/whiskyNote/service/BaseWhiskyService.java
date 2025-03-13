@@ -27,17 +27,9 @@ import static develop.whiskyNote.enums.ErrorCode.CRAWLING_DATA_NOT_EXIST;
 @Transactional
 public class BaseWhiskyService {
     private final BaseWhiskyRepository baseWhiskyRepository;
-    private final SessionUtils sessionUtils;
-    private final LambdaConfig lambdaConfig;
-    private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
 
-    public BaseWhiskyService(BaseWhiskyRepository baseWhiskyRepository, SessionUtils sessionUtils, LambdaConfig lambdaConfig, RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public BaseWhiskyService(BaseWhiskyRepository baseWhiskyRepository) {
         this.baseWhiskyRepository = baseWhiskyRepository;
-        this.sessionUtils = sessionUtils;
-        this.lambdaConfig = lambdaConfig;
-        this.restTemplate = restTemplate;
-        this.objectMapper = objectMapper;
     }
     public ResponseDto<?> searchFiveBaseWhiskyUsingKeyword(String keyword) {
 
@@ -51,7 +43,6 @@ public class BaseWhiskyService {
 
     public ResponseDto<?> searchOtherUserReviewUsingKeyword(String uuid, String keyword, int page) {
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
-
         return ResponseDto.builder().build();
     }
 
