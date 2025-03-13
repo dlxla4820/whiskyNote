@@ -5,6 +5,8 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import develop.whiskyNote.dto.GetOtherReviewListReqeustDto;
 import develop.whiskyNote.dto.GetOtherReviewListResponseDto;
+import develop.whiskyNote.entity.Review;
+import develop.whiskyNote.entity.ReviewLikeCount;
 import org.springframework.stereotype.Repository;
 
 import static develop.whiskyNote.entity.QReview.review;
@@ -14,21 +16,24 @@ import java.util.List;
 
 @Repository
 public class OtherUserReviewRepository {
-    private final ReviewLIkeRepository reviewLIkeRepository;
+    private final ReviewLikeCountRepository reviewLikeCountRepository;
     private final BaseWhiskyRepository baseWhiskyRepository;
     private final UserRepository userRepository;
     private final JPAQueryFactory jpaQueryFactory;
+    private final ReviewLikeMappingRepository reviewLikeMappingRepository;
 
 
-    public OtherUserReviewRepository(
-            ReviewLIkeRepository reviewLIkeRepository,
-            BaseWhiskyRepository baseWhiskyRepository,
-            UserRepository userRepository,
-            JPAQueryFactory jpaQueryFactory) {
-        this.reviewLIkeRepository = reviewLIkeRepository;
+    public OtherUserReviewRepository(ReviewLikeCountRepository reviewLikeCountRepository, BaseWhiskyRepository baseWhiskyRepository, UserRepository userRepository, JPAQueryFactory jpaQueryFactory, ReviewLikeMappingRepository reviewLikeMappingRepository) {
+        this.reviewLikeCountRepository = reviewLikeCountRepository;
         this.baseWhiskyRepository = baseWhiskyRepository;
         this.userRepository = userRepository;
         this.jpaQueryFactory = jpaQueryFactory;
+        this.reviewLikeMappingRepository = reviewLikeMappingRepository;
+    }
+    //좋아요 갯수 생성하기
+    public void save(Review review) {
+        ReviewLikeCount reviewLikeCount = ReviewLikeCount.builder().reviewId(review.getUuid()).build();
+        reviewLikeCountRepository.save(reviewLikeCount);
     }
 
     //좋아요 누르기

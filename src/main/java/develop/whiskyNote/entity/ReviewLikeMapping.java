@@ -8,7 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@Table(name="review_like")
+@Table(name="review_like_mapping")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewLikeMapping {
@@ -21,7 +21,7 @@ public class ReviewLikeMapping {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="like_count_id", nullable=false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private LikeCount likeCount;
+    private ReviewLikeCount reviewLikeCount;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

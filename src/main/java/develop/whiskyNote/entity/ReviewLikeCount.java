@@ -12,22 +12,23 @@ import java.util.UUID;
 
 @Entity
 @Builder
-@Table(name="like_count")
+@Table(name="review_like_count")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class LikeCount {
+public class ReviewLikeCount {
     @Id
     @Builder.Default
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid = UUID.randomUUID();
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "review_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Review review;
+    @Column//외래키 사용지 않는 이유 -> discord 20250313-2 검색
+    private UUID reviewId;
 
-    @Column(name = "like_count")
     @Builder.Default
+    @Column(name = "like_count")
     private int likeCount = 0;
 
+    //리뷰 삭제 시에 삭제
+    //리뷰의 isAnnonymous가 False이면 생성 안되어야 함
+    //좋아요 삭제되면 삭제되어야 함
 }
