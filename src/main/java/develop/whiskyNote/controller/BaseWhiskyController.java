@@ -16,8 +16,6 @@ public class BaseWhiskyController {
     private final BaseWhiskyService baseWhiskyService;
 
 
-    //
-
     //위스키 기본 이름 5개 제공
     @GetMapping(value = "/base")
     public ResponseEntity<ResponseDto<?>> searchFiveBaseWhiskyName(@RequestParam String keyword) {

@@ -7,6 +7,7 @@ import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.repository.OtherUserReviewRepository;
 import develop.whiskyNote.utils.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RedissonClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,14 @@ import java.util.UUID;
 @Service
 public class OtherUserReviewService {
     private final OtherUserReviewRepository otherUserReviewRepository;
+    private final RedissonClient redisson;
 
     public OtherUserReviewService(
-            OtherUserReviewRepository otherUserReviewRepository
+            OtherUserReviewRepository otherUserReviewRepository,
+            RedissonClient redisson
     ) {
         this.otherUserReviewRepository = otherUserReviewRepository;
+        this.redisson = redisson;
     }
 
     public ResponseDto<?> searchOtherUserReviewUsingKeyword(GetOtherReviewListReqeustDto getOtherReviewListReqeustDto) {
@@ -36,4 +40,5 @@ public class OtherUserReviewService {
                 .data(result)
                 .build();
     }
+
 }

@@ -8,12 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@Table(name="review_like",
-    indexes = {
-        @Index(name="idx_review_id", columnList = "reviewId"),
-        @Index(name="idx_user_id", columnList = "userId")
-    }
-)
+@Table(name="review_like")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewLikeMapping {

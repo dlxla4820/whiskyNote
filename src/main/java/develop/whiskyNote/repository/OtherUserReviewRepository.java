@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import develop.whiskyNote.dto.GetOtherReviewListReqeustDto;
 import develop.whiskyNote.dto.GetOtherReviewListResponseDto;
 import org.springframework.stereotype.Repository;
-import static develop.whiskyNote.entity.QReviewLike.reviewLike;
+
 import static develop.whiskyNote.entity.QReview.review;
 
 import java.time.LocalDateTime;
@@ -48,9 +48,9 @@ public class OtherUserReviewRepository {
                             review.tags,
                             review.imageNames.as("imageNames"),
                             Expressions.dateTemplate(LocalDateTime.class, "GREATEST({0}, {1})", review.regDate, review.modDate)
-                                .as("lastUpdateDate"),
+                                .as("lastUpdateDate")
 //                            reviewLike.review.isNotNull().as("likeUuid"),
-                            review.likeCount
+
                         ))
                 .from(review)
 //                .leftJoin(reviewLike).on(reviewLike.review)
