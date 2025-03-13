@@ -19,26 +19,4 @@ import java.util.UUID;
 @TestPropertySource(properties = "jasypt.encryptor.password=pistachio")
 class WiskyNoteApplicationTests {
 
-//	@Test
-//	void contextLoads() {
-//	}
-//	private PooledPBEStringEncryptor encryptor;
-//	@Value("${jasypt.encryptor.password}")
-//	public String password;
-//	@Test
-//	@DisplayName("encrypt")
-//	void encrypt(){
-//		String targetText = "https://13.125.39.61:3306/";
-//
-//
-//		String encryptedText = encryptor.encrypt(targetText);
-//		System.out.println(encryptedText);
-//
-//		String decryptedText = encryptor.decrypt(encryptedText);
-//		System.out.println(decryptedText);
-//
-//		Assertions.assertEquals(targetText, decryptedText);
-//
-//
-//	}
 }

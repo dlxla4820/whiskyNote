@@ -3,7 +3,8 @@ package develop.whiskyNote.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.UUID;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -15,26 +16,23 @@ import java.util.UUID;
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ReviewLike {
+public class ReviewLikeMapping {
     //해당 테이블에 데이터가 추가되면 좋아요를 누른 것
     //삭제되면 좋아요를 삭제한 것
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String reviewLikeId;
-    @Column(nullable = false)
-    private UUID reviewId;
-    @Column(nullable = false)
-    private UUID userId;
 
-    @Builder
-    public ReviewLike(UUID reviewId, UUID userId) {
-        this.reviewId = reviewId;
-        this.userId = userId;
-        this.reviewLikeId = generateReviewLikeId(reviewId, userId);
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="like_count_id", nullable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private LikeCount likeCount;
 
-    private static String generateReviewLikeId(UUID reviewId, UUID userId) {
-        return(reviewId.toString() + userId.toString()).replaceAll("-", "");
-    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
 
 }
 

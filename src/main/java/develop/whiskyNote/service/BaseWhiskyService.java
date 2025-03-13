@@ -1,7 +1,5 @@
 package develop.whiskyNote.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import develop.whiskyNote.config.LambdaConfig;
 import develop.whiskyNote.dto.BaseWhiskyFiveResponseDto;
 import develop.whiskyNote.dto.BaseWhiskyRequestDto;
 import develop.whiskyNote.dto.ResponseDto;
@@ -9,12 +7,10 @@ import develop.whiskyNote.entity.Whisky;
 import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.repository.BaseWhiskyRepository;
 import develop.whiskyNote.utils.CommonUtils;
-import develop.whiskyNote.utils.SessionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Set;

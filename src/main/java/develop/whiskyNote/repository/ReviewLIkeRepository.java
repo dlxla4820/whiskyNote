@@ -1,10 +1,10 @@
 package develop.whiskyNote.repository;
 
-import develop.whiskyNote.entity.ReviewLike;
+import develop.whiskyNote.entity.ReviewLikeMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface ReviewLIkeRepository extends JpaRepository<ReviewLike, UUID> {
+public interface ReviewLIkeRepository extends JpaRepository<ReviewLikeMapping, UUID> {
 
 }
