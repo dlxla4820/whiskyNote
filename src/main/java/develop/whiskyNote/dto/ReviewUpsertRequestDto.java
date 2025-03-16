@@ -13,10 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor
@@ -34,6 +31,7 @@ public class ReviewUpsertRequestDto {
 
     public Review toReview(UserWhisky userWhisky, User user){
         return Review.builder()
+                .uuid(UUID.randomUUID())
                 .userWhisky(userWhisky)
                 .content(this.content)
                 .user(user)

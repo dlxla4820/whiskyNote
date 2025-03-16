@@ -4,6 +4,7 @@ import develop.whiskyNote.dto.ResponseDto;
 import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.enums.ErrorCode;
 import develop.whiskyNote.exception.ForbiddenException;
+import develop.whiskyNote.exception.ReviewLikeException;
 import develop.whiskyNote.exception.UnauthenticatedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,17 @@ public class ExceptionController {
                 .description(Description.FAIL)
                 .errorDescription(ErrorCode.TOKEN_UNAUTHORIZED.getErrorDescription())
                 .build(), HttpStatus.UNAUTHORIZED);  // 401 Unauthorized
+    }
+
+    @ExceptionHandler(ReviewLikeException.class)
+    public ResponseEntity<?> handleReviewLikeException(ReviewLikeException ex) {
+        ErrorCode errorCode = ErrorCode.valueOf(ex.getMessage());
+        return new ResponseEntity<>(ResponseDto.builder()
+                .code(errorCode.getStatus())
+                .errorCode(errorCode.getErrorCode())
+                .description(Description.FAIL)
+                .errorDescription(errorCode.getErrorDescription())
+                .build(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ForbiddenException.class)

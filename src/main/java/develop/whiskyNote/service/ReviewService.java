@@ -59,7 +59,7 @@ public class ReviewService {
         Review review = requestBody.toReview(userWhisky, user);
         reviewRepository.save(review);
         //ReviewLikeCount 데이터 생성
-        if(requestBody.getIsAnonymous()) otherUserReviewRepository.save(review);
+        if(requestBody.getIsAnonymous()) otherUserReviewRepository.save(review.getUuid());
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())

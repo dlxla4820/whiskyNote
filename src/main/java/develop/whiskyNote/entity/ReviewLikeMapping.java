@@ -6,6 +6,9 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.UUID;
+
+@Builder
 @Entity
 @Getter
 @Table(name="review_like_mapping")
@@ -16,17 +19,17 @@ public class ReviewLikeMapping {
     //삭제되면 좋아요를 삭제한 것
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String reviewLikeId;
+    private UUID reviewLikeId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="like_count_id", nullable=false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    //OneToMany랑 mapped 되는 필드
     private ReviewLikeCount reviewLikeCount;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    //OneToMany랑 mapped 되는 필드
     private User user;
 
 }

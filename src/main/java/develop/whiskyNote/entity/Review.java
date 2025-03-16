@@ -23,7 +23,8 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Review {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    //reviewCount entity 생성을 위해서 자동 생성 방지
+//    @GeneratedValue(strategy = GenerationType.UUID)
     @Builder.Default
     private UUID uuid = UUID.randomUUID();
 
