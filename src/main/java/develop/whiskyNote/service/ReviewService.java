@@ -32,8 +32,9 @@ public class ReviewService {
     private final ImageFileDetailRepository imageFileDetailRepository;
     private final SessionUtils sessionUtils;
     private final ImageHandler imageHandler;
+    private final OtherUserReviewRepository otherUserReviewRepository;
 
-    public ReviewService(ReviewDetailRepository reviewDetailRepository, WhiskyRepository whiskyRepository, ReviewRepository reviewRepository, UserWhiskyRepository userWhiskyRepository, ImageFileRepository imageFileRepository, ImageFileDetailRepository imageFileDetailRepository, SessionUtils sessionUtils, ImageHandler imageHandler) {
+    public ReviewService(ReviewDetailRepository reviewDetailRepository, WhiskyRepository whiskyRepository, ReviewRepository reviewRepository, UserWhiskyRepository userWhiskyRepository, ImageFileRepository imageFileRepository, ImageFileDetailRepository imageFileDetailRepository, SessionUtils sessionUtils, ImageHandler imageHandler, OtherUserReviewRepository otherUserReviewRepository) {
         this.reviewDetailRepository = reviewDetailRepository;
         this.whiskyRepository = whiskyRepository;
         this.reviewRepository = reviewRepository;
@@ -42,6 +43,7 @@ public class ReviewService {
         this.imageFileDetailRepository = imageFileDetailRepository;
         this.sessionUtils = sessionUtils;
         this.imageHandler = imageHandler;
+        this.otherUserReviewRepository = otherUserReviewRepository;
     }
 
     public ResponseDto<?> createReview(ReviewUpsertRequestDto requestBody) {
@@ -56,6 +58,8 @@ public class ReviewService {
                     .build();
         Review review = requestBody.toReview(userWhisky, user);
         reviewRepository.save(review);
+        //ReviewLikeCount 데이터 생성
+        if(requestBody.getIsAnonymous()) otherUserReviewRepository.save(review.getUuid());
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())

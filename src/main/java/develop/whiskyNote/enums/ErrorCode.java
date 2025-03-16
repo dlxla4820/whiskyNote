@@ -27,7 +27,14 @@ public enum ErrorCode {
     MAX_PHOTO_OVER(400,"E00301", "사진의 개수가 너무 많습니다."),
 
     CRAWLING_DATA_NOT_EXIST(400,"E00501","CRAWLING DATA가 존재하지 않습니다."),
-    ALL_WHISKY_INFO_DUPLICATE(400,"E00502","모든 위스키가 저장되어 있습니다.");
+    ALL_WHISKY_INFO_DUPLICATE(400,"E00502","모든 위스키가 저장되어 있습니다."),
+
+    REVIEW_LIKE_ALREADY_ADD(409,"E00601", "이미 좋아요를 눌렀습니다"),
+    REVIEW_LIKE_NOT_EXIST(409, "E00602", "좋아요를 누른 적이 없거나 이미 취소되었습니다."),
+
+    REDISSON_ENTITY_LOCK(409, "E00701", "해당 ENTITY는 이미 사용중입니다."),
+    REDISSON_WRONG_KEY(400, "E00702", "String인 UUID를 전달해주세요")
+    ;
 
     private final int status;
     private final String errorCode;

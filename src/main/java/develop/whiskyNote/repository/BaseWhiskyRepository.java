@@ -1,18 +1,16 @@
 package develop.whiskyNote.repository;
 
-import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import develop.whiskyNote.dto.BaseWhiskyFiveResponseDto;
 import develop.whiskyNote.dto.BaseWhiskyRequestDto;
-import develop.whiskyNote.dto.BaseWhiskySearchRequestDto;
 import develop.whiskyNote.entity.Whisky;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static develop.whiskyNote.entity.QWhisky.whisky;
@@ -32,28 +30,45 @@ public class BaseWhiskyRepository {
     }
     private Integer pageSize = 10;
 
-
-    public List<Whisky> getWhiskyByKoreaName(BaseWhiskySearchRequestDto requestDto) {
-        String searchKeyword = requestDto.getSearchKeyword()+"%";
-        List<Whisky> whiskyList = queryFactory.selectFrom(whisky)
-                .where(whisky.koreaName.contains("%"+searchKeyword))
-                .where(whisky.uuid.gt(UUID.fromString(requestDto.getLastWhiskyId())))
+    public List<BaseWhiskyFiveResponseDto> getWhiskyByKoreaName(String keyword) {
+        List<BaseWhiskyFiveResponseDto> whiskyList = queryFactory.select(Projections.fields(BaseWhiskyFiveResponseDto.class,
+                        whisky.koreaName.as("whiskyKoreaName"),
+                        whisky.englishName.as("whiskyEnglishName"),
+                        whisky.category.as("whiskyCategory"),
+                        whisky.uuid.as("whiskyUuid")
+                        ))
+                .from(whisky)
+                .where(whisky.koreaName.contains(keyword))
                 .orderBy(
-                        Expressions.stringTemplate("CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",whisky, searchKeyword).asc(), whisky.koreaName.asc()
-                ).limit(5).fetch();
+                        Expressions.stringTemplate(
+                                "CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",
+                                whisky.koreaName, keyword + "%"
+                                ).asc(),
+                        whisky.koreaName.asc()
+                )
+                .limit(5).fetch();
         return whiskyList;
     }
-    public List<Whisky> getWhiskyByEnglishName(BaseWhiskySearchRequestDto requestDto) {
-        String searchKeyword = requestDto.getSearchKeyword()+"%";
-        List<Whisky> whiskyList = queryFactory.selectFrom(whisky)
-                .where(whisky.englishName.contains("%"+searchKeyword))
-                .where(whisky.uuid.gt(UUID.fromString(requestDto.getLastWhiskyId())))
+    //나중에 시간이 된다면 유사검색 시도
+    public List<BaseWhiskyFiveResponseDto> getWhiskyByEnglishName(String keyword) {
+        List<BaseWhiskyFiveResponseDto> whiskyList = queryFactory.select(Projections.fields(BaseWhiskyFiveResponseDto.class,
+                        whisky.englishName.as("whiskyEnglishName"),
+                        whisky.koreaName.as("whiskyKoreaName"),
+                        whisky.category.as("whiskyCategory"),
+                        whisky.uuid.as("whiskyUuid")
+                ))
+                .from(whisky)
+                .where(whisky.englishName.containsIgnoreCase(keyword))
                 .orderBy(
-                        Expressions.stringTemplate("CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",whisky, searchKeyword).asc(), whisky.koreaName.asc()
-                ).limit(5).fetch();
+                        Expressions.stringTemplate(
+                                "CASE WHEN {0} LIKE {1} THEN 0 ELSE 1 END",
+                                whisky.englishName, keyword+"%"
+                        ).asc(),
+                        whisky.englishName.asc()
+                )
+                .limit(5).fetch();
         return whiskyList;
     }
-
     //Whisky Database에 데이터 추가
     public List<Whisky> saveWhiskies(BaseWhiskyRequestDto baseWhiskyRequestDtos) {
         List<Whisky> whiskyList = new ArrayList<>();

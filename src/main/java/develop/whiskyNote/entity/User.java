@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 import java.util.UUID;
 
@@ -28,6 +30,9 @@ public class User {
 
     @Column(name = "mod_date")
     private LocalDateTime modDate;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<ReviewLikeMapping> reviewLikeMapping = new ArrayList<>();
 
     @Override
     public String toString() {
