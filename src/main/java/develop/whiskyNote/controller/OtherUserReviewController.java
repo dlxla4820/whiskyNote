@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class OtherUserReviewController {
 //    }
 
     @PostMapping(value = "/like/{likeCountUuid}")
-    public ResponseEntity<?> createReviewLikeEntity(@PathVariable  String likeCountUuid) {
+    public ResponseEntity<?> createReviewLikeEntity(@PathVariable  String likeCountUuid){
         ResponseDto<?> response = otherUserReviewService.createReviewLikeMapping(likeCountUuid);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

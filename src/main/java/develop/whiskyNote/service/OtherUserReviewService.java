@@ -9,6 +9,7 @@ import develop.whiskyNote.exception.ForbiddenException;
 import develop.whiskyNote.exception.ReviewLikeException;
 import develop.whiskyNote.repository.OtherUserReviewRepository;
 import develop.whiskyNote.utils.CommonUtils;
+import develop.whiskyNote.utils.RedissonLock;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
@@ -32,7 +33,8 @@ public class OtherUserReviewService {
         this.otherUserReviewRepository = otherUserReviewRepository;
         this.redisson = redisson;
     }
-
+    
+    @RedissonLock(key = "#reviewCountUuid")
     public ResponseDto<?> createReviewLikeMapping(String reviewCountUuid){
         //현재 로그인 한 유저 가져오기
         UUID user = CommonUtils.getUserUuidIfAdminOrUser();
@@ -47,7 +49,7 @@ public class OtherUserReviewService {
                 .data(reviewCount)
                 .build();
     }
-
+    @RedissonLock(key = "#reviewCountUuid")
     public ResponseDto<?> deleteReviewLikeMapping(String reviewCountUuid){
         UUID user = CommonUtils.getUserUuidIfAdminOrUser();
         //삭제, 없을 시 에러 > 이미 취소

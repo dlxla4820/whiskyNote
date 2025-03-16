@@ -80,6 +80,10 @@ public class OtherUserReviewRepository {
                 .where(reviewLikeMapping.user.uuid.eq(userId))
                 .where(reviewLikeCount.uuid.eq(reviewCountUuid))
                 .execute();
+        jpaQueryFactory.update(reviewLikeCount)
+                .set(reviewLikeCount.likeCount,reviewLikeCount.likeCount.add(-1))
+                .where(reviewLikeCount.uuid.eq(reviewCountUuid))
+                .execute();
         return jpaQueryFactory.select(reviewLikeCount.likeCount)
                 .from(reviewLikeCount)
                 .where(reviewLikeCount.uuid.eq(reviewCountUuid))

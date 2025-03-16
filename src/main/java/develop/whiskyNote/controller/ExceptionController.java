@@ -4,8 +4,10 @@ import develop.whiskyNote.dto.ResponseDto;
 import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.enums.ErrorCode;
 import develop.whiskyNote.exception.ForbiddenException;
+import develop.whiskyNote.exception.RedissonException;
 import develop.whiskyNote.exception.ReviewLikeException;
 import develop.whiskyNote.exception.UnauthenticatedException;
+import org.redisson.client.RedisAskException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,6 +33,17 @@ public class ExceptionController {
                 .description(Description.FAIL)
                 .errorDescription(errorCode.getErrorDescription())
                 .build(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(RedissonException.class)
+    public ResponseEntity<?> handleRedisAskException(RedissonException ex) {
+        ErrorCode errorCode = ErrorCode.valueOf(ex.getMessage());
+        return new ResponseEntity<>(ResponseDto.builder()
+                .code(errorCode.getStatus())
+                .errorCode(errorCode.getErrorCode())
+                .description(Description.FAIL)
+                .errorDescription(errorCode.getErrorDescription())
+                .build(),HttpStatus.CONFLICT);//409 Conflict, 나중에 에러코드에 status를 저장하도록 수정
     }
 
     @ExceptionHandler(ForbiddenException.class)
