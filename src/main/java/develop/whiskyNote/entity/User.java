@@ -31,6 +31,7 @@ public class User {
     @Column(name = "mod_date")
     private LocalDateTime modDate;
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ReviewLikeMapping> reviewLikeMapping = new ArrayList<>();
 

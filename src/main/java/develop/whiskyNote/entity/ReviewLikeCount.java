@@ -29,6 +29,7 @@ public class ReviewLikeCount {
     private Integer likeCount = 0;
 
     //리뷰에 좋아요 누른 사람 리스트
+    @Builder.Default
     @OneToMany(mappedBy = "reviewLikeCount", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ReviewLikeMapping> reviewLikeMapping = new ArrayList<>();
 
