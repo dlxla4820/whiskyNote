@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2701fa11-c067-440c-92b6-e248ce53d09f" name="Changes" comment="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/controller/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/controller/ReviewController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -290,6 +291,9 @@
       <workItem from="1741261463391" duration="1285000" />
       <workItem from="1741270744784" duration="10000" />
       <workItem from="1741441132272" duration="926000" />
+      <workItem from="1741508153732" duration="316000" />
+      <workItem from="1741946164041" duration="54000" />
+      <workItem from="1742126232785" duration="398000" />
     </task>
     <task id="LOCAL-00001" summary="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
       <option name="closed" value="true" />

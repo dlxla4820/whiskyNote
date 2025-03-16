@@ -57,7 +57,7 @@ public class ReviewController {
     }
 
     //위스키 변경
-    @PostMapping(value = "/my-whisky/{userWhiskyUuid}")
+    @PutMapping(value = "/my-whisky/{userWhiskyUuid}")
     public ResponseEntity<ResponseDto<?>> updateWhisky(@PathVariable String userWhiskyUuid, @RequestBody UserWhiskyDto requestBody) {
         ResponseDto<?> response = reviewService.updateWhisky(userWhiskyUuid, requestBody);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
