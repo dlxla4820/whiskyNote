@@ -19,13 +19,10 @@ public class ReviewLikeMapping {
     //삭제되면 좋아요를 삭제한 것
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID reviewLikeId;
+    private UUID uuid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    //OneToMany랑 mapped 되는 필드
-    private ReviewLikeCount reviewLikeCount;
-
+    @Column(nullable = false)
+    private UUID reviewId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)

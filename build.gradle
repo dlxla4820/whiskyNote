@@ -50,7 +50,7 @@ dependencies {
 	//MySQL Connector
 	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 	//Redisson (Config설정 불필요)
-	implementation 'org.redisson:redisson-spring-boot-starter:3.45.0'
+//	implementation 'org.redisson:redisson-spring-boot-starter:3.45.0'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
