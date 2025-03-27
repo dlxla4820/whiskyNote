@@ -7,10 +7,10 @@ spring:
     username: ENC(rb+1eENOywxIneqUsq6I5mxgJsyCYypB0WbnjUuvoAHhe0tLBNJ3nkH/YmogtadO)
     password: ENC(JIXYu07a93thG9eHqq5uZPCwTofxSqj257MI6Hv4JQnGLjQ0EE0s0XMsCl2d1T3v)
     driver-class-name: com.mysql.cj.jdbc.Driver
-  data:
-    redis:
-      host: localhost
-      port: 6379
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
 
 
 aws:

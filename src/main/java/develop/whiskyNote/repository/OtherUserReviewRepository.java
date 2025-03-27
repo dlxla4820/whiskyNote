@@ -1,18 +1,25 @@
 package develop.whiskyNote.repository;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import develop.whiskyNote.dto.OtherReviewGetReqeustDto;
 import develop.whiskyNote.dto.OtherReviewGetResponseDto;
 import develop.whiskyNote.entity.ReviewLikeCount;
 import develop.whiskyNote.entity.ReviewLikeMapping;
 import develop.whiskyNote.entity.User;
+import develop.whiskyNote.enums.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,6 +28,8 @@ import java.util.UUID;
 import static develop.whiskyNote.entity.QReview.review;
 import static develop.whiskyNote.entity.QReviewLikeCount.reviewLikeCount;
 import static develop.whiskyNote.entity.QReviewLikeMapping.reviewLikeMapping;
+import static develop.whiskyNote.entity.QUserWhisky.userWhisky;
+import static develop.whiskyNote.entity.QWhisky.whisky;
 
 @Repository
 public class OtherUserReviewRepository {
@@ -90,83 +99,93 @@ public class OtherUserReviewRepository {
                 .fetchOne();
     }
 
-    //다른 유저 리뷰 읽어오기
-    public List<OtherReviewGetResponseDto> findOtherUserReview(OtherReviewGetReqeustDto reqeustDto, UUID userId) {
-        return jpaQueryFactory.select(
-                Projections.fields(OtherReviewGetResponseDto.class,
-                            review.uuid.as("reviewUuid"),
-                            review.userWhisky.uuid.as("userWhiskyUuid"),
-                            review.isAnonymous,//없어도 될거 같은데 득환이가 넣어달라함
-                            review.openDate,
-                            review.content,
-                            review.score,
-                            review.tags,
-                            review.imageNames.as("imageNames"),
-                            Expressions.dateTemplate(LocalDateTime.class, "GREATEST({0}, {1})", review.regDate, review.modDate)
-                                .as("lastUpdateDate"),
-                            Expressions.booleanTemplate("CASE WHEN {0} IS NOT NULL THEN true ELSE false END", reviewLikeMapping.user.uuid)
-                                .as("likeState"),
-                            reviewLikeCount.likeCount.as("likeCount"),
-                            reviewLikeCount.uuid.as("reviewLikeCountUuid")
-                        ))
+
+//    다른 유저 리뷰 읽어오기
+    public Page<OtherReviewGetResponseDto> findOtherUserReview(
+            OtherReviewGetReqeustDto dto, UUID currentUser, Pageable pageable) {
+
+        BooleanExpression mainSearchCondition = dto.isMainKorean() ?
+                review.userWhisky.whisky.koreaName.containsIgnoreCase(dto.getMainSearchWord()) :
+                review.userWhisky.whisky.englishName.containsIgnoreCase(dto.getMainSearchWord());
+
+        BooleanExpression subSearchCondition = null;
+        if (dto.getSubSearchWord() != null && !dto.getSubSearchWord().isEmpty()) {
+            subSearchCondition = dto.isSubKorean() ?
+                    review.userWhisky.koreaName.containsIgnoreCase(dto.getSubSearchWord()) :
+                    review.userWhisky.englishName.containsIgnoreCase(dto.getSubSearchWord());
+        }
+
+        // 정렬 리스트 생성
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+
+        OrderSpecifier<?> likeOrder = getOrderSpecifier(dto.getLikeOrder(), reviewLikeCount.likeCount);
+        if (likeOrder != null) orderSpecifiers.add(likeOrder);
+
+        OrderSpecifier<?> scoreOrder = getOrderSpecifier(dto.getScoreOrder(), review.score);
+        if (scoreOrder != null) orderSpecifiers.add(scoreOrder);
+
+        OrderSpecifier<?> createdOrder = getOrderSpecifier(dto.getCreatedOrder(),
+                Expressions.dateTemplate(LocalDateTime.class, "GREATEST({0}, {1})", review.regDate, review.modDate));
+        if (createdOrder != null) orderSpecifiers.add(createdOrder);
+
+        OrderSpecifier<?> nameOrder = getOrderSpecifier(dto.getNameOrder(),
+                dto.isSubKorean() ? review.userWhisky.koreaName : review.userWhisky.englishName);
+        if (nameOrder != null) orderSpecifiers.add(nameOrder);
+
+        // 본 쿼리
+        List<OtherReviewGetResponseDto> content = jpaQueryFactory
+                .select(Projections.fields(OtherReviewGetResponseDto.class,
+                        review.uuid.as("reviewUuid"),
+                        review.userWhisky.uuid.as("userWhiskyUuid"),
+                        review.isAnonymous,
+                        review.openDate,
+                        review.content,
+                        review.score,
+                        review.tags,
+                        review.imageNames.as("imageNames"),
+                        Expressions.dateTemplate(LocalDateTime.class, "GREATEST({0}, {1})", review.regDate, review.modDate).as("lastUpdateDate"),
+                        Expressions.booleanTemplate("CASE WHEN {0} IS NOT NULL THEN true ELSE false END", reviewLikeMapping.user.uuid).as("likeState"),
+                        reviewLikeCount.likeCount.as("likeCount"),
+                        reviewLikeCount.uuid.as("reviewLikeCountUuid")
+                ))
                 .from(review)
+                .join(review.userWhisky, userWhisky)
+                .join(userWhisky.whisky, whisky)
                 .leftJoin(reviewLikeCount).on(reviewLikeCount.reviewId.eq(review.uuid))
-                .leftJoin(reviewLikeMapping).on(reviewLikeMapping.reviewLikeCount.eq(reviewLikeCount).and(reviewLikeMapping.user.uuid.eq(userId)))
+                .leftJoin(reviewLikeMapping).on(reviewLikeMapping.reviewLikeCount.eq(reviewLikeCount)
+                        .and(reviewLikeMapping.user.uuid.eq(currentUser)))
                 .where(
-                        review.userWhisky.whisky.uuid.eq(UUID.fromString(reqeustDto.getBaseWhiskyUuid())),//좋아요 여부 확인
-                        review.isAnonymous.eq(true),//공개 여부 확인
-                        getUserWhiskyNameCondition(reqeustDto),//한글 이름 또는 영어 이름 검색
-                        getLastIndexCondition(reqeustDto)
+                        review.isAnonymous.isTrue()
+                                .and(mainSearchCondition)
+                                .and(subSearchCondition != null ? subSearchCondition : Expressions.TRUE)
                 )
-                .orderBy(
-                        //좋아요, 이름, 점수, 작성일 순 정렬
-                        getLikeOrder(reqeustDto),
-                        getwhiskyNameOrder(reqeustDto),
-                        getScoreOrder(reqeustDto),
-                        getCreatedAtOrder(reqeustDto)
-                )
-                .limit(10)
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        // 전체 카운트
+        Long total = jpaQueryFactory
+                .select(review.count())
+                .from(review)
+                .join(review.userWhisky, userWhisky)
+                .join(userWhisky.whisky, whisky)
+                .where(
+                        review.isAnonymous.isTrue()
+                                .and(mainSearchCondition)
+                                .and(subSearchCondition != null ? subSearchCondition : Expressions.TRUE)
+                )
+                .fetchOne();
+
+        return new PageImpl<>(content, pageable, total != null ? total : 0L);
     }
 
-    private BooleanExpression getLastIndexCondition(OtherReviewGetReqeustDto reqeustDto) {
-        if(reqeustDto.getLastIndex() == null || reqeustDto.getLastIndex().isEmpty()){
-            return null;//첫페이지
-        }
-        return review.uuid.gt(UUID.fromString(reqeustDto.getLastIndex()));
+    private <T extends Comparable<?>> OrderSpecifier<T> getOrderSpecifier(Order order, Expression<T> field) {
+        if (order == null) return null;
+        return order == Order.ASC ? new OrderSpecifier<>(com.querydsl.core.types.Order.ASC, field)
+                : new OrderSpecifier<>(com.querydsl.core.types.Order.DESC, field);
     }
 
-    private BooleanExpression getUserWhiskyNameCondition(OtherReviewGetReqeustDto reqeustDto) {
-        if(reqeustDto.getSearchWord() == null || reqeustDto.getSearchWord().isEmpty()){
-            return null;
-        }
-        if(reqeustDto.isKorean()){
-            return review.userWhisky.koreaName.containsIgnoreCase(reqeustDto.getSearchWord());
-        }else{
-            return review.userWhisky.englishName.containsIgnoreCase(reqeustDto.getSearchWord());
-        }
-    }
 
-    private OrderSpecifier<?> getLikeOrder(OtherReviewGetReqeustDto reqeustDto) {
-        return reqeustDto.isLikeAsc() ? reviewLikeCount.likeCount.asc() : reviewLikeCount.likeCount.desc();
-    }
-
-    private OrderSpecifier<?> getScoreOrder(OtherReviewGetReqeustDto reqeustDto) {
-        return reqeustDto.isScoreAsc() ? review.score.asc() : review.score.desc();
-    }
-
-    private OrderSpecifier<?> getCreatedAtOrder(OtherReviewGetReqeustDto requestDto) {
-        return requestDto.isCreatedAtAsc()
-                ? Expressions.dateTemplate(LocalDateTime.class, "GREATEST({0}, {1})", review.regDate, review.modDate).asc()
-                : Expressions.dateTemplate(LocalDateTime.class, "GREATEST({0}, {1})", review.regDate, review.modDate).desc();
-    }
-    private OrderSpecifier<?> getwhiskyNameOrder(OtherReviewGetReqeustDto reqeustDto) {
-        if(reqeustDto.isKorean()){
-            return reqeustDto.isWhiskyNameAsc() ? review.userWhisky.koreaName.asc() : review.userWhisky.koreaName.desc();
-        }
-        else{
-            return reqeustDto.isWhiskyNameAsc() ? review.userWhisky.koreaName.asc() : review.userWhisky.koreaName.desc();
-        }
-    }
 
 }

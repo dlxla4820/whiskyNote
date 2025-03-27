@@ -9,10 +9,11 @@ import develop.whiskyNote.exception.ForbiddenException;
 import develop.whiskyNote.exception.ReviewLikeException;
 import develop.whiskyNote.repository.OtherUserReviewRepository;
 import develop.whiskyNote.utils.CommonUtils;
-import develop.whiskyNote.utils.RedissonLock;
+import develop.whiskyNote.utils.OrderParser;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RedissonClient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -24,17 +25,13 @@ import java.util.UUID;
 @Service
 public class OtherUserReviewService {
     private final OtherUserReviewRepository otherUserReviewRepository;
-    private final RedissonClient redisson;
 
     public OtherUserReviewService(
-            OtherUserReviewRepository otherUserReviewRepository,
-            RedissonClient redisson
+            OtherUserReviewRepository otherUserReviewRepository
     ) {
         this.otherUserReviewRepository = otherUserReviewRepository;
-        this.redisson = redisson;
     }
-    
-    @RedissonLock(key = "#reviewCountUuid")
+
     public ResponseDto<?> createReviewLikeMapping(String reviewCountUuid){
         //현재 로그인 한 유저 가져오기
         UUID user = CommonUtils.getUserUuidIfAdminOrUser();
@@ -49,7 +46,7 @@ public class OtherUserReviewService {
                 .data(reviewCount)
                 .build();
     }
-    @RedissonLock(key = "#reviewCountUuid")
+
     public ResponseDto<?> deleteReviewLikeMapping(String reviewCountUuid){
         UUID user = CommonUtils.getUserUuidIfAdminOrUser();
         //삭제, 없을 시 에러 > 이미 취소
@@ -64,19 +61,40 @@ public class OtherUserReviewService {
                 .build();
     }
 
-
-
-    public ResponseDto<?> searchOtherUserReviewUsingKeyword(OtherReviewGetReqeustDto otherReviewGetReqeustDto) {
-        //현재 접속 유저 찾기
+    public ResponseDto<?> searchOtherUserReviewUsingKeyword(
+            String mainSearchWord,
+            String subSearchWord,
+            String likeOrder,
+            String scoreOrder,
+            String createdOrder,
+            String nameOrder,
+            int page,
+            int size
+    ) {
         UUID currentUser = CommonUtils.getUserUuidIfAdminOrUser();
-        //repository에 값 전달하기
-        List<OtherReviewGetResponseDto> result = otherUserReviewRepository.findOtherUserReview(otherReviewGetReqeustDto, currentUser);
+
+        boolean isMainKorean = CommonUtils.containsKorean(mainSearchWord);
+        boolean isSubKorean = subSearchWord != null && CommonUtils.containsKorean(subSearchWord);
+
+        OtherReviewGetReqeustDto dto = new OtherReviewGetReqeustDto();
+        dto.setMainSearchWord(mainSearchWord);
+        dto.setSubSearchWord(subSearchWord);
+        dto.setMainKorean(isMainKorean);
+        dto.setSubKorean(isSubKorean);
+        dto.setLikeOrder(OrderParser.parse(likeOrder));
+        dto.setScoreOrder(OrderParser.parse(scoreOrder));
+        dto.setCreatedOrder(OrderParser.parse(createdOrder));
+        dto.setNameOrder(OrderParser.parse(nameOrder));
+        dto.setPage(page);
+        dto.setSize(size);
+
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<OtherReviewGetResponseDto> result = otherUserReviewRepository.findOtherUserReview(dto, currentUser, pageable);
 
         return ResponseDto.builder()
-                .code(result.isEmpty()? HttpStatus.NO_CONTENT.value() : HttpStatus.OK.value())
+                .code(result.isEmpty() ? HttpStatus.NO_CONTENT.value() : HttpStatus.OK.value())
                 .description(Description.SUCCESS)
                 .data(result)
                 .build();
     }
-
 }
