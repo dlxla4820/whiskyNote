@@ -28,4 +28,6 @@ public class OtherReviewGetReqeustDto {
 
     private int page;
     private int size;
+
+    private boolean searchFromBaseWhisky;//baseWhisky에 mainSearchWord의 결과가 존재하는지 확인
 }

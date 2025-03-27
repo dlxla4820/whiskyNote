@@ -30,14 +30,15 @@ import static develop.whiskyNote.entity.QWhisky.whisky;
 
 @Repository
 public class OtherUserReviewRepository {
-    private final BaseWhiskyRepository baseWhiskyRepository;
+    private final WhiskyRepository whiskyRepository;
     private final UserRepository userRepository;
     private final JPAQueryFactory jpaQueryFactory;
     private final ReviewLikeMappingRepository reviewLikeMappingRepository;
 
 
-    public OtherUserReviewRepository( BaseWhiskyRepository baseWhiskyRepository, UserRepository userRepository, JPAQueryFactory jpaQueryFactory, ReviewLikeMappingRepository reviewLikeMappingRepository) {
-        this.baseWhiskyRepository = baseWhiskyRepository;
+
+    public OtherUserReviewRepository(WhiskyRepository whiskyRepository, UserRepository userRepository, JPAQueryFactory jpaQueryFactory, ReviewLikeMappingRepository reviewLikeMappingRepository) {
+        this.whiskyRepository = whiskyRepository;
         this.userRepository = userRepository;
         this.jpaQueryFactory = jpaQueryFactory;
         this.reviewLikeMappingRepository = reviewLikeMappingRepository;
@@ -71,15 +72,22 @@ public class OtherUserReviewRepository {
                 .execute();
     }
 
+    //base whisky에 main 검색어 존재하는지 확인
+    public boolean checkBaseWhiskyExist(OtherReviewGetReqeustDto reqeustDto) {
+        return reqeustDto.isMainKorean()? whiskyRepository.existsByKoreaNameContainingIgnoreCase(reqeustDto.getMainSearchWord()) : whiskyRepository.existsByEnglishNameContainingIgnoreCase(reqeustDto.getMainSearchWord());
+    }
 
 //    다른 유저 리뷰 읽어오기
 public Page<OtherReviewGetResponseDto> findOtherUserReview(
         OtherReviewGetReqeustDto dto, UUID currentUser, Pageable pageable) {
 
-    BooleanExpression mainSearchCondition = dto.isMainKorean() ?
-            review.userWhisky.whisky.koreaName.containsIgnoreCase(dto.getMainSearchWord()) :
-            review.userWhisky.whisky.englishName.containsIgnoreCase(dto.getMainSearchWord());
-
+    BooleanExpression mainSearchCondition = dto.isSearchFromBaseWhisky()
+            ? (dto.isMainKorean()
+            ? userWhisky.whisky.koreaName.containsIgnoreCase(dto.getMainSearchWord())
+            : userWhisky.whisky.englishName.containsIgnoreCase(dto.getMainSearchWord()))
+            : (dto.isMainKorean()
+            ? userWhisky.koreaName.containsIgnoreCase(dto.getMainSearchWord())
+            : userWhisky.englishName.containsIgnoreCase(dto.getMainSearchWord()));
     BooleanExpression subSearchCondition = null;
     if (dto.getSubSearchWord() != null && !dto.getSubSearchWord().isEmpty()) {
         subSearchCondition = dto.isSubKorean() ?

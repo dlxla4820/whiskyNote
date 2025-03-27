@@ -75,7 +75,7 @@ public class OtherUserReviewService {
 
         boolean isMainKorean = CommonUtils.containsKorean(mainSearchWord);
         boolean isSubKorean = subSearchWord != null && CommonUtils.containsKorean(subSearchWord);
-
+        //dto에 매핑
         OtherReviewGetReqeustDto dto = new OtherReviewGetReqeustDto();
         dto.setMainSearchWord(mainSearchWord);
         dto.setSubSearchWord(subSearchWord);
@@ -87,7 +87,8 @@ public class OtherUserReviewService {
         dto.setNameOrder(OrderParser.parse(nameOrder));
         dto.setPage(page);
         dto.setSize(size);
-
+        dto.setSearchFromBaseWhisky(otherUserReviewRepository.checkBaseWhiskyExist(dto));
+        //page 객체 생성
         PageRequest pageable = PageRequest.of(page, size);
         Page<OtherReviewGetResponseDto> result = otherUserReviewRepository.findOtherUserReview(dto, currentUser, pageable);
 
