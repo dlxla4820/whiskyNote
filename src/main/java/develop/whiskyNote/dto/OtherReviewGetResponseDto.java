@@ -25,7 +25,6 @@ public class OtherReviewGetResponseDto {
     private List<String> tags;
     private List<String> imageNames;
     private LocalDateTime lastUpdateDate;
-    private UUID reviewLikeCountUuid;
     private Boolean likeState;
     private Integer likeCount;
 }

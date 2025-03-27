@@ -27,15 +27,15 @@ public class OtherUserReviewController {
 //        return new ResponseEntity<>(responseDto, HttpStatus.OK);
 //    }
 
-    @PostMapping(value = "/like/{likeCountUuid}")
-    public ResponseEntity<?> createReviewLikeEntity(@PathVariable  String likeCountUuid){
-        ResponseDto<?> response = otherUserReviewService.createReviewLikeMapping(likeCountUuid);
+    @PostMapping(value = "/like/{reviewUuid}")
+    public ResponseEntity<?> createReviewLikeEntity(@PathVariable  String reviewUuid) {
+        ResponseDto<?> response = otherUserReviewService.createReviewLikeMapping(reviewUuid);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/like/{likeCountUuid}")
-    public ResponseEntity<?> deleteReviewLikeEntity(@PathVariable  String likeCountUuid) {
-        ResponseDto<?> response = otherUserReviewService.deleteReviewLikeMapping(likeCountUuid);
+    @DeleteMapping(value = "/like/{reviewUuid}")
+    public ResponseEntity<?> deleteReviewLikeEntity(@PathVariable  String reviewUuid) {
+        ResponseDto<?> response = otherUserReviewService.deleteReviewLikeMapping(reviewUuid);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
