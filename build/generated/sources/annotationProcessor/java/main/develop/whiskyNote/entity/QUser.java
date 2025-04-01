@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -24,6 +25,8 @@ public class QUser extends EntityPathBase<User> {
     public final DateTimePath<java.time.LocalDateTime> modDate = createDateTime("modDate", java.time.LocalDateTime.class);
 
     public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
+
+    public final ListPath<ReviewLikeMapping, QReviewLikeMapping> reviewLikeMapping = this.<ReviewLikeMapping, QReviewLikeMapping>createList("reviewLikeMapping", ReviewLikeMapping.class, QReviewLikeMapping.class, PathInits.DIRECT2);
 
     public final ComparablePath<java.util.UUID> uuid = createComparable("uuid", java.util.UUID.class);
 

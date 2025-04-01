@@ -196,13 +196,12 @@ public class ReviewService {
     public ResponseDto<?> updateWhisky(String userWhiskyUuid, UserWhiskyDto requestBody) {
         UUID userUuid = CommonUtils.getUserUuidIfAdminOrUser();
         UserWhisky userWhisky = userWhiskyRepository.findById(UUID.fromString(userWhiskyUuid)).orElseThrow(() -> new ForbiddenException("access deny"));
-
         ImageFile imageFile = imageFileRepository.findByName(requestBody.getImageName()).orElse(null);
         String imageName = (imageFile == null) ? null : requestBody.getImageName();
         if(imageName != null)
             imageFileDetailRepository.updateImageFileIsSavedByNameAndUserUuid(imageName, userUuid);
 
-        reviewDetailRepository.updateUserWhisky(requestBody,userWhisky.getUserUuid(), imageName);
+        reviewDetailRepository.updateUserWhisky(requestBody,userWhisky.getUuid(), imageName);
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
