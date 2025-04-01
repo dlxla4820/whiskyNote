@@ -8,10 +8,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.UUID;
 
 public class CommonUtils {
+
+    public static String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     public static UserSessionDto getUserSession() {
 
@@ -49,5 +52,15 @@ public class CommonUtils {
 
     public static boolean containsKorean(String str) throws NullPointerException {
         return str.matches(".*[가-힣].*");
+    }
+
+    public static String getRandomCode(int length) {
+        SecureRandom random = new SecureRandom();
+        StringBuilder code = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            code.append(CHARACTERS.charAt(index));
+        }
+        return code.toString();
     }
 }

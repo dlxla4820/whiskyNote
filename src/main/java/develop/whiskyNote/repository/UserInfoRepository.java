@@ -53,4 +53,13 @@ public class UserInfoRepository {
                 .fetchOne();
     }
 
+    /**
+     * DB UPDATE :
+     **/
+    public void updateUserDeviceId(UUID userUuid, String userDeviceId){
+        queryFactory.update(user)
+                .set(user.deviceId, userDeviceId)
+                .where(user.uuid.eq(userUuid))
+                .execute();
+    }
 }
