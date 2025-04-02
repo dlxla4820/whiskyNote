@@ -118,7 +118,8 @@ public Page<OtherReviewGetResponseDto> findOtherUserReview(
     List<OtherReviewGetResponseDto> content = jpaQueryFactory
             .select(Projections.fields(OtherReviewGetResponseDto.class,
                     review.uuid.as("reviewUuid"),
-                    review.userWhisky.uuid.as("userWhiskyUuid"),
+                    whisky.koreaName.as("koreaName"),
+                    whisky.englishName.as("englishName"),
                     review.content,
                     review.isAnonymous,
                     review.openDate,
