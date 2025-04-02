@@ -17,7 +17,8 @@ import java.util.UUID;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class OtherReviewGetResponseDto {
     private UUID reviewUuid;
-    private UUID userWhiskyUuid;
+    private String koreaName;
+    private String englishName;
     private String content;
     private Boolean isAnonymous;
     private LocalDate openDate;
