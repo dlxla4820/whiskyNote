@@ -7,10 +7,12 @@ import develop.whiskyNote.exception.ForbiddenException;
 //import develop.whiskyNote.exception.RedissonException;
 import develop.whiskyNote.exception.ReviewLikeException;
 import develop.whiskyNote.exception.UnauthenticatedException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+@Slf4j
 @ControllerAdvice
 public class ExceptionController {
     @ExceptionHandler(UnauthenticatedException.class)
@@ -33,18 +35,6 @@ public class ExceptionController {
                 .errorDescription(errorCode.getErrorDescription())
                 .build(), HttpStatus.CONFLICT);
     }
-
-//    @ExceptionHandler(RedissonException.class)
-//    public ResponseEntity<?> handleRedisAskException(RedissonException ex) {
-//        ErrorCode errorCode = ErrorCode.valueOf(ex.getMessage());
-//        return new ResponseEntity<>(ResponseDto.builder()
-//                .code(errorCode.getStatus())
-//                .errorCode(errorCode.getErrorCode())
-//                .description(Description.FAIL)
-//                .errorDescription(errorCode.getErrorDescription())
-//                .build(),HttpStatus.CONFLICT);//409 Conflict, 나중에 에러코드에 status를 저장하도록 수정
-//    }
-
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<?> handleForbiddenException(ForbiddenException ex) {
         return new ResponseEntity<>(ResponseDto.builder()
@@ -53,5 +43,15 @@ public class ExceptionController {
                 .description(Description.FAIL)
                 .errorDescription(ErrorCode.TOKEN_FORBIDDEN.getErrorDescription())
                 .build(), HttpStatus.FORBIDDEN);  // 403 Forbidden
+    }
+    //배포 환경에서 너무 많은 로그가 쌓여서 임시로 처리
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception ex) {
+        log.error(ex.getMessage());
+        return new ResponseEntity<>(ResponseDto.builder().code(ErrorCode.SYSTEM_ERROR.getStatus())
+        .errorCode(ErrorCode.SYSTEM_ERROR.getErrorCode())
+            .description(Description.FAIL)
+            .errorDescription(ex.getMessage())
+            .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

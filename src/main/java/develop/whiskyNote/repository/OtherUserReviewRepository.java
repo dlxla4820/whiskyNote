@@ -95,7 +95,7 @@ public Page<OtherReviewGetResponseDto> findOtherUserReview(
                 review.userWhisky.englishName.containsIgnoreCase(dto.getSubSearchWord());
     }
 
-    NumberExpression<Long> likeCountExpr = reviewLikeMapping.reviewId.count().as("likeCount");
+    NumberExpression<Long> likeCountExpr = reviewLikeMapping.reviewId.count();
 
     // 정렬 리스트 생성
     List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
