@@ -208,6 +208,15 @@ public class ReviewService {
                 .build();
     }
 
+    public ResponseDto<?> deleteWhisky(String userWhiskyUuid){
+        User user = sessionUtils.getUser(RoleType.USER);
+        reviewDetailRepository.deleteUserWhisky(userWhiskyUuid, user.getUuid());
+        return ResponseDto.builder()
+                .description(Description.SUCCESS)
+                .code(HttpStatus.OK.value())
+                .build();
+    }
+
 //    public ResponseDto<?> insertWhisky()  {
 //        Whisky whisky = Whisky.builder()
 //                .koreaName("글렌리벳 12")

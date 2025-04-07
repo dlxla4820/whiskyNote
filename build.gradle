@@ -52,6 +52,8 @@ dependencies {
 	//Redisson (Config설정 불필요)
 //	implementation 'org.redisson:redisson-spring-boot-starter:3.45.0'
 
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

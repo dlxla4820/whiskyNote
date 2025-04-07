@@ -62,6 +62,13 @@ public class ReviewController {
         ResponseDto<?> response = reviewService.updateWhisky(userWhiskyUuid, requestBody);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
+    //위스키 삭제
+    @DeleteMapping(value = "/my-whisky/{userWhiskyUuid}")
+    public ResponseEntity<ResponseDto<?>> deleteWhisky(@PathVariable String userWhiskyUuid) {
+        ResponseDto<?> response = reviewService.deleteWhisky(userWhiskyUuid);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
+    }
+
 
     @GetMapping(value = "/my-whisky/{userWhiskyUuid}/my-reviews")
     public ResponseEntity<ResponseDto<?>> readMyReviews(@PathVariable String userWhiskyUuid, @RequestParam(name = "order") String order){

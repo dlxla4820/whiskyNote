@@ -73,6 +73,7 @@ public class UserService {
     public ResponseDto<?> backupUser(BackupCodeDto requestBody){
         User user = sessionUtils.getUser(RoleType.USER);
         BackupCode backupCode = backupCodeRepository.findByCode(requestBody.getCode()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
+        userInfoRepository.deleteUser(user.getUuid());
         userInfoRepository.updateUserDeviceId(backupCode.getUser().getUuid(), user.getDeviceId());
 
         return ResponseDto.builder()

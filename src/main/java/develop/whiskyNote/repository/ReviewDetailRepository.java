@@ -193,6 +193,12 @@ public class ReviewDetailRepository {
                 .fetch();
     }
 
+    public void deleteUserWhisky(String userWhiskyUuid, UUID userUuid){
+        queryFactory.delete(userWhisky)
+                .where(Expressions.stringTemplate("HEX({0})", userWhisky.uuid).eq(userWhiskyUuid.replace("-", "")))
+                .where(userWhisky.userUuid.eq(userUuid))
+                .execute();
+    }
 
     private BooleanExpression likeWhiskyName(String name){
         if(name == null || name.isEmpty())

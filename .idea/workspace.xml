@@ -6,10 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="2701fa11-c067-440c-92b6-e248ce53d09f" name="Changes" comment="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/controller/ReviewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/controller/ReviewController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/develop/whiskyNote/entity/QUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/develop/whiskyNote/entity/QUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/repository/ReviewDetailRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/repository/ReviewDetailRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/repository/UserInfoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/repository/UserInfoRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/service/ReviewService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/service/ReviewService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/controller/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/controller/ReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/ReviewDetailRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/ReviewDetailRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/UserInfoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/UserInfoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/ReviewService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -325,6 +333,8 @@
       <workItem from="1741946164041" duration="54000" />
       <workItem from="1742126232785" duration="398000" />
       <workItem from="1743491760558" duration="2225000" />
+      <workItem from="1743587376603" duration="2009000" />
+      <workItem from="1744026094752" duration="1745000" />
     </task>
     <task id="LOCAL-00001" summary="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
       <option name="closed" value="true" />

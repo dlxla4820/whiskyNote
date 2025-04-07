@@ -56,6 +56,12 @@ public class UserInfoRepository {
     /**
      * DB UPDATE :
      **/
+    public void deleteUser(UUID userUuid){
+        queryFactory.delete(user)
+                .where(user.uuid.eq(userUuid))
+                .execute();
+    }
+
     public void updateUserDeviceId(UUID userUuid, String userDeviceId){
         queryFactory.update(user)
                 .set(user.deviceId, userDeviceId)
