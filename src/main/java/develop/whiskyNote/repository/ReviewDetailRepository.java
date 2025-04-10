@@ -89,8 +89,8 @@ public class ReviewDetailRepository {
                 .execute();
     }
 
-    public void updateUserWhisky(UserWhiskyDto requestDto, UUID userWhiskyUuid, String imageName){
-        queryFactory.update(userWhisky)
+    public long updateUserWhisky(UserWhiskyDto requestDto, UUID userWhiskyUuid, String imageName){
+        return queryFactory.update(userWhisky)
                 .set(userWhisky.koreaName, requestDto.getKoreaName())
                 .set(userWhisky.englishName, requestDto.getEnglishName())
                 .set(userWhisky.category, requestDto.getCategory())
@@ -144,7 +144,7 @@ public class ReviewDetailRepository {
 
 
 
-    public List<MyWhiskyListResponseDto> findAllMyWhiskyListResponseDto(String name, String category, String nameOrder, String scoreOrder, String dateOrder, UUID userUuid){
+    public List<MyWhiskyListResponseDto> findAllMyWhiskyListResponseDto(String name, String category, String openDateOrder, String scoreOrder, String dateOrder, UUID userUuid){
         return queryFactory.select(Projections.constructor(MyWhiskyListResponseDto.class,
                         userWhisky.uuid.as("whiskyUuid"),
                         userWhisky.koreaName.as("koreaName"),
@@ -168,6 +168,7 @@ public class ReviewDetailRepository {
                 .leftJoin(review).on(review.userWhisky.eq(userWhisky))
                 .where(likeUserWhiskyName(name))
                 .where(eqUserWhiskyCategory(category))
+                .where(userWhisky.userUuid.eq(userUuid))
                 .groupBy(
                         userWhisky.uuid,
                         userWhisky.koreaName,
@@ -184,8 +185,7 @@ public class ReviewDetailRepository {
                 )
                 //.having(review.score.avg().isNotNull())
                 .orderBy(
-                        orderByUserWhiskyKoreaName(nameOrder),    // 이름 정렬
-                        orderByUserWhiskyEnglishName(nameOrder),
+                        orderByUserWhiskyOpenDateOrder(openDateOrder),
                         orderByScore(scoreOrder),         // 점수 정렬
                         orderByRegDate(dateOrder),        // 출시일 정렬
                         review.modDate.max().desc()             // MAX(modDate) 내림차순 정렬
@@ -226,33 +226,42 @@ public class ReviewDetailRepository {
             return null;
         return userWhisky.category.eq(category);
     }
+    private OrderSpecifier<?> orderByUserWhiskyOpenDateOrder(String order) {
+        if (Order.ASC.getOrder().equals(order) || order.isEmpty())
+            return userWhisky.openDate.asc(); // ASC 정렬
+        if (Order.DESC.getOrder().equals(order))
+            return userWhisky.openDate.desc(); // DESC 정렬
+        return null;
+    }
+    @Deprecated
     private OrderSpecifier<?> orderByUserWhiskyKoreaName(String order) {
         if (Order.ASC.getOrder().equals(order) || order.isEmpty())
             return userWhisky.koreaName.asc(); // ASC 정렬
         if (Order.DESC.getOrder().equals(order))
             return userWhisky.koreaName.desc(); // DESC 정렬
-        throw new RuntimeException();
+        return null;
     }
+    @Deprecated
     private OrderSpecifier<?> orderByUserWhiskyEnglishName(String order) {
         if (Order.ASC.getOrder().equals(order) || order.isEmpty())
             return userWhisky.koreaName.asc(); // ASC 정렬
         if (Order.DESC.getOrder().equals(order))
             return userWhisky.koreaName.desc(); // DESC 정렬
-        throw new RuntimeException();
+        return null;
     }
     private OrderSpecifier<?> orderByScore(String order) {
         if (Order.ASC.getOrder().equals(order) || order.isEmpty())
             return review.score.avg().asc();
         if (Order.DESC.getOrder().equals(order))
             return review.score.avg().desc(); // AVG(score) DESC 정렬
-        throw new RuntimeException("Invalid order direction for score");
+        return null;
     }
     private OrderSpecifier<?> orderByRegDate(String order) {
         if (Order.ASC.getOrder().equals(order) || order.isEmpty())
             return review.regDate.asc(); // ASC 정렬
         if (Order.DESC.getOrder().equals(order))
             return review.regDate.desc(); // DESC 정렬
-        throw new RuntimeException();
+        return null;
     }
 
 }

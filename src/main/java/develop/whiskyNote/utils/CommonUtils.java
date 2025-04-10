@@ -1,5 +1,6 @@
 package develop.whiskyNote.utils;
 
+import develop.whiskyNote.dto.ErrorMessageResponseDto;
 import develop.whiskyNote.dto.UserSessionDto;
 import develop.whiskyNote.enums.RoleType;
 import develop.whiskyNote.exception.ForbiddenException;
@@ -10,7 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.security.SecureRandom;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CommonUtils {
 
@@ -62,5 +66,29 @@ public class CommonUtils {
             code.append(CHARACTERS.charAt(index));
         }
         return code.toString();
+    }
+
+
+    public static ErrorMessageResponseDto<?,?> createErrorMessageResponseDtoByErrorMap(HashMap<String, List<String>> errorMap){
+        int totalErrorCount = errorMap.values().stream()
+                .mapToInt(List::size)
+                .sum();
+        if(totalErrorCount == 1)
+            return ErrorMessageResponseDto.builder()
+                    .message(errorMap.values().stream()
+                            .flatMap(List::stream)
+                            .collect(Collectors.joining(", ")))
+                    .errors(errorMap)
+                    .build();
+        else
+            return ErrorMessageResponseDto.builder()
+                    .message(String.format("%s (%d more errors)",
+                            errorMap.values().stream()
+                                    .findFirst()
+                                    .map(list -> list.get(0))
+                                    .orElse("No errors found"),
+                            totalErrorCount - 1))
+                    .errors(errorMap)
+                    .build();
     }
 }

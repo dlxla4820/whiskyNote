@@ -1,13 +1,12 @@
 package develop.whiskyNote.service;
 
 import develop.whiskyNote.auth.TokenProvider;
-import develop.whiskyNote.dto.BackupCodeDto;
-import develop.whiskyNote.dto.ResponseDto;
-import develop.whiskyNote.dto.UserRequestDto;
+import develop.whiskyNote.dto.*;
 import develop.whiskyNote.entity.BackupCode;
 import develop.whiskyNote.entity.User;
 import develop.whiskyNote.entity.UserWhisky;
 import develop.whiskyNote.enums.Description;
+import develop.whiskyNote.enums.ErrorCode;
 import develop.whiskyNote.enums.RoleType;
 import develop.whiskyNote.exception.ModelNotFoundException;
 import develop.whiskyNote.repository.BackupCodeRepository;
@@ -21,13 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.security.SecureRandom;
 import static develop.whiskyNote.enums.ErrorCode.PARAMETER_INVALID_SPECIFIC;
-import static develop.whiskyNote.utils.CommonUtils.CHARACTERS;
-import static develop.whiskyNote.utils.CommonUtils.getRandomCode;
+import static develop.whiskyNote.utils.CommonUtils.*;
 import static develop.whiskyNote.utils.Constant.WHISKY_NOT_FOUND;
 
 
@@ -72,6 +68,12 @@ public class UserService {
 
     public ResponseDto<?> backupUser(BackupCodeDto requestBody){
         User user = sessionUtils.getUser(RoleType.USER);
+        ErrorMessageResponseDto<?,?> response = validateBackupCodeDto(requestBody);
+        if(response != null)
+            return ResponseDto.builder()
+                    .code(422)
+                    .data(response)
+                    .build();
         BackupCode backupCode = backupCodeRepository.findByCode(requestBody.getCode()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
         userInfoRepository.deleteUser(user.getUuid());
         userInfoRepository.updateUserDeviceId(backupCode.getUser().getUuid(), user.getDeviceId());
@@ -101,5 +103,12 @@ public class UserService {
                 .build();
     }
 
-
+    private ErrorMessageResponseDto<?,?> validateBackupCodeDto(BackupCodeDto requestBody) {
+        HashMap<String, List<String>> errorMap = new HashMap<>();
+        if(requestBody.getCode() == null || requestBody.getCode().trim().isEmpty())
+            errorMap.put("code", Collections.singletonList(String.format(ErrorCode.PARAMETER_INVALID_SPECIFIC.getErrorDescription(), "code")));
+        if(errorMap.isEmpty())
+            return null;
+        return createErrorMessageResponseDtoByErrorMap(errorMap);
+    }
 }
