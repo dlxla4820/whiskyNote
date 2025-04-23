@@ -4,11 +4,15 @@ import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.ComparablePath;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import develop.whiskyNote.dto.OtherReviewGetReqeustDto;
 import develop.whiskyNote.dto.OtherReviewGetResponseDto;
+import develop.whiskyNote.entity.QReviewLikeMapping;
 import develop.whiskyNote.entity.ReviewLikeMapping;
 import develop.whiskyNote.entity.User;
 import develop.whiskyNote.enums.Order;
@@ -128,7 +132,7 @@ public Page<OtherReviewGetResponseDto> findOtherUserReview(
                     review.imageNames,
                     Expressions.dateTemplate(LocalDateTime.class, "GREATEST({0}, {1})", review.regDate, review.modDate).as("lastUpdateDate"),
                     // 좋아요 여부
-                    reviewLikeMapping.user.uuid.eq(currentUser).count().goe(1L).as("likeState"),
+                    ExpressionUtils.as(likeStateExpression(review.uuid, currentUser), "likeState"),
                     // 좋아요 수 → Integer로 캐스팅
                     reviewLikeMapping.reviewId.count().intValue().as("likeCount")
             ))
@@ -162,6 +166,23 @@ public Page<OtherReviewGetResponseDto> findOtherUserReview(
 
     return new PageImpl<>(content, pageable, total != null ? total : 0L);
 }
+
+    private Expression<Boolean> likeStateExpression(ComparablePath<UUID> reviewIdPath, UUID currentUser) {
+        QReviewLikeMapping subReviewLikeMapping = new QReviewLikeMapping("subReviewLikeMapping");
+
+        return JPAExpressions
+            .selectOne()
+            .from(subReviewLikeMapping)
+            .where(
+                subReviewLikeMapping.reviewId.eq(reviewIdPath),
+                subReviewLikeMapping.user.uuid.eq(currentUser)
+            )
+            .exists();
+    }
+
+
+
+
 
     private <T extends Comparable<?>> OrderSpecifier<T> getOrderSpecifier(Order order, Expression<T> field) {
         if (order == null) return null;

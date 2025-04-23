@@ -1,14 +1,21 @@
 package develop.whiskyNote.service;
 
+import static develop.whiskyNote.utils.CommonUtils.createErrorMessageResponseDtoByErrorMap;
+
+import develop.whiskyNote.dto.ErrorMessageResponseDto;
 import develop.whiskyNote.dto.OtherReviewGetReqeustDto;
 import develop.whiskyNote.dto.OtherReviewGetResponseDto;
 import develop.whiskyNote.dto.ResponseDto;
 import develop.whiskyNote.enums.Description;
+import develop.whiskyNote.enums.ErrorCode;
 import develop.whiskyNote.exception.ReviewLikeException;
 import develop.whiskyNote.repository.OtherUserReviewRepository;
 import develop.whiskyNote.utils.CommonUtils;
 import develop.whiskyNote.utils.OrderParser;
 import jakarta.transaction.Transactional;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +35,13 @@ public class OtherUserReviewService {
     ) {
         this.otherUserReviewRepository = otherUserReviewRepository;
     }
-
     public ResponseDto<?> createReviewLikeMapping(String inputUuid){
+        ErrorMessageResponseDto<?,?> response = validateinputUuid(inputUuid);
+        if(response != null)
+            return ResponseDto.builder()
+                .code(422)
+                .data(response)
+                .build();
         //현재 로그인 한 유저 가져오기
         UUID user = CommonUtils.getUserUuidIfAdminOrUser();
         UUID reviewUuid = UUID.fromString(inputUuid);
@@ -47,6 +59,12 @@ public class OtherUserReviewService {
     }
 
     public ResponseDto<?> deleteReviewLikeMapping(String inputUuid){
+        ErrorMessageResponseDto<?,?> response = validateinputUuid(inputUuid);
+        if(response != null)
+            return ResponseDto.builder()
+                .code(422)
+                .data(response)
+                .build();
         UUID user = CommonUtils.getUserUuidIfAdminOrUser();
         UUID reviewUuid = UUID.fromString(inputUuid);
         //삭제, 없을 시 에러 > 이미 취소
@@ -72,7 +90,6 @@ public class OtherUserReviewService {
             int size
     ) {
         UUID currentUser = CommonUtils.getUserUuidIfAdminOrUser();
-
         boolean isMainKorean = CommonUtils.containsKorean(mainSearchWord);
         boolean isSubKorean = subSearchWord != null && CommonUtils.containsKorean(subSearchWord);
         //dto에 매핑
@@ -98,4 +115,13 @@ public class OtherUserReviewService {
                 .data(result)
                 .build();
     }
+
+    private ErrorMessageResponseDto<?,?> validateinputUuid(String inputUuid){
+        HashMap<String, List<String>> errorMap = new HashMap<>();
+        if(inputUuid == null || inputUuid.isEmpty()) errorMap.put("inputUuid", Collections.singletonList(String.format(
+            ErrorCode.PARAMETER_INVALID_SPECIFIC.getErrorDescription(), "inputUuid")));
+        if (errorMap.isEmpty()) return null;
+        return createErrorMessageResponseDtoByErrorMap(errorMap);
+    }
+
 }
