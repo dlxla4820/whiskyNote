@@ -17,6 +17,7 @@ import develop.whiskyNote.utils.CommonUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -145,6 +146,19 @@ public class ReviewDetailRepository {
 
 
     public List<MyWhiskyListResponseDto> findAllMyWhiskyListResponseDto(String name, String category, String openDateOrder, String scoreOrder, String dateOrder, UUID userUuid){
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+
+        OrderSpecifier<?> openDateOrderBy = orderByUserWhiskyOpenDateOrder(openDateOrder);
+        OrderSpecifier<?> scoreOrderBy = orderByScore(scoreOrder);
+        OrderSpecifier<?> regDateOrderBy = orderByRegDate(dateOrder);
+
+        if (openDateOrderBy != null) orderSpecifiers.add(openDateOrderBy);
+        if (scoreOrderBy != null) orderSpecifiers.add(scoreOrderBy);
+        if (regDateOrderBy != null) orderSpecifiers.add(regDateOrderBy);
+
+        orderSpecifiers.add(review.modDate.max().desc());
+
+
         return queryFactory.select(Projections.constructor(MyWhiskyListResponseDto.class,
                         userWhisky.uuid.as("whiskyUuid"),
                         userWhisky.koreaName.as("koreaName"),
@@ -184,12 +198,7 @@ public class ReviewDetailRepository {
                         review.modDate    // modDate 추가
                 )
                 //.having(review.score.avg().isNotNull())
-                .orderBy(
-                        orderByUserWhiskyOpenDateOrder(openDateOrder),
-                        orderByScore(scoreOrder),         // 점수 정렬
-                        orderByRegDate(dateOrder),        // 출시일 정렬
-                        review.modDate.max().desc()             // MAX(modDate) 내림차순 정렬
-                )
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .fetch();
     }
 
@@ -227,7 +236,7 @@ public class ReviewDetailRepository {
         return userWhisky.category.eq(category);
     }
     private OrderSpecifier<?> orderByUserWhiskyOpenDateOrder(String order) {
-        if (Order.ASC.getOrder().equals(order) || order.isEmpty())
+        if (Order.ASC.getOrder().equals(order))
             return userWhisky.openDate.asc(); // ASC 정렬
         if (Order.DESC.getOrder().equals(order))
             return userWhisky.openDate.desc(); // DESC 정렬
@@ -250,14 +259,14 @@ public class ReviewDetailRepository {
         return null;
     }
     private OrderSpecifier<?> orderByScore(String order) {
-        if (Order.ASC.getOrder().equals(order) || order.isEmpty())
+        if (Order.ASC.getOrder().equals(order))
             return review.score.avg().asc();
         if (Order.DESC.getOrder().equals(order))
             return review.score.avg().desc(); // AVG(score) DESC 정렬
         return null;
     }
     private OrderSpecifier<?> orderByRegDate(String order) {
-        if (Order.ASC.getOrder().equals(order) || order.isEmpty())
+        if (Order.ASC.getOrder().equals(order))
             return review.regDate.asc(); // ASC 정렬
         if (Order.DESC.getOrder().equals(order))
             return review.regDate.desc(); // DESC 정렬

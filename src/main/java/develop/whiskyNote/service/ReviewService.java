@@ -242,7 +242,7 @@ public class ReviewService {
     private ErrorMessageResponseDto<?,?> validateUpsertReview(ReviewUpsertRequestDto requestBody) {
         HashMap<String, List<String>> errorMap = new HashMap<>();
         if(requestBody.getMyWhiskyUuid() == null || requestBody.getMyWhiskyUuid().trim().isEmpty())
-            errorMap.put("myWhiskyUuid", Collections.singletonList(String.format(ErrorCode.PARAMETER_INVALID_SPECIFIC.getErrorDescription(), "my_whisky_uuid")));
+            errorMap.put("my_whisky_uuid", Collections.singletonList(String.format(ErrorCode.PARAMETER_INVALID_SPECIFIC.getErrorDescription(), "my_whisky_uuid")));
         if(requestBody.getIsAnonymous() == null)
             errorMap.put("is_anonymous", Collections.singletonList(String.format(ErrorCode.PARAMETER_INVALID_SPECIFIC.getErrorDescription(), "is_anonymous")));
         if(requestBody.getOpenDate() == null)

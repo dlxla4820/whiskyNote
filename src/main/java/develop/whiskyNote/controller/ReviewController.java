@@ -43,8 +43,8 @@ public class ReviewController {
     //내 위스키 불러오기
     @GetMapping(value = "/my-whiskys")
     public ResponseEntity<ResponseDto<?>> searchMyWhiskys(@RequestParam(required = false) String name
-            , @RequestParam(required = false) String category, @RequestParam(name = "score_order") String scoreOrder
-            , @RequestParam(name = "date_order") String dateOrder, @RequestParam(name = "open_date_order") String openDateOrder ){
+            , @RequestParam(required = false) String category, @RequestParam(required = false, name = "score_order") String scoreOrder
+            , @RequestParam(required = false, name = "date_order") String dateOrder, @RequestParam(required = false, name = "open_date_order") String openDateOrder ){
         ResponseDto<?> response = reviewService.searchMyWhiskyList(name, category, scoreOrder, dateOrder,openDateOrder);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getCode()));
     }
