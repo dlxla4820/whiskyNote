@@ -43,6 +43,19 @@ public class ResponseDto<T> {
         this.data = data;
     }
 
+    public ResponseDto(ErrorCode errorCode) {
+        this.code = errorCode.getStatus();
+        this.description = Description.FAIL;
+        this.errorCode = errorCode.getErrorCode();
+        this.errorDescription = errorCode.getErrorDescription();
+    }
+
+    public ResponseDto(ErrorCode errorCode, String errorDescriptionParameter) {
+        this.code = errorCode.getStatus();
+        this.description = Description.FAIL;
+        this.errorCode = errorCode.getErrorCode();
+        this.errorDescription = String.format(errorCode.getErrorDescription(), errorDescriptionParameter);
+    }
 
     @Override
     public String toString(){

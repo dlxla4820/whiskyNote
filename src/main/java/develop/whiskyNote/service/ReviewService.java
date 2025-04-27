@@ -58,12 +58,8 @@ public class ReviewService {
                     .build();
         UserWhisky userWhisky = userWhiskyRepository.findById(UUID.fromString(requestBody.getMyWhiskyUuid())).orElseThrow(() -> new ModelNotFoundException(WHISKY_NOT_FOUND));
         if(requestBody.getImageNames() != null && requestBody.getImageNames().size() > 3)
-            return ResponseDto.builder()
-                    .code(MAX_PHOTO_OVER.getStatus())
-                    .description(Description.FAIL)
-                    .errorCode(MAX_PHOTO_OVER.getErrorCode())
-                    .errorDescription(MAX_PHOTO_OVER.getErrorDescription())
-                    .build();
+            return new ResponseDto<>(MAX_PHOTO_OVER);
+
         Review review = requestBody.toReview(userWhisky, user);
         reviewRepository.save(review);
         return ResponseDto.builder()
@@ -136,12 +132,7 @@ public class ReviewService {
         if(review != null && review.getUser().getUuid() != user.getUuid())
             throw new ForbiddenException("Access Denied");
         if(requestBody.getImageNames() != null && requestBody.getImageNames().size() > 3)
-            return ResponseDto.builder()
-                    .code(MAX_PHOTO_OVER.getStatus())
-                    .description(Description.FAIL)
-                    .errorCode(MAX_PHOTO_OVER.getErrorCode())
-                    .errorDescription(MAX_PHOTO_OVER.getErrorDescription())
-                    .build();
+            return new ResponseDto<>(MAX_PHOTO_OVER);
 
         reviewDetailRepository.updateReviewByReviewUuid(requestBody, reviewUuid);
         return ResponseDto.builder()
@@ -173,7 +164,7 @@ public class ReviewService {
                     .data(response)
                     .build();
 
-        Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow(() -> new ModelNotFoundException("Whisky Not Found"));
+        Whisky whisky = whiskyRepository.findById(UUID.fromString(requestBody.getWhiskyUuid())).orElseThrow(() -> new ModelNotFoundException(requestBody.getWhiskyUuid()));
         ImageFile imageFile = imageFileRepository.findByName(requestBody.getImageName()).orElse(null);
         String imageName = (imageFile == null) ? null : requestBody.getImageName();
         userWhiskyRepository.save(requestBody.toUserWhisky(whisky, userUuid, imageName));

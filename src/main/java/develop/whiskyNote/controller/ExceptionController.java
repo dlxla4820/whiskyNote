@@ -5,6 +5,7 @@ import develop.whiskyNote.enums.Description;
 import develop.whiskyNote.enums.ErrorCode;
 import develop.whiskyNote.exception.ForbiddenException;
 //import develop.whiskyNote.exception.RedissonException;
+import develop.whiskyNote.exception.ModelNotFoundException;
 import develop.whiskyNote.exception.ReviewLikeException;
 import develop.whiskyNote.exception.UnauthenticatedException;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionController {
     @ExceptionHandler(UnauthenticatedException.class)
     public ResponseEntity<?> handleUnauthenticatedException(UnauthenticatedException ex) {
-        return new ResponseEntity<>(ResponseDto.builder()
-                .code(ErrorCode.TOKEN_UNAUTHORIZED.getStatus())
-                .errorCode(ErrorCode.TOKEN_UNAUTHORIZED.getErrorCode())
-                .description(Description.FAIL)
-                .errorDescription(ErrorCode.TOKEN_UNAUTHORIZED.getErrorDescription())
-                .build(), HttpStatus.UNAUTHORIZED);  // 401 Unauthorized
+        return new ResponseEntity<>(new ResponseDto<>(ErrorCode.TOKEN_UNAUTHORIZED), HttpStatus.UNAUTHORIZED);  // 401 Unauthorized
     }
 
     @ExceptionHandler(ReviewLikeException.class)
@@ -37,13 +33,14 @@ public class ExceptionController {
     }
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<?> handleForbiddenException(ForbiddenException ex) {
-        return new ResponseEntity<>(ResponseDto.builder()
-                .code(ErrorCode.TOKEN_FORBIDDEN.getStatus())
-                .errorCode(ErrorCode.TOKEN_FORBIDDEN.getErrorCode())//
-                .description(Description.FAIL)
-                .errorDescription(ErrorCode.TOKEN_FORBIDDEN.getErrorDescription())
-                .build(), HttpStatus.FORBIDDEN);  // 403 Forbidden
+        return new ResponseEntity<>(new ResponseDto<>(ErrorCode.TOKEN_FORBIDDEN), HttpStatus.FORBIDDEN);  // 403 Forbidden
     }
+
+    @ExceptionHandler(ModelNotFoundException.class)
+    public ResponseEntity<?> handleModelNotFoundException(ModelNotFoundException ex) {
+        return new ResponseEntity<>(new ResponseDto<>(ErrorCode.DATA_NOT_FOUND, ex.getMessage()), HttpStatus.NOT_FOUND);   // 404 NotFound
+    }
+
     //배포 환경에서 너무 많은 로그가 쌓여서 임시로 처리
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception ex) {

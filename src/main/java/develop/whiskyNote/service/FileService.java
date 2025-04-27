@@ -62,7 +62,7 @@ public class FileService {
     }
 
     public ResponseDto<?> showImage(String fileName)  {
-        ImageFile imageFile = imageFileRepository.findByName(fileName).orElseThrow(() -> new ModelNotFoundException("File Not Found"));
+        ImageFile imageFile = imageFileRepository.findByName(fileName).orElseThrow(() -> new ModelNotFoundException(fileName));
         try {
             Path tempFilePath = Paths.get(imageFile.getPath());
             File tempFile = tempFilePath.toFile();
