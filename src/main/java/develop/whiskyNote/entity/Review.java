@@ -38,7 +38,7 @@ public class Review {
     @JoinColumn(name = "user_uuid", nullable = false)
     private User user;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "image_names")
