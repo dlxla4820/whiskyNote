@@ -193,9 +193,7 @@ public class ReviewDetailRepository {
                         userWhisky.category,
                         userWhisky.caskType,
                         userWhisky.openDate,
-                        userWhisky.memo,
-                        review.regDate,   // regDate 추가
-                        review.modDate    // modDate 추가
+                        userWhisky.memo
                 )
                 //.having(review.score.avg().isNotNull())
                 .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))

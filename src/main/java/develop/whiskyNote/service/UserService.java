@@ -74,7 +74,7 @@ public class UserService {
                     .code(422)
                     .data(response)
                     .build();
-        BackupCode backupCode = backupCodeRepository.findByCode(requestBody.getCode()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
+        BackupCode backupCode = backupCodeRepository.findFirstByCodeOrderByCreatedAtDesc(requestBody.getCode()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
         userInfoRepository.deleteUser(user.getUuid());
         userInfoRepository.updateUserDeviceId(backupCode.getUser().getUuid(), user.getDeviceId());
 

@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface BackupCodeRepository extends JpaRepository<BackupCode, Long> {
-    Optional<BackupCode> findByCode(String code);
+    Optional<BackupCode> findFirstByCodeOrderByCreatedAtDesc(String code);
 }
