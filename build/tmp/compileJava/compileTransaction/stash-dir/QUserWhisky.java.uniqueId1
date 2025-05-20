@@ -36,8 +36,6 @@ public class QUserWhisky extends EntityPathBase<UserWhisky> {
 
     public final StringPath koreaName = createString("koreaName");
 
-    public final DateTimePath<java.time.LocalDateTime> lastRegReview = createDateTime("lastRegReview", java.time.LocalDateTime.class);
-
     public final StringPath memo = createString("memo");
 
     public final DateTimePath<java.time.LocalDateTime> modDate = createDateTime("modDate", java.time.LocalDateTime.class);

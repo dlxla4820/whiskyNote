@@ -62,6 +62,7 @@ public class ReviewService {
 
         Review review = requestBody.toReview(userWhisky, user);
         reviewRepository.save(review);
+        reviewDetailRepository.updateUserWhiskyLastRegReview(review.getUserWhisky().getUuid());
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())

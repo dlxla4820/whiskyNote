@@ -107,6 +107,13 @@ public class ReviewDetailRepository {
                 .execute();
     }
 
+    public long updateUserWhiskyLastRegReview(UUID userWhiskyUuid){
+        return queryFactory.update(userWhisky)
+                .set(userWhisky.lastRegReview, LocalDateTime.now())
+                .where(userWhisky.uuid.eq(userWhiskyUuid))
+                .execute();
+    }
+
 
     public void deleteReviewByReviewUuid(String reviewUuid){
         queryFactory.delete(review)

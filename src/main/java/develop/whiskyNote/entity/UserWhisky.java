@@ -64,6 +64,8 @@ public class UserWhisky {
     @Column(name="user_uuid")
     private UUID userUuid;
 
+    @Column(name = "last_reg_review")
+    private LocalDateTime lastRegReview;
 
     @Column(name = "reg_date")
     private LocalDateTime regDate;
