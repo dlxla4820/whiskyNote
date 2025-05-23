@@ -157,11 +157,11 @@ public class ReviewDetailRepository {
 
         OrderSpecifier<?> openDateOrderBy = orderByUserWhiskyOpenDateOrder(openDateOrder);
         OrderSpecifier<?> scoreOrderBy = orderByScore(scoreOrder);
-        OrderSpecifier<?> regDateOrderBy = orderByRegDate(dateOrder);
+        OrderSpecifier<?> lastRegReviewOrderBy = orderByLastRegReview(dateOrder);
 
         if (openDateOrderBy != null) orderSpecifiers.add(openDateOrderBy);
         if (scoreOrderBy != null) orderSpecifiers.add(scoreOrderBy);
-        if (regDateOrderBy != null) orderSpecifiers.add(regDateOrderBy);
+        if (lastRegReviewOrderBy != null) orderSpecifiers.add(lastRegReviewOrderBy);
 
         orderSpecifiers.add(review.modDate.max().desc());
 
@@ -182,8 +182,7 @@ public class ReviewDetailRepository {
                         userWhisky.caskType.as("caskType"),
                         userWhisky.openDate.as("openDate"),
                         userWhisky.memo.as("memo"),
-                        review.regDate.max().as("regDate"), // MAX(regDate)
-                        review.modDate.max().as("modDate") // MAX(modDate)
+                        userWhisky.lastRegReview.as("last_reg_review")
                 ))
                 .from(userWhisky)
                 .leftJoin(review).on(review.userWhisky.eq(userWhisky))
@@ -200,7 +199,8 @@ public class ReviewDetailRepository {
                         userWhisky.category,
                         userWhisky.caskType,
                         userWhisky.openDate,
-                        userWhisky.memo
+                        userWhisky.memo,
+                        userWhisky.lastRegReview
                 )
                 //.having(review.score.avg().isNotNull())
                 .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
@@ -268,6 +268,13 @@ public class ReviewDetailRepository {
             return review.score.avg().asc();
         if (Order.DESC.getOrder().equals(order))
             return review.score.avg().desc(); // AVG(score) DESC 정렬
+        return null;
+    }
+    private OrderSpecifier<?> orderByLastRegReview(String order) {
+        if (Order.ASC.getOrder().equals(order))
+            return userWhisky.lastRegReview.asc(); // ASC 정렬
+        if (Order.DESC.getOrder().equals(order))
+            return userWhisky.lastRegReview.desc(); // DESC 정렬
         return null;
     }
     private OrderSpecifier<?> orderByRegDate(String order) {

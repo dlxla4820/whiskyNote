@@ -5,27 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2701fa11-c067-440c-92b6-e248ce53d09f" name="Changes" comment="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.10.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/wiskyNote.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/wiskyNote.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/entity/QUserWhisky.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/entity/QUserWhisky.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/entity/UserWhisky$UserWhiskyBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/entity/UserWhisky$UserWhiskyBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/entity/UserWhisky.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/entity/UserWhisky.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/repository/ReviewDetailRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/repository/ReviewDetailRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/service/ReviewService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/develop/whiskyNote/service/ReviewService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/develop/whiskyNote/entity/QUserWhisky.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/develop/whiskyNote/entity/QUserWhisky.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ReviewController.class.uniqueId1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ReviewDetailRepository.class.uniqueId2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ReviewService.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/entity/UserWhisky.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/entity/UserWhisky.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/ReviewDetailRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/ReviewDetailRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/ReviewService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/UserInfoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/UserInfoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,7 +146,7 @@
       <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
+      <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="whiskyNote [bootJar]" type="GradleRunConfiguration" factoryName="Gradle">
@@ -182,7 +168,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="whiskyNote [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -204,7 +190,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="whiskyNote [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -226,7 +212,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="WhiskyNoteApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
@@ -351,6 +337,7 @@
       <workItem from="1746704571118" duration="2409000" />
       <workItem from="1746965242411" duration="2407000" />
       <workItem from="1747741157768" duration="815000" />
+      <workItem from="1747969270352" duration="1733000" />
     </task>
     <task id="LOCAL-00001" summary="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
       <option name="closed" value="true" />

@@ -36,12 +36,14 @@ public class UserService {
     private final BackupCodeRepository backupCodeRepository;
     private final SessionUtils sessionUtils;
     private final TokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
-    public UserService(UserInfoRepository userInfoRepository, BackupCodeRepository backupCodeRepository, SessionUtils sessionUtils, TokenProvider tokenProvider) {
+    public UserService(UserInfoRepository userInfoRepository, BackupCodeRepository backupCodeRepository, SessionUtils sessionUtils, TokenProvider tokenProvider, UserRepository userRepository) {
         this.userInfoRepository = userInfoRepository;
         this.backupCodeRepository = backupCodeRepository;
         this.sessionUtils = sessionUtils;
         this.tokenProvider = tokenProvider;
+        this.userRepository = userRepository;
     }
 
     public ResponseDto<?> saveUser(UserRequestDto requestBody){
@@ -75,8 +77,10 @@ public class UserService {
                     .data(response)
                     .build();
         BackupCode backupCode = backupCodeRepository.findFirstByCodeOrderByCreatedAtDesc(requestBody.getCode()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
-        userInfoRepository.deleteUser(user.getUuid());
-        userInfoRepository.updateUserDeviceId(backupCode.getUser().getUuid(), user.getDeviceId());
+        userRepository.deleteByUuid(user.getUuid());
+        long updates = userInfoRepository.updateUserDeviceId(backupCode.getUser().getUuid(), user.getDeviceId());
+        if(updates != 0)
+            backupCodeRepository.delete(backupCode);
 
         return ResponseDto.builder()
                 .description(Description.SUCCESS)

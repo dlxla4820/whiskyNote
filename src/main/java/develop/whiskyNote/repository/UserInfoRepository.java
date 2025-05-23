@@ -62,8 +62,8 @@ public class UserInfoRepository {
                 .execute();
     }
 
-    public void updateUserDeviceId(UUID userUuid, String userDeviceId){
-        queryFactory.update(user)
+    public long updateUserDeviceId(UUID userUuid, String userDeviceId){
+        return queryFactory.update(user)
                 .set(user.deviceId, userDeviceId)
                 .where(user.uuid.eq(userUuid))
                 .execute();
