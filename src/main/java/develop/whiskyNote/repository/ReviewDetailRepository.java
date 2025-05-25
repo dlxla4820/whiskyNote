@@ -182,7 +182,7 @@ public class ReviewDetailRepository {
                         userWhisky.caskType.as("caskType"),
                         userWhisky.openDate.as("openDate"),
                         userWhisky.memo.as("memo"),
-                        userWhisky.lastRegReview.as("last_reg_review")
+                        userWhisky.lastRegReview.as("lastRegReview")
                 ))
                 .from(userWhisky)
                 .leftJoin(review).on(review.userWhisky.eq(userWhisky))

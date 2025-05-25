@@ -31,8 +31,7 @@ public class MyWhiskyListResponseDto {
     private String caskType;
     private LocalDate openDate;
     private String memo;
-    private LocalDateTime regDate;
-    private LocalDateTime modDate;
+    private LocalDateTime lastRegReview;
 
 
 
