@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.security.SecureRandom;
+
+import static develop.whiskyNote.enums.ErrorCode.MAX_BACKUP_OVER;
 import static develop.whiskyNote.enums.ErrorCode.PARAMETER_INVALID_SPECIFIC;
 import static develop.whiskyNote.utils.CommonUtils.*;
 import static develop.whiskyNote.utils.Constant.WHISKY_NOT_FOUND;
@@ -76,12 +78,24 @@ public class UserService {
                     .code(422)
                     .data(response)
                     .build();
-        BackupCode backupCode = backupCodeRepository.findFirstByCodeOrderByCreatedAtDesc(requestBody.getCode()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
-        userRepository.deleteByUuid(user.getUuid());
-        long updates = userInfoRepository.updateUserDeviceId(backupCode.getUser().getUuid(), user.getDeviceId());
-        if(updates != 0)
-            backupCodeRepository.delete(backupCode);
+        BackupCode backupCode = backupCodeRepository.findFirstByUserUuidOrderByCreatedAtDesc(user.getUuid()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
+        System.out.println("backupCode = " + backupCode);
+        if(!backupCode.getCode().equals(requestBody.getCode()))
+            return ResponseDto.builder()
+                    .description(Description.FAIL)
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .build();
 
+        if(!backupCode.getUserUuid().equals(user.getUuid()))
+            userRepository.deleteByUuid(user.getUuid());
+
+        long updates = userInfoRepository.updateUserDeviceId(backupCode.getUserUuid(), user.getDeviceId());
+        if(updates == 0)
+            return ResponseDto.builder()
+                    .description(Description.FAIL)
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .build();
+        backupCodeRepository.deleteAllByUserUuid(backupCode.getUserUuid());
         return ResponseDto.builder()
                 .description(Description.SUCCESS)
                 .code(HttpStatus.OK.value())
@@ -90,9 +104,16 @@ public class UserService {
 
     public ResponseDto<?> getBackupCode(){
         User user = sessionUtils.getUser(RoleType.USER);
+        List<BackupCode> backupCodeList = backupCodeRepository.findAllByUserUuid(user.getUuid())
+                .stream().filter(s -> s.getExpiredAt().isAfter(LocalDateTime.now()))
+                .toList();
+
+        if(backupCodeList.size() >= 5)
+            return new ResponseDto<>(MAX_BACKUP_OVER);
+
         BackupCode backupCode = BackupCode.builder()
                 .code(getRandomCode(CODE_LENGTH))
-                .user(user)
+                .userUuid(user.getUuid())
                 .createdAt(LocalDateTime.now())
                 .expiredAt(LocalDateTime.now().plusMinutes(EXPIRES_IN_MINUTES))
                 .build();

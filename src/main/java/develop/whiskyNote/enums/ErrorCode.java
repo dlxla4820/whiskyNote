@@ -23,6 +23,8 @@ public enum ErrorCode {
 
     MAX_PHOTO_OVER(400,"E00201", "사진의 개수가 너무 많습니다."),
 
+    MAX_BACKUP_OVER(400, "E00301","백업코드 생성 횟수 초과 했습니다."),
+
     CRAWLING_DATA_NOT_EXIST(400,"E00501","CRAWLING DATA가 존재하지 않습니다."),
     ALL_WHISKY_INFO_DUPLICATE(400,"E00502","모든 위스키가 저장되어 있습니다."),
 

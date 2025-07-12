@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,8 +16,6 @@ import com.querydsl.core.types.dsl.PathInits;
 public class QBackupCode extends EntityPathBase<BackupCode> {
 
     private static final long serialVersionUID = -2136628584L;
-
-    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QBackupCode backupCode = new QBackupCode("backupCode");
 
@@ -30,27 +27,18 @@ public class QBackupCode extends EntityPathBase<BackupCode> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final QUser user;
+    public final ComparablePath<java.util.UUID> userUuid = createComparable("userUuid", java.util.UUID.class);
 
     public QBackupCode(String variable) {
-        this(BackupCode.class, forVariable(variable), INITS);
+        super(BackupCode.class, forVariable(variable));
     }
 
     public QBackupCode(Path<? extends BackupCode> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QBackupCode(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QBackupCode(PathMetadata metadata, PathInits inits) {
-        this(BackupCode.class, metadata, inits);
-    }
-
-    public QBackupCode(Class<? extends BackupCode> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
+        super(BackupCode.class, metadata);
     }
 
 }

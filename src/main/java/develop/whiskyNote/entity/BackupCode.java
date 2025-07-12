@@ -21,8 +21,8 @@ public class BackupCode {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @Column(name = "user_iuid")
+    private UUID userUuid;
 
     @Column(name = "code")
     private String code;
