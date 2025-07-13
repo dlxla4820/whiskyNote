@@ -78,8 +78,9 @@ public class UserService {
                     .code(422)
                     .data(response)
                     .build();
-        BackupCode backupCode = backupCodeRepository.findFirstByUserUuidOrderByCreatedAtDesc(user.getUuid()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
-
+        BackupCode userBackupCode = backupCodeRepository.findFirstByCode(requestBody.getCode()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
+        
+        BackupCode backupCode = backupCodeRepository.findFirstByUserUuidOrderByCreatedAtDesc(userBackupCode.getUserUuid()).orElseThrow(() -> new ModelNotFoundException("Fail Backup"));
         if(!backupCode.getCode().equals(requestBody.getCode()))
             return ResponseDto.builder()
                     .description(Description.FAIL)

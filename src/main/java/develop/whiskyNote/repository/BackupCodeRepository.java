@@ -10,7 +10,9 @@ import java.util.UUID;
 
 @Repository
 public interface BackupCodeRepository extends JpaRepository<BackupCode, Long> {
-    Optional<BackupCode> findFirstByUserUuidOrderByCreatedAtDesc(UUID code);
+    Optional<BackupCode> findFirstByUserUuidOrderByCreatedAtDesc(UUID userUuid);
+
+    Optional<BackupCode> findFirstByCode(String code);
     List<BackupCode> findAllByUserUuid(UUID userUuid);
     void deleteAllByUserUuid(UUID userUUid);
 }

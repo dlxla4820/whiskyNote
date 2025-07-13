@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2701fa11-c067-440c-92b6-e248ce53d09f" name="Changes" comment="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/develop/whiskyNote/entity/QBackupCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main/develop/whiskyNote/entity/QBackupCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/entity/BackupCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/entity/BackupCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/enums/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/enums/ErrorCode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/BackupCodeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/repository/BackupCodeRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/develop/whiskyNote/service/UserService.java" afterDir="false" />
     </list>
@@ -344,7 +340,9 @@
       <workItem from="1750851533843" duration="1776000" />
       <workItem from="1751716103149" duration="1049000" />
       <workItem from="1752141250912" duration="1296000" />
-      <workItem from="1752328949037" duration="3348000" />
+      <workItem from="1752328949037" duration="3611000" />
+      <workItem from="1752406844375" duration="43000" />
+      <workItem from="1752407528345" duration="2160000" />
     </task>
     <task id="LOCAL-00001" summary="enums 파일 구조 변경, 유저 서비스 수정&#10;&#10;- deviceID 저장 로직 추가">
       <option name="closed" value="true" />
