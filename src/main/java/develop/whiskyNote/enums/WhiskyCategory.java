@@ -19,6 +19,7 @@ public enum WhiskyCategory {
     SINGLE_POT_STILL("Single Pot Still"),
     SPIRIT("Spirit"),
     TENNESSEE("Tennessee"),
-    WHEAT("Wheat");
+    WHEAT("Wheat"),
+    OTHER("Other");
     private final String category;
 }
