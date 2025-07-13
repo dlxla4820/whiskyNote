@@ -20,6 +20,7 @@
 - 개별 날짜 별 위스키 리뷰 작성 가능
 - 다른 유저의 리뷰 검색
 - 독병 위스키도 저장 가능
+- [수입식품마루](https://impfood.mfds.go.kr/CFCCC01F01)에서 위스키 정보 저장 및 제공
 
 ## 사용 스택
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
