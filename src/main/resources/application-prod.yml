@@ -1,3 +1,31 @@
 server:
   shutdown: graceful
   port: 8080
+
+spring:
+  jpa:
+    open-in-view: false
+    database: mysql
+    hibernate:
+      ddl-auto: update
+    datasource:
+      url: ENC(e/1VVpGEwM8j6NZrAE5WQncBfTM4ZM22vEodk8gwatgTLYfo8VJmxYeV/aRhtrf7Gs1ZH3aWaHyuoO0f6Dh+QqGE/53ndya+CZLouL92XiqRm7LpBTQ3kJLDOwFI2Aa+1PcogeFDXYilhMcp5cm3zA==)
+      username: ENC(IPsiciWeUcbAa51YuvBVjstGIf2p23+oDDe6n7llI0I3mTy39LLwy6cqF/BCXHOy)
+      password: ENC(onHC8oKY4oW4i66RnLxMSM9JWRgPr4eQccf4wgfId081w0s+w0Bs0JPo5ADxqF5W)
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+jasypt:
+  encryptor:
+    bean: jasyptEncryptor
+    property:
+      prefix: ENC(
+      suffix: )
+
+jwt:
+  secret-key: ENC(muJb6AlP76iTualVAQlZhDmRAiVxFMDm7cNmVHy1Ko6nG//cyhlRa1JzfsbEoEq79vEWOnim1qzBOjm0imO7m9s4d5PsfKRs2luK9xd73Pa1w4x3EB+5aHmfnCOjxiys4RvVZCdwUwntn+041sfxQpHj2SeDetngBx+oJ54Cyts15BEyZY8oD5fNrwnmcg8/be7iD4GLo47SYQ8WxmiFEhHc0YVSGQF+At9sKm+ER6U=)
+  expiration-hours: 3
+  refresh-expiration-weeks: 2
+  issuer: UST21
+
+file:
+  path: /home/ubuntu/file_images/
